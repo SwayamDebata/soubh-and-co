@@ -1,27 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 35s linear infinite;
-}
 
 @layer base {
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white font-body text-dark antialiased;
+    /* Fletch-like body: Inter, black, comfortable measure (~1.65) */
+    @apply overflow-x-hidden bg-white font-body font-normal text-dark antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
   }
 }
