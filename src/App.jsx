@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import logoPng from "./assets/logo.png";
 import brandsPng from "./assets/brands.png";
 import img3 from "./assets/position.png";
@@ -16,19 +16,6 @@ const CHECKLIST_ITEMS = [
   "You're getting beaten on commission, not winning on value",
   "You've grown the team but the brand still feels like a startup",
   'You "do everything for everyone" and it shows in your marketing',
-];
-
-const QUIZ_QUESTIONS = [
-  "Could a vendor describe what makes your agency different from the franchise down the road, in one sentence?",
-  "When you compete head-to-head, do vendors choose you for a clear, specific reason (not just rapport)?",
-  "Can you name 3 things your agency says no to: segments, suburbs, or property types?",
-  "Does every agent and admin describe the agency the same way?",
-  "Do you have a documented brand voice or messaging guide?",
-  "Is every piece of social content tied to a clear positioning story (not just listing photos)?",
-  "Do you have a content plan for the next 30 days mapped to your positioning?",
-  "Do you have a written \"ideal vendor profile\"?",
-  "When you write a listing description, are you writing to that specific vendor (not \"everyone\")?",
-  "Are you winning vendors on value rather than commission discounts in over half your appraisals?",
 ];
 
 const FAQ_ITEMS = [
@@ -98,18 +85,19 @@ const STATS_COLUMNS = [
 ];
 
 const WEEK1_ROWS = [
-  { day: "Mon", title: "Workshop 1", badge: "(75 min)", desc: "Present 3–4 positioning options" },
-  { day: "Tue", title: "Internal team meeting", badge: null, desc: "(without us). Choose a direction" },
-  { day: "Wed", title: "Workshop 2", badge: "(75 min)", desc: "Refine differentiation + voice" },
-  { day: "Thu", title: "Workshop 3", badge: "(75 min)", desc: "Lock the deck" },
-  { day: "Fri", title: "We start drafting the content engine", badge: null, desc: "" },
+  { day: "Monday", title: "Workshop 1", badge: "75 minutes", desc: "Present 3–4 positioning options" },
+  { day: "Tuesday", title: "Internal team meeting", badge: null, desc: "(without us). Choose a direction" },
+  { day: "Wednesday", title: "Workshop 2", badge: "75 minutes", desc: "Refine differentiation + voice" },
+  { day: "Thursday", title: "Workshop 3", badge: "75 minutes", desc: "Lock the deck" },
+  { day: "Friday", title: "We start drafting the content engine", badge: null, desc: "" },
 ];
 
 const WEEK2_ROWS = [
-  { day: "Mon", title: "First 4 weeks of content drafted", badge: null, desc: "" },
-  { day: "Tue", title: "Live review", badge: "(60 min)", desc: "V1 content + voice guide" },
-  { day: "Wed–Thu", title: "Async revisions", badge: null, desc: "" },
-  { day: "Fri", title: "Final feedback", badge: null, desc: "Deck + voice guide locked." },
+  { day: "Monday", title: "First 4 weeks of content drafted", badge: null, desc: "" },
+  { day: "Tuesday", title: "Live review", badge: "60 minutes", desc: "V1 content + voice guide" },
+  { day: "Wednesday", title: "Async revisions", badge: null, desc: "" },
+  { day: "Thursday", title: "Async revisions continued", badge: null, desc: "" },
+  { day: "Friday", title: "Final feedback", badge: null, desc: "Deck + voice guide locked." },
 ];
 
 const INLINE_TESTIMONIALS = [
@@ -210,8 +198,8 @@ const CALENDLY_URL =
 /** Fletch-style: thick black stroke + rounded corners + hover pop */
 const ctaPop =
   "transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D] active:translate-y-0 active:shadow-none";
-const ctaPrimary = `inline-flex flex-col items-center justify-center rounded-xl border-[3px] border-dark bg-orange px-6 py-3.5 text-center font-body text-sm font-bold text-dark shadow-none ${ctaPop} hover:bg-dark hover:text-white`;
-const ctaSecondary = `inline-flex items-center justify-center rounded-xl border-[3px] border-dark bg-white px-6 py-3.5 text-center font-body text-sm font-bold text-dark shadow-none ${ctaPop} hover:bg-dark hover:text-white`;
+const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-xl border-[3px] border-dark bg-orange px-4 py-2.5 text-center font-body text-[13px] font-bold leading-snug text-white shadow-none sm:px-6 sm:py-3.5 sm:text-sm ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
+const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-xl border-[3px] border-dark bg-white px-4 py-2.5 text-center font-body text-[13px] font-bold leading-snug text-dark shadow-none sm:px-6 sm:py-3.5 sm:text-sm ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
 
 const OFFER_INTRO =
   "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content, without you lifting a finger.";
@@ -279,56 +267,173 @@ function renderBoldSegments(text) {
 }
 
 function Nav() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const linkClass =
     "whitespace-nowrap font-body text-sm font-medium text-dark/65 transition-colors duration-150 hover:text-dark";
+  /** Fletch mobile overlay: no dividers, no tinted borders on menu chrome */
+  const mobileNavLinkClass =
+    "block py-1 text-center font-body text-lg font-medium text-dark transition-colors hover:text-dark/80";
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white pt-[env(safe-area-inset-top,0px)]">
-      <div
-        className={`mx-auto flex w-full max-w-[min(100%,1280px)] items-center justify-between gap-3 py-3 sm:gap-4 ${pageGutter}`}
-      >
-        <a
-          href="#"
-          className="flex shrink-0 items-center gap-2.5 py-0.5 sm:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
-        >
-          <img
-            src={logoPng}
-            alt=""
-            className="h-9 w-auto shrink-0 sm:h-10 md:h-11"
-            decoding="async"
-            aria-hidden
-          />
-          <span className="font-display text-lg font-bold leading-none tracking-tight text-dark sm:text-xl md:text-2xl">
-            Soubh &amp; Co.
-          </span>
-        </a>
-        <div className="flex min-w-0 items-center justify-end gap-4 sm:gap-6 md:gap-8">
-          <nav className="hidden items-center gap-5 md:flex lg:gap-8" aria-label="Primary">
-            <a href="#case-studies" className={linkClass}>
-              Case studies
-            </a>
-            <a href="#sprint" className={linkClass}>
-              Sprint
-            </a>
-            <a href="#pricing" className={linkClass}>
-              Pricing
-            </a>
-            <a href="#faqs" className={linkClass}>
-              FAQs
-            </a>
-          </nav>
+      <div className={`relative mx-auto w-full max-w-[min(100%,1280px)] ${pageGutter}`}>
+        <div className="relative z-50 mx-auto flex w-full max-w-[min(100%,1280px)] items-center justify-between gap-3 py-3 sm:gap-4">
           <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${ctaPrimary} shrink-0 px-3 py-2 sm:px-4 sm:py-2.5`}
+            href="#"
+            className="flex shrink-0 items-center gap-2.5 py-0.5 sm:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
+            onClick={() => setMenuOpen(false)}
           >
-            Reserve your sprint
-            <span className="mt-0.5 block max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight opacity-90 sm:max-w-none">
-              (Founding pricing, 3 spots)
+            <img
+              src={logoPng}
+              alt=""
+              className="h-9 w-auto shrink-0 sm:h-10 md:h-11"
+              decoding="async"
+              aria-hidden
+            />
+            <span className="font-display text-lg font-bold leading-none tracking-tight text-dark sm:text-xl md:text-2xl">
+              Soubh &amp; Co.
             </span>
           </a>
+          <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3 md:gap-8">
+            <nav className="hidden items-center gap-5 md:flex lg:gap-8" aria-label="Primary">
+              <a href="#case-studies" className={linkClass}>
+                Case studies
+              </a>
+              <a href="#sprint" className={linkClass}>
+                Sprint
+              </a>
+              <a href="#pricing" className={linkClass}>
+                Pricing
+              </a>
+              <a href="#faqs" className={linkClass}>
+                FAQs
+              </a>
+            </nav>
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex`}
+            >
+              Reserve your sprint
+              <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
+                (Founding pricing, 3 spots)
+              </span>
+            </a>
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-orange bg-white text-dark transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2 md:hidden"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav-panel"
+              aria-label={menuOpen ? "Menu open" : "Open menu"}
+              tabIndex={menuOpen ? -1 : 0}
+              onClick={() => setMenuOpen(true)}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+                <path
+                  d="M5 7h14M5 12h14M5 17h14"
+                  stroke="currentColor"
+                  strokeWidth="2.25"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
+
+        {menuOpen ? (
+          <div
+            id="mobile-nav-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+            className="fixed inset-0 z-[100] flex min-h-0 flex-col bg-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] md:hidden"
+          >
+            <div
+              className={`mx-auto flex w-full max-w-[min(100%,1280px)] shrink-0 items-center justify-between gap-3 py-3 sm:gap-4 ${pageGutter}`}
+            >
+              <a
+                href="#"
+                className="flex shrink-0 items-center gap-2.5 py-0.5 sm:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                <img
+                  src={logoPng}
+                  alt=""
+                  className="h-9 w-auto shrink-0 sm:h-10"
+                  decoding="async"
+                  aria-hidden
+                />
+                <span className="font-display text-lg font-bold leading-none tracking-tight text-dark sm:text-xl">
+                  Soubh &amp; Co.
+                </span>
+              </a>
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dark bg-white text-dark transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
+                aria-label="Close menu"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+                  <path
+                    d="M6 6l12 12M18 6L6 18"
+                    stroke="currentColor"
+                    strokeWidth="2.25"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-14 px-6 sm:gap-16">
+              <nav className="flex flex-col items-center gap-10 sm:gap-11" aria-label="Mobile primary">
+                <a
+                  href="#case-studies"
+                  className={mobileNavLinkClass}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Case studies
+                </a>
+                <a href="#sprint" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
+                  Sprint
+                </a>
+                <a href="#pricing" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
+                  Pricing
+                </a>
+                <a href="#faqs" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
+                  FAQs
+                </a>
+              </nav>
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${ctaPrimary} w-full max-w-md`}
+                onClick={() => setMenuOpen(false)}
+              >
+                Reserve your sprint
+                <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
+                  (Founding pricing, 3 spots)
+                </span>
+              </a>
+            </div>
+          </div>
+        ) : null}
       </div>
     </header>
   );
@@ -370,19 +475,19 @@ function Hero() {
         <p className="mt-6 max-w-[640px] font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
           {HERO_BODY}
         </p>
-        <div className="mt-10 flex flex-wrap items-stretch gap-4">
+        <div className="mt-10 flex w-full max-w-lg flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
           <a
             href={CALENDLY_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={ctaPrimary}
+            className={`${ctaPrimary} w-full sm:w-auto`}
           >
             Reserve your sprint
-            <span className="mt-1 font-body text-[11px] font-normal opacity-90">
+            <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
               (Founding pricing, 3 spots)
             </span>
           </a>
-          <a href="#case-studies" className={ctaSecondary}>
+          <a href="#case-studies" className={`${ctaSecondary} w-full sm:w-auto`}>
             See case studies →
           </a>
         </div>
@@ -557,15 +662,17 @@ function OfferBlockThreeColumn() {
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 border-t border-border bg-[#FAFAFA] px-6 py-8 md:px-10">
-            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className={ctaPrimary}>
+          <div className="flex flex-col items-stretch gap-3 border-t border-border bg-[#FAFAFA] px-4 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 sm:px-6 md:px-10 md:py-8">
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${ctaPrimary} w-full sm:w-auto`}
+            >
               Reserve your sprint
-              <span className="mt-1 font-body text-[11px] font-normal opacity-90">
+              <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
                 (Founding pricing, 3 spots)
               </span>
-            </a>
-            <a href="#quiz" className={ctaSecondary}>
-              Take the 2-minute quiz →
             </a>
           </div>
         </div>
@@ -583,26 +690,27 @@ function OfferBlockThreeColumn() {
   );
 }
 
-const GRID_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const GRID_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+/** Fletch-style: workshops + live review in brand blue; everything else black */
+function weekCellTitleClass(title) {
+  const t = title.toLowerCase();
+  const accent = t.includes("workshop") || t.includes("live review");
+  return accent ? "text-orange" : "text-dark";
+}
 
 function WeekCell({ row }) {
-  const highlight =
-    row.title.includes("Workshop") || row.title === "Live review";
   return (
-    <div className="min-h-[100px] border-border p-3 md:min-h-[140px] md:border-l md:border-dashed md:p-4">
-      <p className="font-body text-[11px] font-bold uppercase tracking-wide text-dark">{row.day}</p>
-      <p
-        className={`mt-2 font-body text-sm font-bold leading-snug ${
-          highlight ? "text-orange" : "text-dark"
-        }`}
-      >
+    <div className="flex min-h-[128px] flex-col p-5 md:min-h-[168px] md:border-l md:border-dotted md:border-border md:p-6 md:pt-6">
+      <p className="font-body text-[13px] font-bold tracking-tight text-dark">{row.day}</p>
+      <p className={`mt-3 font-body text-[15px] font-bold leading-snug tracking-tight md:text-base ${weekCellTitleClass(row.title)}`}>
         {row.title}
       </p>
       {row.badge ? (
-        <p className="mt-1 font-body text-xs text-dark">{row.badge}</p>
+        <p className="mt-1.5 font-body text-[13px] font-normal leading-snug text-mid">{row.badge}</p>
       ) : null}
       {row.desc ? (
-        <p className="mt-2 font-body text-xs leading-[1.65] text-dark">{row.desc}</p>
+        <p className="mt-2 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">{row.desc}</p>
       ) : null}
     </div>
   );
@@ -616,41 +724,47 @@ function SprintTimeline() {
           Here&apos;s exactly what the sprint looks like
         </h2>
 
-        <div className="relative mt-12 rounded-2xl border-[3px] border-dark bg-white p-8 pt-10 md:p-10 md:pt-12">
-          <span className="absolute -top-3 left-8 inline-flex rounded-lg border-2 border-dark bg-white px-3 py-1 font-display text-xs font-bold tracking-tight text-dark md:left-10">
-            Pre-Work
-          </span>
-          <div className="mt-4 grid gap-10 border-t border-border pt-10 md:grid-cols-2 md:gap-12">
-            <div>
-              <p className="font-body text-sm font-bold text-dark">Your team</p>
-              <p className="mt-2 font-body text-sm leading-[1.65] text-dark">
+        <div className="mt-12 overflow-hidden rounded-3xl border-2 border-dark bg-white">
+          <div className="p-5 md:p-6">
+            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
+              Pre-Work
+            </span>
+          </div>
+          <div className="grid border-t border-border md:grid-cols-2">
+            <div className="p-5 md:p-6 md:pr-8">
+              <p className="font-body text-[15px] font-bold leading-snug tracking-tight text-dark md:text-base">
+                Your team
+              </p>
+              <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
                 15-min intake form + send listing presentations + last 30 days of social
               </p>
             </div>
-            <div>
-              <p className="font-body text-sm font-bold text-dark">Our team</p>
-              <p className="mt-2 font-body text-sm leading-[1.65] text-dark">
+            <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
+              <p className="font-body text-[15px] font-bold leading-snug tracking-tight text-dark md:text-base">
+                Our team
+              </p>
+              <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
                 Audit competitors, social, REA/Domain footprint, 5 comparable agencies
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
-          <div className="hidden grid-cols-6 border-b border-border bg-[#FAFAFA] md:grid">
-            <div className="border-r border-border" />
+        <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white shadow-none">
+          <div className="hidden grid-cols-6 border-b border-border bg-white md:grid">
+            <div className="border-r border-dotted border-border" aria-hidden />
             {GRID_DAYS.map((d) => (
               <div
                 key={d}
-                className="border-l border-dashed border-border px-3 py-3 text-center font-body text-[11px] font-bold uppercase tracking-wide text-dark"
+                className="border-l border-dotted border-border px-2 py-4 text-center font-body text-[13px] font-bold tracking-tight text-dark md:py-5"
               >
                 {d}
               </div>
             ))}
           </div>
           <div className="hidden md:grid md:grid-cols-6">
-            <div className="flex flex-col border-r border-border p-4">
-              <span className="inline-flex w-fit rounded-lg border-2 border-dark bg-[#FFE8DE] px-2 py-1.5 font-body text-[10px] font-bold uppercase leading-tight tracking-wide text-dark">
+            <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
+              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
                 Week 01 · Strategy
               </span>
             </div>
@@ -659,8 +773,8 @@ function SprintTimeline() {
             ))}
           </div>
           <div className="hidden border-t border-border md:grid md:grid-cols-6">
-            <div className="flex flex-col border-r border-border p-4">
-              <span className="inline-flex w-fit rounded-lg border-2 border-dark bg-[#FFF3E0] px-2 py-1.5 font-body text-[10px] font-bold uppercase leading-tight tracking-wide text-dark">
+            <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
+              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
                 Week 02 · Content
               </span>
             </div>
@@ -669,18 +783,18 @@ function SprintTimeline() {
             ))}
           </div>
           <div className="border-t border-border p-6 md:hidden">
-            <p className="font-body text-xs font-bold uppercase text-dark">Week 01 · Strategy</p>
-            <div className="mt-4 space-y-4">
+            <p className="font-body text-[11px] font-bold uppercase tracking-wide text-dark">Week 01 · Strategy</p>
+            <div className="mt-5 space-y-6">
               {WEEK1_ROWS.map((row) => (
-                <div key={row.day} className="border-b border-border pb-4 last:border-0">
+                <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
                   <WeekCell row={row} />
                 </div>
               ))}
             </div>
-            <p className="mt-8 font-body text-xs font-bold uppercase text-dark">Week 02 · Content</p>
-            <div className="mt-4 space-y-4">
+            <p className="mt-10 font-body text-[11px] font-bold uppercase tracking-wide text-dark">Week 02 · Content</p>
+            <div className="mt-5 space-y-6">
               {WEEK2_ROWS.map((row) => (
-                <div key={row.day} className="border-b border-border pb-4 last:border-0">
+                <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
                   <WeekCell row={row} />
                 </div>
               ))}
@@ -688,16 +802,16 @@ function SprintTimeline() {
           </div>
         </div>
 
-        <div className="relative mt-10 overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
-          <div className="p-8 md:p-10">
-            <span className="inline-flex rounded-lg border-2 border-dark bg-[#FFE8DE] px-2 py-1.5 font-body text-[10px] font-bold uppercase tracking-wide text-dark">
+        <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white">
+          <div className="p-5 md:p-6">
+            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
               Months 01–03 · Content engine
             </span>
-            <ul className="mt-6 space-y-3 font-body text-sm text-dark">
-              <li>Weekly content batches delivered. Scheduled by us.</li>
-              <li>Monthly Loom report plus a 30-minute review call.</li>
-            </ul>
           </div>
+          <ul className="space-y-4 border-t border-border p-5 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:space-y-5 md:p-6 md:pt-6 md:text-sm">
+            <li>Weekly content batches delivered. Scheduled by us.</li>
+            <li>Monthly Loom report plus a 30-minute review call.</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -792,171 +906,8 @@ function ProblemChecklist() {
                 <p className="mt-3 font-body text-sm leading-[1.65] text-dark md:text-base">{message.subtitle}</p>
               ) : null}
             </div>
-            <a
-              href="#quiz"
-              className="mt-8 inline-block text-center font-body text-sm font-semibold text-orange underline underline-offset-4 transition-colors hover:text-dark lg:text-left"
-            >
-              Take the 2-minute quiz →
-            </a>
           </aside>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function scoreAnswer(value) {
-  if (value === "yes") return 3;
-  if (value === "sometimes") return 1;
-  return 0;
-}
-
-function Quiz() {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [pending, setPending] = useState(null);
-  const [email, setEmail] = useState("");
-  const [emailStatus, setEmailStatus] = useState("idle");
-
-  const totalSteps = QUIZ_QUESTIONS.length;
-  const isDone = step >= totalSteps;
-  const score = useMemo(
-    () => answers.reduce((acc, a) => acc + scoreAnswer(a), 0),
-    [answers]
-  );
-  const progress = isDone ? 100 : ((step + 1) / totalSteps) * 100;
-  const result =
-    score <= 10
-      ? {
-          emoji: "🟥",
-          title: "You're Invisible.",
-          body: "You don't have a positioning yet. Everything is on the table, but another agency in your market is about to plant a flag first.",
-        }
-      : score <= 20
-        ? {
-            emoji: "🟧",
-            title: "You're Known, but Not Different.",
-            body: "You have results. But the team isn't aligned and the marketing tells five different stories.",
-          }
-        : {
-            emoji: "🟨",
-            title: "You're Growing, but Unfocused.",
-            body: "You have positioning instincts and momentum. The next stage is choosing what to give up.",
-          };
-
-  const goNext = () => {
-    if (pending == null) return;
-    setAnswers((prev) => [...prev, pending]);
-    setPending(null);
-    setStep((s) => s + 1);
-  };
-
-  const reset = () => {
-    setStep(0);
-    setAnswers([]);
-    setPending(null);
-    setEmail("");
-    setEmailStatus("idle");
-  };
-
-  const submitEmail = (e) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setEmailStatus("sent");
-  };
-
-  return (
-    <section id="quiz" className="scroll-mt-24 border-b border-border bg-white py-20 md:py-28">
-      <div className={content}>
-        <h2 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-bold tracking-tight text-dark">
-          Does your agency have a positioning problem?
-        </h2>
-        <p className="mt-2 font-body text-sm italic text-dark">A 2-minute self-diagnostic.</p>
-        <div className="mb-10 mt-8 h-px w-full bg-border">
-          <div className="h-full bg-orange transition-all duration-300" style={{ width: `${progress}%` }} />
-        </div>
-
-        {!isDone ? (
-          <div>
-            <p className="mb-8 font-display text-xl font-semibold leading-snug text-dark">
-              {QUIZ_QUESTIONS[step]}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {["Yes", "Sometimes", "No"].map((label) => {
-                const v = label === "Yes" ? "yes" : label === "Sometimes" ? "sometimes" : "no";
-                const selected = pending === v;
-                return (
-                  <button
-                    key={label}
-                    type="button"
-                    onClick={() => setPending(v)}
-                    className={`border px-6 py-3 font-body text-sm transition-colors ${
-                      selected
-                        ? "border-dark bg-dark text-white"
-                        : "border-border bg-white text-dark hover:border-dark"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={pending == null}
-              className="mt-8 bg-dark px-6 py-3 font-body text-sm font-semibold text-white transition-colors hover:bg-orange disabled:opacity-35"
-            >
-              Next →
-            </button>
-          </div>
-        ) : (
-          <div>
-            <p className="font-display text-7xl font-extrabold leading-none text-orange">{score}</p>
-            <p className="mt-2 text-3xl">{result.emoji}</p>
-            <h3 className="mt-4 font-display text-2xl font-bold text-dark">{result.title}</h3>
-            <p className="mt-3 max-w-[480px] font-body text-base leading-[1.65] text-dark">{result.body}</p>
-            <form onSubmit={submitEmail} className="mt-10">
-              <label className="mb-2 block font-body text-sm font-medium text-dark">
-                Get your full diagnosis sent to your inbox
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@agency.com.au"
-                className="w-full max-w-sm border border-border px-4 py-3 font-body text-sm outline-none transition-colors focus:border-dark"
-              />
-              <button
-                type="submit"
-                className="mt-3 bg-orange px-5 py-3 font-body text-sm font-semibold text-white transition-colors hover:bg-dark"
-              >
-                Send my results
-              </button>
-              {emailStatus === "sent" && (
-                <p className="mt-3 font-body text-sm text-orange">
-                  Thanks. We&apos;ll be in touch (demo: no email sent).
-                </p>
-              )}
-            </form>
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${ctaPrimary} mt-6`}
-            >
-              Reserve your sprint ($5,000 founding pricing) →
-            </a>
-            <button
-              type="button"
-              onClick={reset}
-              className="mt-6 block font-body text-sm text-dark underline underline-offset-4 hover:text-dark"
-            >
-              Retake quiz
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );
@@ -1101,15 +1052,15 @@ function FinalCTA() {
         <p className="mx-auto mt-5 max-w-lg text-center font-body text-base text-dark">
           Founding pricing. 3 spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
         </p>
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 flex justify-center px-0">
           <a
             href={CALENDLY_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={ctaPrimary}
+            className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}
           >
             Reserve your sprint
-            <span className="mt-1 block font-body text-[11px] font-normal opacity-90">
+            <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
               (Founding pricing, 3 spots)
             </span>
           </a>
@@ -1169,7 +1120,6 @@ export default function App() {
         <OfferBlockThreeColumn />
         <SprintTimeline />
         <ProblemChecklist />
-        <Quiz />
         <InlineQuoteBand />
         <TestimonialsMasonry />
         <FAQs />

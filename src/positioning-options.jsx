@@ -29,7 +29,7 @@ function CardContent({ card }) {
           </div>
           <div style={{ fontSize: 10, color: "#999", lineHeight: 1.6, marginBottom: 13, maxWidth: 420 }}>{card.sub}</div>
           <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
-            <div style={{ background: "#E8470A", color: "white", fontSize: 9, fontWeight: 700, padding: "5px 11px", borderRadius: 2 }}>Reserve your sprint</div>
+            <div style={{ background: "#08608f", color: "white", fontSize: 9, fontWeight: 700, padding: "5px 11px", borderRadius: 2 }}>Reserve your sprint</div>
             <div style={{ border: "1px solid #D5D5D5", color: "#999", fontSize: 9, fontWeight: 500, padding: "4px 10px", borderRadius: 2 }}>See past work →</div>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function PositioningOptions() {
     {
       number: 3, description: "Position as the off-market specialists",
       tags: [{ color: "#F59E0B", label: "Use Case" }, { color: "#EF4444", label: "Problem" }],
-      headlineLines: [{ text: "The off-market agency.", color: "#E8470A" }, { text: "Better results. Less noise.", color: "#E8470A" }],
+      headlineLines: [{ text: "The off-market agency.", color: "#08608f" }, { text: "Better results. Less noise.", color: "#08608f" }],
       sub: "While other agencies compete on REA and Domain, we build vendor relationships before a listing exists — so your property sells faster, quieter, and at a premium.",
       badge: { label: "BOLD", bg: "#FEE2E2", color: "#991B1B" },
       thesis: ["Off-market is a growing segment premium vendors actively seek", "No competitor owns this angle in Australian boutiques yet", "Defensible high-GCI niche with compounding referrals"],
@@ -85,9 +85,9 @@ export default function PositioningOptions() {
       <div style={{ width: "100%", maxWidth: 1080 }}>
         <div style={{ marginBottom: 40, textAlign: "center" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-            <div style={{ width: 28, height: 1.5, background: "#E8470A" }} />
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#E8470A" }}>Deliverable 1</span>
-            <div style={{ width: 28, height: 1.5, background: "#E8470A" }} />
+            <div style={{ width: 28, height: 1.5, background: "#08608f" }} />
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#08608f" }}>Deliverable 1</span>
+            <div style={{ width: 28, height: 1.5, background: "#08608f" }} />
           </div>
           <div style={{ fontSize: 17, fontWeight: 700, color: "#0D0D0D", letterSpacing: "-0.02em" }}>3–4 positioning strategies, ranked by risk</div>
           <div style={{ fontSize: 12, color: "#999", marginTop: 5 }}>Each option is labelled Safe, Stretch, or Bold — with a breakdown of what you'd gain and what you'd give up.</div>

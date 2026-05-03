@@ -9,7 +9,7 @@ export default {
         sans: ["Inter", "sans-serif"],
       },
       colors: {
-        orange: "#FF4F00",
+        orange: "#08608f",
         dark: "#0D0D0D",
         mid: "#6B6B6B",
         border: "#E5E5E5",
