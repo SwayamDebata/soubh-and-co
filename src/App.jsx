@@ -1,21 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import logoPng from "./assets/logo.png";
-import brandsPng from "./assets/brands.png";
-import img3 from "./assets/position.png";
-import img6 from "./assets/image6.png";
-import img7 from "./assets/image7.jpg";
-import img8 from "./assets/image8.jpg";
-import img9 from "./assets/image9.png";
-import img10 from "./assets/image10.png";
-import img11 from "./assets/image11.png";
+import positionPng from "./assets/position.png";
+import positionPng2 from "./assets/position2.png";
+import positionPng3 from "./assets/position3.png";
+import brandZammit from "./assets/zammit.png";
+import brandArum from "./assets/arum.png";
+import brandCarismatic from "./assets/carismatic.png";
+import brandTspg from "./assets/tspg.png";
+import brandBai from "./assets/bai.png";
 
 const CHECKLIST_ITEMS = [
-  "Vendors can't tell what makes you different from the agency next door",
-  "Every agent on your team describes the business differently",
-  "Your social posts are just listing photos: there's no story",
-  "You're getting beaten on commission, not winning on value",
-  "You've grown the team but the brand still feels like a startup",
-  'You "do everything for everyone" and it shows in your marketing',
+  "Vendors can't tell what makes you different from the agency next door.",
+  "Every agent on your team describes the business differently.",
+  "Your social posts are just listing photos — there's no story.",
+  "You're getting beaten on commission, not winning on value.",
+  "You've grown the team but the brand still feels like a startup.",
+  'You "do everything for everyone" and it shows in your marketing.',
 ];
 
 const FAQ_ITEMS = [
@@ -24,163 +24,91 @@ const FAQ_ITEMS = [
     a: "Because we're not trying to be a marketing agency. We're trying to be the marketing agency for one specific kind of business. The deeper the niche, the better the work.",
   },
   {
-    q: "Do you write our website?",
-    a: "The sprint covers positioning, the deck, and the content. The homepage rewrite isn't included. Most boutique agencies get more leverage from social and listing presentations. We'll quote that separately.",
+    q: "Do we get a website rewrite?",
+    a: "The sprint covers positioning, the pitch deck, and the content. The homepage isn't included by default — most boutique agencies generate more leverage from listing presentations and social than their homepage. We'll happily quote it as a follow-on.",
   },
   {
     q: "What if our team can't agree on the positioning?",
-    a: "That's exactly why the deck exists. The sprint is designed to force the decision and document it so it sticks.",
+    a: "That's exactly why the sprint is structured the way it is. Workshop 1 forces the options. Tuesday forces the internal decision. Workshops 2 and 3 lock it in writing. The pitch deck exists so the decision sticks after we leave.",
   },
   {
     q: "Do you take on franchise offices (Ray White, McGrath, etc.)?",
-    a: "No. Their brand is locked. We work with independents and boutiques only.",
+    a: "No. Their brand is locked at HQ. We work with independents and boutiques who own their own positioning.",
   },
   {
     q: "What if I miss a workshop?",
-    a: "Every session is recorded. But it's a sprint: if you can't commit to four sessions in two weeks, this isn't for you.",
+    a: "Every workshop is recorded. But it's a sprint — if you can't commit to four sessions across two weeks, the sprint isn't for you yet.",
   },
   {
     q: "Can we start with just the strategy and add content later?",
-    a: "Not at founding pricing. The $5K rate is for the full sprint only.",
-  },
-];
-
-const DELIVERABLES = [
-  {
-    title: "3–4 Positioning Strategies, Ranked by Risk",
-    body: "We analyse your last 90 days of marketing, your recent listings, your competitors, and your intake responses. Then we present 3–4 distinct positioning bets, each labelled Safe, Stretch, or Bold.",
-    image: img3,
-  },
-  {
-    title: "A 6-Slide Internal Positioning Deck",
-    body: "Nobody reads a 50-slide brand guide. Six slides with the exact words for what you do, who it's for, why you, and how you say it. Drop it in your next sales meeting. Watch your team finally tell the same story.",
-    image: null,
-  },
-  {
-    title: "3 Months of Content, Scheduled in Your Voice",
-    body: "~36 pieces of content (3/week) across Instagram, LinkedIn, and one weekly long-form. Mapped to your new positioning. Written and scheduled by us. Reviewed monthly.",
-    image: null,
+    a: "Not at founding pricing. The $5K rate is for the full sprint. After our first three clients, we'll consider modular options.",
   },
 ];
 
 const HERO_BODY =
-  "Soubh & Co. is a positioning consultancy for boutique Australian real estate agencies. In two weeks, we find what actually makes you different, and put it in front of the right vendors for the next 90 days.";
+  "Soubh & Co. is a marketing consultancy built for boutique Australian real estate agencies. We define your positioning, build your pitch deck, and run your social for 90 days.";
 
-const STATS_COLUMNS = [
+const DELIVERABLE_CARDS = [
   {
-    label: "The Real Estate Positioning Sprint",
-    body: HERO_BODY,
-    stat: "2 weeks",
+    label: "Deliverable 1",
+    heading: "3–4 positioning strategies, ranked by risk",
+    body: "Built from a deep audit of your last 90 days of marketing, your recent listings, your team's intake responses, and 5 competing agencies in your market.",
+    foot: "3–4 strategies · Safe / Stretch / Bold",
+    image: positionPng,
+    imageAlt: "Positioning options: strategic bets presented in the sprint.",
   },
   {
-    label: DELIVERABLES[2].title,
-    body: DELIVERABLES[2].body,
-    stat: "90 days",
+    label: "Deliverable 2",
+    heading: "A documented 6-slide pitch deck",
+    body: "A vendor-facing pitch deck built on your new positioning. The deck your principal walks into every appraisal with. Extend it with listing-specific case studies and the deck closes itself.",
+    foot: "6-slide deck · Used in every appraisal",
+    image: positionPng2,
+    imageAlt: "6-slide pitch deck preview from the sprint.",
   },
   {
-    label: DELIVERABLES[0].title,
-    body: DELIVERABLES[0].body,
-    stat: "3–4",
+    label: "Deliverable 3",
+    heading: "3 months of content, scheduled in your voice",
+    body: "36 pieces of content across Instagram, LinkedIn, and weekly long-form. Mapped to your new positioning. Reviewed monthly.",
+    foot: "90 days · 3 posts/week, scheduled by us",
+    image: positionPng3,
+    imageAlt: "Content calendar and channels from the sprint.",
   },
 ];
 
 const WEEK1_ROWS = [
-  { day: "Monday", title: "Workshop 1", badge: "75 minutes", desc: "Present 3–4 positioning options" },
-  { day: "Tuesday", title: "Internal team meeting", badge: null, desc: "(without us). Choose a direction" },
-  { day: "Wednesday", title: "Workshop 2", badge: "75 minutes", desc: "Refine differentiation + voice" },
-  { day: "Thursday", title: "Workshop 3", badge: "75 minutes", desc: "Lock the deck" },
+  { day: "Monday", title: "Workshop 1", badge: "75 min", desc: "Present 3–4 positioning options" },
+  { day: "Tuesday", title: "Internal team meeting", badge: "60 min", desc: "Internal call: choose a direction" },
+  { day: "Wednesday", title: "Workshop 2", badge: "75 min", desc: "Refine differentiation + voice" },
+  { day: "Thursday", title: "Workshop 3", badge: "75 min", desc: "Lock the deck" },
   { day: "Friday", title: "We start drafting the content engine", badge: null, desc: "" },
 ];
 
 const WEEK2_ROWS = [
   { day: "Monday", title: "First 4 weeks of content drafted", badge: null, desc: "" },
-  { day: "Tuesday", title: "Live review", badge: "60 minutes", desc: "V1 content + voice guide" },
+  { day: "Tuesday", title: "Live review", badge: "60 min", desc: "V1 of content + voice guide" },
   { day: "Wednesday", title: "Async revisions", badge: null, desc: "" },
   { day: "Thursday", title: "Async revisions continued", badge: null, desc: "" },
   { day: "Friday", title: "Final feedback", badge: null, desc: "Deck + voice guide locked." },
 ];
 
-const INLINE_TESTIMONIALS = [
+const THREE_TESTIMONIALS = [
   {
-    text: "I've been working with Soubh for years and I still can't say his name right. But I can tell you this: his work is **unforgettable**. That's really all you need to know.",
+    text: "I've been working with him (Soubh, Saubh, Subh, Soub) for years and I still can't say his name right. But I can tell you this: his work is **unforgettable**. That's really all you need to know.",
     name: "Mark Zammit",
-    role: "Zammit Real Estate",
+    role: "Director, Zammit Real Estate",
     initials: "MZ",
   },
   {
-    text: "We had great results but nobody knew why we were different. After the sprint, **every agent on the team tells the same story**.",
-    name: "[Placeholder Name]",
-    role: "[Agency]",
-    initials: "SA",
+    text: "He helped streamline our workflows, saving us time and effort. His attention to detail and a keen understanding of our business needs have made him an invaluable partner.",
+    name: "Jason McCall",
+    role: "Director, The SMSF Property Guy",
+    initials: "JM",
   },
   {
-    text: "The positioning strategies we got weren't generic. They were built around our market, our competitors, and our actual clients. We chose the Bold option. **Best decision we've made.**",
-    name: "[Placeholder Name]",
-    role: "[Agency]",
-    initials: "TB",
-  },
-  {
-    text: "In two weeks we had more clarity on our brand than we'd had in five years of running the agency.",
-    name: "[Placeholder Name]",
-    role: "[Agency]",
-    initials: "JC",
-  },
-];
-
-const GRID_TESTIMONIALS = [
-  {
-    quote:
-      "I've been working with Soubh for years and I still can't say his name right. But I can tell you this: his work is unforgettable. That's really all you need to know.",
-    name: "Mark Zammit",
-    title: "Principal",
-    company: "Zammit Real Estate",
-    highlight: "unforgettable",
-    avatarSrc: img6,
-  },
-  {
-    quote:
-      "The sprint forced us to pick a lane. Our listing presentations finally sound like us, not a template from 2014.",
-    name: "[Name]",
-    title: "[Title]",
-    company: "[Agency]",
-    highlight: null,
-    avatarSrc: img7,
-  },
-  {
-    quote:
-      "We stopped competing on commission the month the new positioning went live. Vendors cite our niche before we mention fees.",
-    name: "[Name]",
-    title: "[Title]",
-    company: "[Agency]",
-    highlight: null,
-    avatarSrc: img8,
-  },
-  {
-    quote:
-      "Six slides beat our fifty-page brand PDF. The team actually uses it.",
-    name: "[Name]",
-    title: "[Title]",
-    company: "[Agency]",
-    highlight: null,
-    avatarSrc: img9,
-  },
-  {
-    quote:
-      "Content finally matches what we say in appraisals. One story, everywhere.",
-    name: "[Name]",
-    title: "[Title]",
-    company: "[Agency]",
-    highlight: null,
-    avatarSrc: img10,
-  },
-  {
-    quote:
-      "Content finally matches what we say in appraisals. One story, everywhere.",
-    name: "[Name]",
-    title: "[Title]",
-    company: "[Agency]",
-    highlight: null,
-    avatarSrc: img11,
+    text: "Finding Soubh through a random Facebook group was the best thing that ever happened to my business. He completely transformed my scattered online presence into a cohesive, powerful brand that now attracts high-quality leads daily.",
+    name: "Arshak Wasim",
+    role: "Director, Arum & Co",
+    initials: "AW",
   },
 ];
 
@@ -202,7 +130,7 @@ const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rou
 const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-xl border-[3px] border-dark bg-white px-4 py-2.5 text-center font-body text-[13px] font-bold leading-snug text-dark shadow-none sm:px-6 sm:py-3.5 sm:text-sm ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
 
 const OFFER_INTRO =
-  "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content, without you lifting a finger.";
+  "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content — without you lifting a finger.";
 
 const OFFER_WHAT_ITEMS = [
   {
@@ -210,44 +138,12 @@ const OFFER_WHAT_ITEMS = [
     body: "Three workshops to review your strategic positioning options, align on your messaging, and build the story you'll tell vendors, the team, and the market.",
   },
   {
-    title: "A documented internal positioning deck",
-    body: "6 slides. Used by your principal at the next sales meeting. Used by your agents the next time they pitch.",
+    title: "A documented 6-slide pitch deck",
+    body: "Built on your new positioning. The deck your principal walks into every appraisal with. The one that closes listings.",
   },
   {
     title: "3 months of content, scheduled in your voice",
     body: "Instagram, LinkedIn, and one weekly long-form. Aligned to your new positioning. We write it. We schedule it. You approve it.",
-  },
-];
-
-const CASE_STUDIES = [
-  {
-    agency: "Zammit Real Estate",
-    headline: "From \"we do it all\" to a clear vendor story.",
-    outcome:
-      "Positioning deck adopted across the sales team. Social moved from generic listings to one repeatable narrative.",
-  },
-  {
-    agency: "Independent · Sydney metro",
-    headline: "Three positioning bets on the table in week one.",
-    outcome:
-      "Principal chose a Stretch option. Listing copy and LDMs now match the headline on the website.",
-  },
-  {
-    agency: "Boutique · Regional",
-    headline: "Agents aligned before the spring campaign.",
-    outcome:
-      "Workshops settled disagreements that had stalled marketing for two seasons. One deck, one voice.",
-  },
-];
-
-const PRICING_TIERS = [
-  {
-    key: "founding",
-    name: "Founding: first 3 clients only",
-    detail: "AUD. Founding rate, first 3 clients only",
-    price: "$5,000",
-    barClass: "bg-orange",
-    tag: "3 spots left",
   },
 ];
 
@@ -311,9 +207,6 @@ function Nav() {
           </a>
           <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3 md:gap-8">
             <nav className="hidden items-center gap-5 md:flex lg:gap-8" aria-label="Primary">
-              <a href="#case-studies" className={linkClass}>
-                Case studies
-              </a>
               <a href="#sprint" className={linkClass}>
                 Sprint
               </a>
@@ -332,7 +225,7 @@ function Nav() {
             >
               Reserve your sprint
               <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
-                (Founding pricing, 3 spots)
+                Founding pricing. 3 spots.
               </span>
             </a>
             <button
@@ -402,13 +295,6 @@ function Nav() {
 
             <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-14 px-6 sm:gap-16">
               <nav className="flex flex-col items-center gap-10 sm:gap-11" aria-label="Mobile primary">
-                <a
-                  href="#case-studies"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Case studies
-                </a>
                 <a href="#sprint" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
                   Sprint
                 </a>
@@ -428,7 +314,7 @@ function Nav() {
               >
                 Reserve your sprint
                 <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-                  (Founding pricing, 3 spots)
+                  Founding pricing. 3 spots.
                 </span>
               </a>
             </div>
@@ -439,27 +325,36 @@ function Nav() {
   );
 }
 
-const brandsAlt =
-  "Past work across Australia: Zammit Real Estate, Buyer's Agent Investing, The SMSF Property Guy, Carismatic, Arum & Co.";
+const BRAND_LOGOS = [
+  { src: brandZammit, alt: "Zammit Real Estate" },
+  { src: brandTspg, alt: "The SMSF Property Guy" },
+  { src: brandBai, alt: "Buyer's Agent Investing" },
+  { src: brandArum, alt: "Arum & Co." },
+  { src: brandCarismatic, alt: "Carismatic" },
+];
 
-function BrandsImage({ className }) {
-  return (
-    <img
-      src={brandsPng}
-      alt={brandsAlt}
-      className={className}
-      loading="lazy"
-      decoding="async"
-    />
-  );
-}
-
-/** Wide logo strip: scales with content width; larger cap than before (Fletch-style prominence). */
+/** Fletch-style: two centered rows (3 + 2), generous gaps, even logo height */
 function BrandsBar() {
+  const row1 = BRAND_LOGOS.slice(0, 3);
+  const row2 = BRAND_LOGOS.slice(3, 5);
+  const logoClass =
+    "h-8 w-auto max-w-[min(42vw,11rem)] object-contain object-center sm:h-9 sm:max-w-[min(36vw,12.5rem)] md:h-10 md:max-w-[13.5rem] lg:h-11 lg:max-w-[15rem]";
   return (
-    <div className="pt-10 md:pt-12">
-      <div className="overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] md:overflow-x-visible">
-        <BrandsImage className="mx-auto block h-auto w-full max-h-[2.75rem] object-contain object-center sm:max-h-12 md:max-h-14 lg:max-h-[3.75rem]" />
+    <div>
+      <p className="mb-8 text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-10 md:text-xs">
+        Past work across Australia.
+      </p>
+      <div className="mx-auto flex w-full max-w-[min(100%,920px)] flex-col items-center gap-9 md:gap-11">
+        <div className="flex w-full flex-wrap items-center justify-center gap-x-10 gap-y-7 sm:gap-x-14 md:gap-x-16 lg:gap-x-20">
+          {row1.map(({ src, alt }) => (
+            <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
+          ))}
+        </div>
+        <div className="flex w-full flex-wrap items-center justify-center gap-x-10 gap-y-7 sm:gap-x-14 md:gap-x-16 lg:gap-x-20">
+          {row2.map(({ src, alt }) => (
+            <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -467,10 +362,10 @@ function BrandsBar() {
 
 function Hero() {
   return (
-    <section className="pb-0 pt-12 sm:pt-16 md:pt-24">
+    <section className="border-b border-border pb-12 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-24">
       <div className={contentWide}>
         <h1 className="max-w-[920px] font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
-          Your agency sounds like every other agency on the high street.
+          You&apos;re the best-kept secret in your suburb. That&apos;s the problem
         </h1>
         <p className="mt-6 max-w-[640px] font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
           {HERO_BODY}
@@ -484,58 +379,92 @@ function Hero() {
           >
             Reserve your sprint
             <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-              (Founding pricing, 3 spots)
+              Founding pricing. 3 spots.
             </span>
           </a>
-          <a href="#case-studies" className={`${ctaSecondary} w-full sm:w-auto`}>
-            See case studies →
+          <a href="#deliverables" className={`${ctaSecondary} w-full sm:w-auto`}>
+            See deliverables ↓
           </a>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function DeliverableImageStack({ src, alt }) {
+  return (
+    <div className="mx-auto w-full max-w-[min(100%,600px)]">
+      <img src={src} alt={alt} className="block h-auto w-full" loading="lazy" decoding="async" />
+    </div>
+  );
+}
+
+function DeliverableCards() {
+  return (
+    <section id="deliverables" className="scroll-mt-24 border-b border-border bg-white py-16 md:py-24">
+      <div className={contentWide}>
+        <h2 className="max-w-[720px] font-display text-[clamp(1.5rem,3.5vw,2rem)] font-bold leading-snug tracking-tight text-dark">
+          Three deliverables. One sprint. No fluff.
+        </h2>
+        <div className="mt-14 flex flex-col gap-16 md:mt-16 md:gap-20 lg:gap-24">
+          {DELIVERABLE_CARDS.map((card, i) => {
+            const imageLeft = i % 2 === 1;
+            return (
+              <article key={card.label}>
+                <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-0 xl:gap-x-20">
+                  <div
+                    className={`flex w-full min-w-0 flex-col justify-center lg:max-w-xl ${
+                      imageLeft ? "lg:order-2 lg:justify-self-end" : "lg:justify-self-start"
+                    }`}
+                  >
+                    <p className="font-body text-xs font-bold uppercase tracking-[0.18em] text-mid">{card.label}</p>
+                    <h3 className="mt-3 font-display text-[clamp(1.35rem,3.2vw,2rem)] font-bold leading-[1.12] tracking-tight text-dark md:text-[1.75rem] lg:mt-4 lg:text-[2rem]">
+                      {card.heading}
+                    </h3>
+                    <p className="mt-5 font-body text-[15px] leading-[1.7] text-dark/75 md:text-base">{card.body}</p>
+                    <p className="mt-6 pt-1 font-body text-xs font-semibold uppercase tracking-wide text-dark/80">
+                      {card.foot}
+                    </p>
+                  </div>
+                  <div
+                    className={`w-full min-w-[240px] shrink-0 ${
+                      imageLeft ? "lg:order-1 lg:justify-self-start" : "lg:justify-self-end"
+                    }`}
+                  >
+                    <DeliverableImageStack src={card.image} alt={card.imageAlt} />
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LogoStrip() {
+  return (
+    <section className="border-b border-border py-16 md:py-20">
+      <div className={contentWide}>
         <BrandsBar />
       </div>
     </section>
   );
 }
 
-function StatsThreeCol() {
-  return (
-    <section className="border-b border-border py-20 md:py-28">
-      <div className={contentWide}>
-        <div className="grid divide-y divide-border border-y border-border md:grid-cols-3 md:divide-x md:divide-y-0">
-          {STATS_COLUMNS.map((col) => (
-            <div key={col.label} className="flex flex-col px-0 py-10 md:px-10 md:py-8">
-              <p className="font-display text-sm font-bold uppercase tracking-wide text-dark">
-                {col.label}
-              </p>
-              <p className="mt-4 flex-1 font-body text-sm leading-[1.65] text-dark md:text-[15px]">
-                {col.body}
-              </p>
-              <p className="mt-8 font-display text-4xl font-extrabold tracking-tight text-dark md:text-5xl">
-                {col.stat}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function TestimonialThreeCards() {
-  const items = INLINE_TESTIMONIALS.slice(0, 3);
+  const items = THREE_TESTIMONIALS;
   return (
     <section className="border-b border-border py-20 md:py-28">
       <div className={contentWide}>
         <div className="grid gap-6 md:grid-cols-3">
           {items.map((item) => (
-            <article
-              key={item.name + item.initials}
-              className="flex flex-col border border-border bg-white p-6"
-            >
+            <article key={item.name} className="flex flex-col bg-white p-6">
               <p className="font-body text-sm leading-[1.65] text-dark">
                 {renderBoldSegments(item.text)}
               </p>
-              <div className="mt-6 flex items-center gap-3 border-t border-border pt-5">
+              <div className="mt-6 flex items-center gap-3 pt-1">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F0F0F0] font-body text-xs font-medium text-dark">
                   {item.initials}
                 </div>
@@ -552,53 +481,12 @@ function TestimonialThreeCards() {
   );
 }
 
-function CaseStudies() {
-  return (
-    <section id="case-studies" className="scroll-mt-24 border-b border-border py-20 md:py-28">
-      <div className={contentWide}>
-        <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
-          Case studies
-        </h2>
-        <p className="mt-4 max-w-2xl font-body text-base leading-[1.65] text-dark">
-          Outcomes-first snapshots. Swap in your real names, suburbs, and metrics when you are ready to publish.
-        </p>
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {CASE_STUDIES.map((cs) => (
-            <article
-              key={cs.agency}
-              className="flex flex-col rounded-2xl border-[3px] border-dark bg-white p-6 md:p-8"
-            >
-              <p className="font-body text-[11px] font-bold uppercase tracking-widest text-dark">{cs.agency}</p>
-              <h3 className="mt-4 font-display text-lg font-bold leading-snug text-dark md:text-xl">{cs.headline}</h3>
-              <p className="mt-4 flex-1 font-body text-sm leading-[1.65] text-dark">{cs.outcome}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg className="mt-0.5 h-5 w-5 shrink-0 text-dark/40" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M16.667 5L7.5 14.167 3.333 10"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function OfferBlockThreeColumn() {
+function SprintCallout() {
   return (
     <section id="sprint" className="scroll-mt-24 border-b border-border py-20 md:py-28">
       <div className={contentOffer}>
         <div className="overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
-          <div className="grid divide-y divide-border md:grid-cols-3 md:divide-x md:divide-y-0 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)_minmax(0,0.92fr)]">
+          <div className="grid divide-y divide-border md:grid-cols-2 md:divide-x md:divide-y-0">
             <div className="p-7 md:p-9 lg:p-10">
               <h2 className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-dark md:text-[2.25rem] lg:text-[2.35rem]">
                 <span className="block">The Real Estate</span>
@@ -609,13 +497,13 @@ function OfferBlockThreeColumn() {
               </p>
             </div>
             <div className="p-7 md:p-9 lg:p-10">
-              <p className="font-body text-xs font-bold uppercase tracking-widest text-dark">
-                What you get:
-              </p>
+              <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">What you get:</p>
               <ul className="mt-6 space-y-8 md:space-y-9">
                 {OFFER_WHAT_ITEMS.map((item) => (
                   <li key={item.title} className="flex gap-4">
-                    <CheckIcon />
+                    <span className="mt-0.5 shrink-0 font-body text-lg leading-none text-dark" aria-hidden>
+                      ✓
+                    </span>
                     <div>
                       <p className="font-body text-sm font-bold leading-snug text-dark">{item.title}</p>
                       <p className="mt-2 font-body text-sm leading-[1.65] text-dark">{item.body}</p>
@@ -624,66 +512,7 @@ function OfferBlockThreeColumn() {
                 ))}
               </ul>
             </div>
-            <div id="pricing" className="scroll-mt-24 p-7 md:p-9 lg:p-10">
-              <p className="font-body text-xs font-bold uppercase tracking-widest text-dark">
-                Pricing tiers based on your agency size:
-              </p>
-              <p className="mt-2 font-body text-sm italic text-dark">
-                (and the resulting complexity &amp; impact)
-              </p>
-              <div className="mt-6 space-y-2.5 md:mt-8 md:space-y-2">
-                {PRICING_TIERS.map((tier) => (
-                  <div key={tier.key} className="flex min-h-0 overflow-hidden border border-border bg-white">
-                    <div className={`w-1.5 shrink-0 self-stretch ${tier.barClass}`} aria-hidden />
-                    <div className="flex min-w-0 flex-1 flex-col gap-2 py-3 pl-3 pr-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-2.5 sm:pl-4 sm:pr-4">
-                      <div className="min-w-0 sm:max-w-[58%] lg:max-w-[55%]">
-                        <p className="font-body text-sm font-bold leading-snug text-dark">{tier.name}</p>
-                        {tier.detail ? (
-                          <p className="mt-0.5 font-body text-xs leading-snug text-dark">{tier.detail}</p>
-                        ) : null}
-                      </div>
-                      <div className="flex shrink-0 flex-row flex-wrap items-center justify-end gap-2 sm:flex-nowrap sm:gap-3">
-                        <p className="font-display text-2xl font-extrabold leading-none tracking-tight text-dark md:text-3xl">
-                          {tier.price}
-                        </p>
-                        {tier.tag ? (
-                          <span className="bg-orange px-2 py-0.5 font-body text-[10px] font-bold uppercase text-white">
-                            {tier.tag}
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-5 font-body text-xs leading-[1.65] text-dark md:mt-6">
-                All prices AUD, ex-GST. 50% on signing, 50% at start of month 2. Prices published because we have
-                nothing to hide.
-              </p>
-            </div>
           </div>
-          <div className="flex flex-col items-stretch gap-3 border-t border-border bg-[#FAFAFA] px-4 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 sm:px-6 md:px-10 md:py-8">
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${ctaPrimary} w-full sm:w-auto`}
-            >
-              Reserve your sprint
-              <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-                (Founding pricing, 3 spots)
-              </span>
-            </a>
-          </div>
-        </div>
-        <div className="mt-10 flex justify-center px-0">
-          <img
-            src={img3}
-            alt="Positioning options preview: how we present strategic bets in the sprint."
-            className="mx-auto block h-auto w-full max-w-[min(100%,680px)] object-contain"
-            loading="lazy"
-            decoding="async"
-          />
         </div>
       </div>
     </section>
@@ -721,7 +550,7 @@ function SprintTimeline() {
     <section className="border-b border-border py-20 md:py-28">
       <div className={contentWide}>
         <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
-          Here&apos;s exactly what the sprint looks like
+          Here&apos;s exactly what the sprint looks like.
         </h2>
 
         <div className="mt-12 overflow-hidden rounded-3xl border-2 border-dark bg-white">
@@ -736,7 +565,7 @@ function SprintTimeline() {
                 Your team
               </p>
               <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
-                15-min intake form + send listing presentations + last 30 days of social
+                15-min intake form + send listing presentations + last 30 days of social.
               </p>
             </div>
             <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
@@ -744,7 +573,7 @@ function SprintTimeline() {
                 Our team
               </p>
               <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
-                Audit competitors, social, REA/Domain footprint, 5 comparable agencies
+                Audit competitors, social, REA/Domain footprint, 5 comparable agencies.
               </p>
             </div>
           </div>
@@ -765,7 +594,7 @@ function SprintTimeline() {
           <div className="hidden md:grid md:grid-cols-6">
             <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
               <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-                Week 01 · Strategy
+                WEEK 01 · STRATEGY
               </span>
             </div>
             {WEEK1_ROWS.map((row) => (
@@ -775,7 +604,7 @@ function SprintTimeline() {
           <div className="hidden border-t border-border md:grid md:grid-cols-6">
             <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
               <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-                Week 02 · Content
+                WEEK 02 · CONTENT
               </span>
             </div>
             {WEEK2_ROWS.map((row) => (
@@ -783,7 +612,7 @@ function SprintTimeline() {
             ))}
           </div>
           <div className="border-t border-border p-6 md:hidden">
-            <p className="font-body text-[11px] font-bold uppercase tracking-wide text-dark">Week 01 · Strategy</p>
+            <p className="font-body text-[11px] font-bold uppercase tracking-wide text-dark">WEEK 01 · STRATEGY</p>
             <div className="mt-5 space-y-6">
               {WEEK1_ROWS.map((row) => (
                 <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
@@ -791,7 +620,7 @@ function SprintTimeline() {
                 </div>
               ))}
             </div>
-            <p className="mt-10 font-body text-[11px] font-bold uppercase tracking-wide text-dark">Week 02 · Content</p>
+            <p className="mt-10 font-body text-[11px] font-bold uppercase tracking-wide text-dark">WEEK 02 · CONTENT</p>
             <div className="mt-5 space-y-6">
               {WEEK2_ROWS.map((row) => (
                 <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
@@ -805,13 +634,85 @@ function SprintTimeline() {
         <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white">
           <div className="p-5 md:p-6">
             <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-              Months 01–03 · Content engine
+              MONTHS 01–03 · CONTENT ENGINE
             </span>
           </div>
           <ul className="space-y-4 border-t border-border p-5 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:space-y-5 md:p-6 md:pt-6 md:text-sm">
-            <li>Weekly content batches delivered. Scheduled by us.</li>
-            <li>Monthly Loom report plus a 30-minute review call.</li>
+            <li>Weekly content batches. Scheduled by us.</li>
+            <li>Monthly Loom report + 30-minute review call.</li>
           </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ContentNinetyDays() {
+  return (
+    <section className="border-b border-border bg-gradient-to-b from-[#E4EEF3] via-[#EDF4F8] to-[#F2F7FA] py-20 md:py-28">
+      <div className={contentWide}>
+        <div className="rounded-2xl border-[3px] border-dark bg-white p-8 shadow-[8px_8px_0_0_rgba(13,13,13,0.12)] md:rounded-3xl md:p-10 lg:p-12">
+          <p className="inline-block rounded-lg border-2 border-dark bg-orange px-3 py-1.5 font-body text-[10px] font-bold uppercase tracking-[0.2em] text-white md:text-[11px]">
+            After the sprint
+          </p>
+          <h2 className="mt-4 max-w-[920px] font-display text-[clamp(1.85rem,4.2vw,2.85rem)] font-bold leading-[1.08] tracking-tight text-dark md:mt-5">
+            <span className="text-orange">90 days</span> of content. Made for you. Scheduled for you.
+          </h2>
+          <p className="mt-4 max-w-[720px] font-body text-base leading-[1.65] text-dark md:mt-5 md:text-lg">
+            After Week 2, the marketing keeps running while you list, sell, and lead. Here&apos;s what lands in your
+            accounts every week.
+          </p>
+          <div className="mt-10 overflow-hidden rounded-2xl border-2 border-dark bg-[#FAFCFD] md:mt-12 md:rounded-3xl">
+            <div className="grid divide-y divide-border md:grid-cols-3 md:divide-x md:divide-y-0">
+              <div className="p-6 md:p-8">
+                <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">Instagram</p>
+                <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
+                  2 posts / week
+                </p>
+                <p className="mt-4 font-body text-sm leading-[1.65] text-dark/80">
+                  Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched,
+                  scheduled in Meta Business Suite.
+                </p>
+              </div>
+              <div className="p-6 md:p-8">
+                <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">LinkedIn</p>
+                <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
+                  1 post / week
+                </p>
+                <p className="mt-4 font-body text-sm leading-[1.65] text-dark/80">
+                  Founder-fronted thought pieces from the principal&apos;s profile + agency page. Built to position the
+                  agency, not just promote listings.
+                </p>
+              </div>
+              <div className="p-6 md:p-8">
+                <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">Long-form</p>
+                <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
+                  1 piece / week
+                </p>
+                <p className="mt-4 font-body text-sm leading-[1.65] text-dark/80">
+                  Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="mx-auto mt-8 max-w-[900px] text-center font-body text-sm font-medium leading-[1.65] text-dark md:mt-10 md:text-[15px]">
+            ✓ Every batch delivered Friday, for the following week. ✓ Scheduled in your accounts by us. ✓ 30-minute
+            review call + Loom report at days 30, 60, and 90.
+          </p>
+          <div className="mt-10 flex flex-col items-stretch gap-8 rounded-xl bg-[#F4F9FB] px-5 py-6 md:flex-row md:items-end md:justify-between md:gap-12 md:px-8 md:py-7">
+            <p className="max-w-xl flex-1 text-left font-body text-sm font-semibold leading-[1.65] text-dark md:text-base">
+              36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On
+              your schedule.
+            </p>
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${ctaPrimary} w-full shrink-0 md:w-auto`}
+            >
+              Reserve your sprint →
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -825,23 +726,16 @@ function ProblemChecklist() {
     count === 0
       ? {
           emoji: "😊",
-          title: "No problem!",
-          subtitle: null,
+          title: "Nothing ticked yet.",
+          subtitle: "If a line feels true, tick it, we'll show you a readout.",
           boxClass: "bg-[#ECFDF3]",
         }
-      : count <= 2
-        ? {
-            emoji: "🙁",
-            title: "Hmm… maybe",
-            subtitle: "You've got early signs of a positioning problem.",
-            boxClass: "bg-[#FCE7F3]",
-          }
-        : {
-            emoji: "😬",
-            title: "You've got a positioning problem.",
-            subtitle: "We can fix it.",
-            boxClass: "bg-[#FFE8DE]",
-          };
+      : {
+          emoji: "😬",
+          title: "No problem!",
+          subtitle: "If you ticked one or more, you've got a positioning problem. We can fix it.",
+          boxClass: "bg-[#FFE8DE]",
+        };
 
   const toggle = (i) => {
     setChecked((prev) => {
@@ -859,7 +753,7 @@ function ProblemChecklist() {
             <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
               Do you have a positioning problem?
             </h2>
-            <p className="mt-3 font-body text-sm italic text-dark">(Check all that apply)</p>
+            <p className="mt-3 font-body text-sm italic text-dark">(Tick all that apply.)</p>
             <ul className="mt-8">
               {CHECKLIST_ITEMS.map((item, i) => (
                 <li key={item} className="border-t border-border py-4 first:border-t-0 first:pt-0">
@@ -913,84 +807,43 @@ function ProblemChecklist() {
   );
 }
 
-function InlineQuoteBand() {
-  const item = INLINE_TESTIMONIALS[3];
+function PricingSection() {
   return (
-    <section className="border-b border-border bg-[#FAFAFA] py-16 md:py-20">
-      <div className={contentWide}>
-        <blockquote className="max-w-[900px] font-display text-xl font-semibold leading-snug text-dark md:text-2xl">
-          {item.text}
-        </blockquote>
-        <div className="mt-6 flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-border font-body text-xs text-dark">
-            {item.initials}
-          </div>
-          <div>
-            <p className="font-body text-sm font-semibold text-dark">{item.name}</p>
-            <p className="font-body text-xs text-dark">{item.role}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function MasonryCard({ t }) {
-  const parts = t.highlight ? t.quote.split(t.highlight) : [t.quote];
-  return (
-    <figure className="mb-4 break-inside-avoid border border-border bg-white p-4">
-      <blockquote className="font-body text-[13px] leading-[1.65] text-dark">
-        {t.highlight && parts.length > 1 ? (
-          <>
-            {parts[0]}
-            <strong className="text-dark">{t.highlight}</strong>
-            {parts[1]}
-          </>
-        ) : (
-          t.quote
-        )}
-      </blockquote>
-      <figcaption className="mt-3 flex items-center gap-2 border-t border-border pt-3">
-        {t.avatarSrc ? (
-          <img src={t.avatarSrc} alt="" className="h-7 w-7 shrink-0 rounded-full object-cover" />
-        ) : (
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#F0F0F0] font-body text-[10px] text-dark">
-            {t.name
-              .split(" ")
-              .map((w) => w[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase()}
-          </div>
-        )}
-        <span className="font-body text-[11px] font-medium text-dark">{t.name}</span>
-      </figcaption>
-    </figure>
-  );
-}
-
-function TestimonialsMasonry() {
-  const wall = useMemo(() => {
-    const out = [];
-    for (let r = 0; r < 5; r += 1) {
-      GRID_TESTIMONIALS.forEach((t, i) => {
-        out.push({ ...t, key: `${r}-${i}` });
-      });
-    }
-    return out;
-  }, []);
-
-  return (
-    <section className="border-b border-border py-20 md:py-28">
-      <div className={contentWide}>
-        <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
-          More ❤️ from past clients
+    <section id="pricing" className="scroll-mt-24 border-b border-border bg-[#FAFAFA] py-20 md:py-28">
+      <div className={content}>
+        <h2 className="text-center font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
+          Founding pricing.
         </h2>
-        <div className="columns-1 gap-4 pt-12 sm:columns-2 lg:columns-3 lg:gap-5">
-          {wall.map(({ key, ...t }) => (
-            <MasonryCard key={key} t={t} />
-          ))}
+        <p className="mx-auto mt-4 max-w-[560px] text-center font-body text-base leading-[1.65] text-dark">
+          We&apos;re taking on three founding clients at a single flat rate while we sharpen the process for the
+          Australian real estate market.
+        </p>
+        <div className="mt-12 text-center">
+          <p className="font-display text-[clamp(2.5rem,8vw,4.5rem)] font-extrabold tracking-tight text-dark">
+            $5,000 AUD
+          </p>
+          <p className="mt-3 font-body text-sm text-dark md:text-base">
+            <span className="line-through decoration-dark/50">Standard from $8,500</span>
+            <span className="mx-2 text-mid" aria-hidden>
+              ·
+            </span>
+            <span className="font-semibold text-dark">3 spots remaining</span>
+          </p>
         </div>
+        <div className="mt-10 flex justify-center">
+          <a
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${ctaPrimary} w-full max-w-md sm:w-auto`}
+          >
+            Reserve your sprint →
+          </a>
+        </div>
+        <p className="mx-auto mt-8 max-w-[640px] text-center font-body text-xs leading-[1.65] text-mid md:text-sm">
+          All prices in AUD, ex-GST. 50% on signing, 50% at start of Week 2. From client #4 onward, pricing scales by
+          agency size — $8,500 / $14,500 / $22,000.
+        </p>
       </div>
     </section>
   );
@@ -1002,7 +855,7 @@ function FAQs() {
     <section id="faqs" className="scroll-mt-24 border-b border-border py-20 md:py-28">
       <div className={content}>
         <h2 className="text-center font-display text-[clamp(1.75rem,4vw,2.5rem)] font-bold tracking-tight text-dark">
-          FAQs
+          Questions we hear a lot.
         </h2>
         <ul className="mx-auto mt-12 max-w-[640px]">
           {FAQ_ITEMS.map((item, i) => {
@@ -1046,12 +899,9 @@ function FinalCTA() {
   return (
     <section className="border-b border-border py-20 md:py-24">
       <div className={content}>
-        <h2 className="mx-auto max-w-[640px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-dark">
-          Stop sounding like every other agency.
+        <h2 className="mx-auto max-w-[720px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-dark">
+          Stop being the best-kept secret in your suburb.
         </h2>
-        <p className="mx-auto mt-5 max-w-lg text-center font-body text-base text-dark">
-          Founding pricing. 3 spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
-        </p>
         <div className="mt-10 flex justify-center px-0">
           <a
             href={CALENDLY_URL}
@@ -1059,12 +909,12 @@ function FinalCTA() {
             rel="noopener noreferrer"
             className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}
           >
-            Reserve your sprint
-            <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-              (Founding pricing, 3 spots)
-            </span>
+            Reserve your sprint →
           </a>
         </div>
+        <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
+          Founding pricing — $5,000 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
+        </p>
       </div>
     </section>
   );
@@ -1076,23 +926,39 @@ function Footer() {
       <div
         className={`mx-auto flex w-full max-w-[min(100%,1280px)] flex-col gap-8 md:flex-row md:items-center md:justify-between ${pageGutter}`}
       >
-        <p className="font-display text-sm font-semibold text-dark">Soubh &amp; Co.</p>
+        <div className="flex max-w-md items-start gap-3 sm:gap-4">
+          <img
+            src={logoPng}
+            alt=""
+            className="mt-0.5 h-9 w-auto shrink-0 sm:h-10"
+            decoding="async"
+            aria-hidden
+          />
+          <div>
+            <p className="font-display text-sm font-semibold text-dark">Soubh &amp; Co.</p>
+            <p className="mt-2 max-w-xs font-body text-xs leading-relaxed text-mid">
+              A real estate marketing consultancy. Built in Australia.
+            </p>
+          </div>
+        </div>
         <nav className="flex flex-wrap gap-6" aria-label="Footer">
-          {["Case studies", "Sprint", "Pricing", "FAQs", "LinkedIn"].map((label, i) => {
+          {["Sprint", "Pricing", "FAQs", "LinkedIn"].map((label) => {
             const href =
-              label === "Case studies"
-                ? "#case-studies"
-                : label === "Sprint"
-                  ? "#sprint"
-                  : label === "Pricing"
-                    ? "#pricing"
-                    : label === "FAQs"
-                      ? "#faqs"
+              label === "Sprint"
+                ? "#sprint"
+                : label === "Pricing"
+                  ? "#pricing"
+                  : label === "FAQs"
+                    ? "#faqs"
+                    : label === "LinkedIn"
+                      ? "https://www.linkedin.com/in/iamsoubh/"
                       : "#";
+            const external = href.startsWith("http");
             return (
               <a
                 key={label}
                 href={href}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="font-body text-xs uppercase tracking-widest text-dark transition-colors hover:text-dark"
               >
                 {label}
@@ -1114,16 +980,15 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
-        <StatsThreeCol />
+        <SprintCallout />
+        <LogoStrip />
         <TestimonialThreeCards />
-        <CaseStudies />
-        <OfferBlockThreeColumn />
+        <DeliverableCards />
         <SprintTimeline />
+        <ContentNinetyDays />
         <ProblemChecklist />
-        <InlineQuoteBand />
-        <TestimonialsMasonry />
+        <PricingSection />
         <FAQs />
-        <FinalCTA />
       </main>
       <Footer />
     </div>
