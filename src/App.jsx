@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import { CALENDLY_URL } from "./config.js";
 import logoPng from "./assets/logo.png";
 import positionPng from "./assets/position.png";
 import positionPng2 from "./assets/position2.png";
 import positionPng3 from "./assets/position3.png";
 import brandZammit from "./assets/zammit.png";
+import avatarMarkZammit from "./assets/Mark Zammit.png";
+import avatarJasonMcCall from "./assets/Jason McCall.png";
+import avatarArshakWasim from "./assets/Arshak Wasim.png";
 import brandArum from "./assets/arum.png";
 import brandCarismatic from "./assets/carismatic.png";
 import brandTspg from "./assets/tspg.png";
@@ -97,18 +101,21 @@ const THREE_TESTIMONIALS = [
     name: "Mark Zammit",
     role: "Director, Zammit Real Estate",
     initials: "MZ",
+    avatar: avatarMarkZammit,
   },
   {
     text: "He helped streamline our workflows, saving us time and effort. His attention to detail and a keen understanding of our business needs have made him an invaluable partner.",
     name: "Jason McCall",
     role: "Director, The SMSF Property Guy",
     initials: "JM",
+    avatar: avatarJasonMcCall,
   },
   {
     text: "Finding Soubh through a random Facebook group was the best thing that ever happened to my business. He completely transformed my scattered online presence into a cohesive, powerful brand that now attracts high-quality leads daily.",
     name: "Arshak Wasim",
     role: "Director, Arum & Co",
     initials: "AW",
+    avatar: avatarArshakWasim,
   },
 ];
 
@@ -120,14 +127,11 @@ const contentWide = `mx-auto w-full max-w-[min(100%,1280px)] ${pageGutter}`;
 /** Wider than default page grid so the sprint / pricing card reads as a landscape panel (Fletch-style). */
 const contentOffer = `mx-auto w-full max-w-[min(100%,1440px)] ${pageGutter}`;
 
-const CALENDLY_URL =
-  "https://calendly.com/hello-iamsoubh/positioning-chat-soubh-co?month=2026-05";
-
-/** Fletch-style: thick black stroke + rounded corners + hover pop */
+/** Fletch-style: flat at rest; hover pops (lift + 4px hard shadow). */
 const ctaPop =
-  "transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D] active:translate-y-0 active:shadow-none";
-const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-xl border-[3px] border-dark bg-orange px-4 py-2.5 text-center font-body text-[13px] font-bold leading-snug text-white shadow-none sm:px-6 sm:py-3.5 sm:text-sm ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
-const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-xl border-[3px] border-dark bg-white px-4 py-2.5 text-center font-body text-[13px] font-bold leading-snug text-dark shadow-none sm:px-6 sm:py-3.5 sm:text-sm ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
+  "shadow-none transition-[transform,box-shadow] duration-200 ease-out hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D] active:translate-x-0 active:translate-y-0 active:shadow-none";
+const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-[12px] border-[3px] border-dark bg-orange px-8 py-3 text-center font-body text-[13px] font-bold leading-snug text-white sm:px-14 sm:py-3.5 sm:text-sm md:px-[4.5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
+const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-[12px] border-[3px] border-dark bg-white px-8 py-3 text-center font-body text-[13px] font-bold leading-snug text-dark sm:px-14 sm:py-3.5 sm:text-sm md:px-[4.5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
 
 const OFFER_INTRO =
   "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content — without you lifting a finger.";
@@ -221,7 +225,7 @@ function Nav() {
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex`}
+              className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex md:!px-5`}
             >
               Reserve your sprint
               <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
@@ -456,21 +460,45 @@ function LogoStrip() {
 function TestimonialThreeCards() {
   const items = THREE_TESTIMONIALS;
   return (
-    <section className="border-b border-border py-20 md:py-28">
+    <section className="border-b border-border py-24 md:py-32">
       <div className={contentWide}>
-        <div className="grid gap-6 md:grid-cols-3">
+        <h2 className="text-center font-display text-[clamp(1.85rem,4.2vw,2.65rem)] font-bold tracking-tight text-dark">
+          Testimonials
+        </h2>
+        <p className="mx-auto mt-3 max-w-lg text-center font-body text-[15px] leading-snug text-dark/65 md:text-base">
+          What principals say after working with us.
+        </p>
+        <div className="mt-12 grid gap-8 md:mt-14 md:grid-cols-3 md:gap-10">
           {items.map((item) => (
-            <article key={item.name} className="flex flex-col bg-white p-6">
-              <p className="font-body text-sm leading-[1.65] text-dark">
+            <article key={item.name} className="flex flex-col">
+              <p className="font-body text-[15px] font-medium leading-[1.72] text-dark md:text-[17px]">
+                <span className="font-display text-[1.35em] font-bold leading-none text-orange/35" aria-hidden="true">
+                  &ldquo;
+                </span>
                 {renderBoldSegments(item.text)}
+                <span className="font-display text-[1.35em] font-bold leading-none text-orange/35" aria-hidden="true">
+                  &rdquo;
+                </span>
               </p>
-              <div className="mt-6 flex items-center gap-3 pt-1">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F0F0F0] font-body text-xs font-medium text-dark">
-                  {item.initials}
-                </div>
+              <div className="mt-8 flex items-center gap-4 pt-1">
+                {item.avatar ? (
+                  <img
+                    src={item.avatar}
+                    alt=""
+                    width={48}
+                    height={48}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-12 w-12 shrink-0 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F0F0F0] font-body text-sm font-medium text-dark">
+                    {item.initials}
+                  </div>
+                )}
                 <div>
-                  <p className="font-body text-sm font-semibold text-dark">{item.name}</p>
-                  <p className="font-body text-xs text-dark">{item.role}</p>
+                  <p className="font-body text-base font-semibold text-dark">{item.name}</p>
+                  <p className="mt-0.5 font-body text-sm text-dark/70">{item.role}</p>
                 </div>
               </div>
             </article>
@@ -549,7 +577,7 @@ function SprintTimeline() {
   return (
     <section className="border-b border-border py-20 md:py-28">
       <div className={contentWide}>
-        <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
+        <h2 className="text-center font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
           Here&apos;s exactly what the sprint looks like.
         </h2>
 
@@ -565,7 +593,14 @@ function SprintTimeline() {
                 Your team
               </p>
               <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
-                15-min intake form + send listing presentations + last 30 days of social.
+                15-min{" "}
+                <a
+                  href={`${import.meta.env.BASE_URL}intake`.replace(/\/{2,}/g, "/")}
+                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-[3px] transition-colors hover:text-orange hover:decoration-orange/50"
+                >
+                  intake form
+                </a>{" "}
+                + send listing presentations + last 30 days of social.
               </p>
             </div>
             <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
@@ -750,8 +785,10 @@ function ProblemChecklist() {
       <div className={contentWide}>
         <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch lg:gap-20">
           <div>
-            <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
-              Do you have a positioning problem?
+            <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.38] tracking-tight text-dark md:leading-[1.45]">
+              Do you have a positioning
+              <br />
+              problem?
             </h2>
             <p className="mt-3 font-body text-sm italic text-dark">(Tick all that apply.)</p>
             <ul className="mt-8">
