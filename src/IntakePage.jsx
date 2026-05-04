@@ -28,15 +28,19 @@ function IntakeForm() {
       return;
     }
     setStatus("sending");
+    const phoneVal = phone.trim() || "Not provided";
+    const materialsVal = materials.trim() || "(none provided)";
     const message = [
+      "Full intake (all fields below are also sent as separate fields for your dashboard / exports).",
+      "",
       `Agency: ${agency}`,
-      `Phone: ${phone || "—"}`,
+      `Phone: ${phoneVal}`,
       `Primary market / patch: ${market}`,
       "",
       "Links & materials (drives, decks, social):",
-      materials || "—",
+      materialsVal,
       "",
-      "Challenges / what we should know:",
+      "Competitors & challenges:",
       challenges,
     ].join("\n");
 
@@ -49,7 +53,14 @@ function IntakeForm() {
           subject: "Soubh & Co — Pre-work intake",
           name,
           email,
+          from_name: `${name} (${agency})`,
+          replyto: email,
           message,
+          agency,
+          phone: phoneVal,
+          primary_market: market,
+          materials_links: materialsVal,
+          competitors_challenges: challenges,
         }),
       });
       const data = await res.json();

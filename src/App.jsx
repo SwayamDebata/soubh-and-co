@@ -458,9 +458,12 @@ function DeliverableCards() {
   return (
     <section id="deliverables" className="scroll-mt-24 border-b border-border bg-white py-16 md:py-24">
       <div className={contentWide}>
-        <h2 className="max-w-[720px] font-display text-[clamp(1.5rem,3.5vw,2rem)] font-bold leading-snug tracking-tight text-dark">
+        <h2 className="mx-auto max-w-[min(100%,920px)] text-center font-display text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[1.04] tracking-tight text-dark">
           Three deliverables. One sprint. No fluff.
         </h2>
+        <div className="mx-auto mt-5 flex justify-center" aria-hidden>
+          <span className="h-1.5 w-20 rounded-full bg-orange md:w-28" />
+        </div>
         <div className="mt-14 flex flex-col gap-16 md:mt-16 md:gap-20 lg:gap-24">
           {DELIVERABLE_CARDS.map((card, i) => {
             const imageLeft = i % 2 === 1;
