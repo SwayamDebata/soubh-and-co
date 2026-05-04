@@ -25,28 +25,78 @@ const CHECKLIST_ITEMS = [
 
 const FAQ_ITEMS = [
   {
+    q: "We've already got a marketing person. Why would we need this?",
+    a: `A marketing person executes posts. We make the strategic decision underneath them, so the posts they write actually pull in one direction instead of five.
+
+After the sprint, your marketing hire works with a clear positioning and a documented voice. They become 3x more effective overnight, because they stop guessing what to say.
+
+This isn't a replacement. It's the strategy layer your marketing person was hired to follow, not invent.`,
+  },
+  {
+    q: "Why does this cost $5,000? Couldn't we get content cheaper?",
+    a: `Yes. You can hire a freelancer for $1,500 a month who'll post listing photos and recycle the same five captions.
+
+What you can't get cheaper is the strategic decision underneath the content: the answer to what makes our agency different and worth full commission. That's the work that pays for itself the first time a vendor stops negotiating you down on fee.
+
+The $5,000 is for the decision. The 90 days of content is the proof it works.`,
+  },
+  {
+    q: "We're already pretty clear on our positioning. Do we still need this?",
+    a: `Probably not the strategy work. But here's the test:
+
+If you asked five different agents on your team to describe what makes your agency different, would they say roughly the same thing?
+
+If yes, you've got positioning. You don't need us.
+
+If no, you've got a founder's intuition about positioning that hasn't made it into the team's hands yet. That's exactly what the sprint fixes. The pitch deck and the 90 days of content are how the intuition becomes shared language.`,
+  },
+  {
+    q: "What if we go through the sprint and don't like the strategies you propose?",
+    a: `We've never had this happen, but the structure handles it.
+
+In Workshop 1, we present 3 to 4 positioning options ranked by risk. If none of them feel right, that's a signal the audit missed something, usually a vendor segment you wanted that we didn't catch from the intake form.
+
+We run a fourth workshop free until you have an option you're confident betting on. The sprint isn't done until you're locked in.`,
+  },
+  {
+    q: "We're a small team. Will the sprint be a huge time commitment?",
+    a: `Total time from your team across two weeks: about 6 hours.
+
+Three 75-minute workshops. One 60-minute internal team meeting (without us). One 60-minute live review at the end of Week 2. Async revisions over Slack, usually 30 minutes total.
+
+Less than one full workday. Spread across 10 business days.
+
+After Week 2, your time commitment drops to a 30-minute monthly call.`,
+  },
+  {
     q: "Why only real estate? Why only Australia?",
-    a: "Because we're not trying to be a marketing agency. We're trying to be the marketing agency for one specific kind of business. The deeper the niche, the better the work.",
+    a: `Because we're not trying to be a marketing agency. We're trying to be the marketing agency for one specific kind of business.
+
+Generic marketing agencies adapt a B2B SaaS playbook to your industry and hope it sticks. We've built our intake form, our positioning frameworks, and our content templates around how Australian boutique agencies actually win listings.
+
+The deeper the niche, the better the work.`,
   },
   {
-    q: "Do we get a website rewrite?",
-    a: "The sprint covers positioning, the pitch deck, and the content. The homepage isn't included by default — most boutique agencies generate more leverage from listing presentations and social than their homepage. We'll happily quote it as a follow-on.",
+    q: "How fast do we see results?",
+    a: `Internal alignment: by the end of Week 2.
+
+That alone usually changes how appraisals go. Your principal walks in with a clearer story, the team uses the same language, and vendors feel the difference even if they can't articulate it.
+
+External traction from content: 60 to 90 days.
+
+Brand positioning compounds slowly. The first month of content seeds the message. The second builds recognition. The third is when inbound shifts.
+
+If you're hoping for a flood of leads in week three, this isn't that product.`,
   },
   {
-    q: "What if our team can't agree on the positioning?",
-    a: "That's exactly why the sprint is structured the way it is. Workshop 1 forces the options. Tuesday forces the internal decision. Workshops 2 and 3 lock it in writing. The pitch deck exists so the decision sticks after we leave.",
-  },
-  {
-    q: "Do you take on franchise offices (Ray White, McGrath, etc.)?",
-    a: "No. Their brand is locked at HQ. We work with independents and boutiques who own their own positioning.",
-  },
-  {
-    q: "What if I miss a workshop?",
-    a: "Every workshop is recorded. But it's a sprint — if you can't commit to four sessions across two weeks, the sprint isn't for you yet.",
-  },
-  {
-    q: "Can we start with just the strategy and add content later?",
-    a: "Not at founding pricing. The $5K rate is for the full sprint. After our first three clients, we'll consider modular options.",
+    q: "What happens after the 90 days?",
+    a: `Two paths.
+
+Path 1: You keep us on a content retainer ($2,000/month) and we keep producing. About a third of clients do this.
+
+Path 2: You take the brand voice guide, the templates, and the proven content patterns, and run it in-house. About two-thirds do this. We help you find the right hire if you want.
+
+Either way, you own everything we built. There's no lock-in.`,
   },
 ];
 
@@ -131,8 +181,8 @@ const contentOffer = `mx-auto w-full max-w-[min(100%,1440px)] ${pageGutter}`;
 /** Fletch-style: flat at rest; hover pops (lift + 4px hard shadow). */
 const ctaPop =
   "shadow-none transition-[transform,box-shadow] duration-200 ease-out hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D] active:translate-x-0 active:translate-y-0 active:shadow-none";
-const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-[12px] border-[3px] border-dark bg-orange px-8 py-3 text-center font-body text-[13px] font-bold leading-snug text-white sm:px-14 sm:py-3.5 sm:text-sm md:px-[4.5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
-const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-[12px] border-[3px] border-dark bg-white px-8 py-3 text-center font-body text-[13px] font-bold leading-snug text-dark sm:px-14 sm:py-3.5 sm:text-sm md:px-[4.5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
+const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-[12px] border-[3px] border-dark bg-orange px-9 py-3 text-center font-body text-[15px] font-bold leading-snug text-white sm:px-16 sm:py-3.5 sm:text-[17px] md:px-[5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
+const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-[12px] border-[3px] border-dark bg-white px-9 py-3 text-center font-body text-[15px] font-bold leading-snug text-dark sm:px-16 sm:py-3.5 sm:text-[17px] md:px-[5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
 
 const OFFER_INTRO =
   "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content — without you lifting a finger.";
@@ -560,15 +610,15 @@ function weekCellTitleClass(title) {
 function WeekCell({ row }) {
   return (
     <div className="flex min-h-[128px] flex-col p-5 md:min-h-[168px] md:border-l md:border-dotted md:border-border md:p-6 md:pt-6">
-      <p className="font-body text-[13px] font-bold tracking-tight text-dark">{row.day}</p>
-      <p className={`mt-3 font-body text-[15px] font-bold leading-snug tracking-tight md:text-base ${weekCellTitleClass(row.title)}`}>
+      <p className="font-body text-[14px] font-bold tracking-tight text-dark md:text-[15px]">{row.day}</p>
+      <p className={`mt-3 font-body text-[17px] font-bold leading-snug tracking-tight md:text-[1.38rem] ${weekCellTitleClass(row.title)}`}>
         {row.title}
       </p>
       {row.badge ? (
-        <p className="mt-1.5 font-body text-[13px] font-normal leading-snug text-mid">{row.badge}</p>
+        <p className="mt-1.5 font-body text-[15px] font-normal leading-snug text-mid md:text-base">{row.badge}</p>
       ) : null}
       {row.desc ? (
-        <p className="mt-2 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">{row.desc}</p>
+        <p className="mt-2 font-body text-[15px] font-normal leading-[1.6] text-dark/80 md:text-base">{row.desc}</p>
       ) : null}
     </div>
   );
@@ -578,22 +628,22 @@ function SprintTimeline() {
   return (
     <section className="border-b border-border py-20 md:py-28">
       <div className={contentWide}>
-        <h2 className="text-center font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
+        <h2 className="text-center font-display text-[clamp(1.9rem,4.3vw,2.95rem)] font-bold tracking-tight text-dark">
           Here&apos;s exactly what the sprint looks like.
         </h2>
 
         <div className="mt-12 overflow-hidden rounded-3xl border-2 border-dark bg-white">
           <div className="p-5 md:p-6">
-            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
+            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
               Pre-Work
             </span>
           </div>
           <div className="grid border-t border-border md:grid-cols-2">
             <div className="p-5 md:p-6 md:pr-8">
-              <p className="font-body text-[15px] font-bold leading-snug tracking-tight text-dark md:text-base">
+              <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
                 Your team
               </p>
-              <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
+              <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
                 15-min{" "}
                 <Link
                   to="/intake"
@@ -605,10 +655,10 @@ function SprintTimeline() {
               </p>
             </div>
             <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
-              <p className="font-body text-[15px] font-bold leading-snug tracking-tight text-dark md:text-base">
+              <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
                 Our team
               </p>
-              <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
+              <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
                 Audit competitors, social, REA/Domain footprint, 5 comparable agencies.
               </p>
             </div>
@@ -621,7 +671,7 @@ function SprintTimeline() {
             {GRID_DAYS.map((d) => (
               <div
                 key={d}
-                className="border-l border-dotted border-border px-2 py-4 text-center font-body text-[13px] font-bold tracking-tight text-dark md:py-5"
+                className="border-l border-dotted border-border px-2 py-4 text-center font-body text-[14px] font-bold tracking-tight text-dark md:py-5 md:text-[15px]"
               >
                 {d}
               </div>
@@ -629,7 +679,7 @@ function SprintTimeline() {
           </div>
           <div className="hidden md:grid md:grid-cols-6">
             <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
-              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
+              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
                 WEEK 01 · STRATEGY
               </span>
             </div>
@@ -639,7 +689,7 @@ function SprintTimeline() {
           </div>
           <div className="hidden border-t border-border md:grid md:grid-cols-6">
             <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
-              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
+              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
                 WEEK 02 · CONTENT
               </span>
             </div>
@@ -648,7 +698,7 @@ function SprintTimeline() {
             ))}
           </div>
           <div className="border-t border-border p-6 md:hidden">
-            <p className="font-body text-[11px] font-bold uppercase tracking-wide text-dark">WEEK 01 · STRATEGY</p>
+            <p className="font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 01 · STRATEGY</p>
             <div className="mt-5 space-y-6">
               {WEEK1_ROWS.map((row) => (
                 <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
@@ -656,7 +706,7 @@ function SprintTimeline() {
                 </div>
               ))}
             </div>
-            <p className="mt-10 font-body text-[11px] font-bold uppercase tracking-wide text-dark">WEEK 02 · CONTENT</p>
+            <p className="mt-10 font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 02 · CONTENT</p>
             <div className="mt-5 space-y-6">
               {WEEK2_ROWS.map((row) => (
                 <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
@@ -669,11 +719,11 @@ function SprintTimeline() {
 
         <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white">
           <div className="p-5 md:p-6">
-            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[11px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
+            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
               MONTHS 01–03 · CONTENT ENGINE
             </span>
           </div>
-          <ul className="space-y-4 border-t border-border p-5 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:space-y-5 md:p-6 md:pt-6 md:text-sm">
+          <ul className="space-y-4 border-t border-border p-5 font-body text-[15px] font-normal leading-[1.65] text-dark/85 md:space-y-5 md:p-6 md:pt-6 md:text-base">
             <li>Weekly content batches. Scheduled by us.</li>
             <li>Monthly Loom report + 30-minute review call.</li>
           </ul>
@@ -685,22 +735,39 @@ function SprintTimeline() {
 
 function ContentNinetyDays() {
   return (
-    <section className="border-b border-border bg-gradient-to-b from-[#E4EEF3] via-[#EDF4F8] to-[#F2F7FA] py-20 md:py-28">
+    <section className="border-b border-border bg-gradient-to-b from-[#DCEAF2] via-[#EAF3F8] to-[#F4F8FB] py-20 md:py-28">
       <div className={contentWide}>
-        <div className="rounded-2xl border-[3px] border-dark bg-white p-8 shadow-[8px_8px_0_0_rgba(13,13,13,0.12)] md:rounded-3xl md:p-10 lg:p-12">
+        <div className="relative overflow-hidden rounded-2xl border-[3px] border-dark bg-white p-8 shadow-[10px_10px_0_0_rgba(13,13,13,0.12)] md:rounded-3xl md:p-10 lg:p-12">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-[#CDE4F2] blur-3xl" aria-hidden />
+          <div className="pointer-events-none absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-[#D8EAF5] blur-3xl" aria-hidden />
           <p className="inline-block rounded-lg border-2 border-dark bg-orange px-3 py-1.5 font-body text-[10px] font-bold uppercase tracking-[0.2em] text-white md:text-[11px]">
-            After the sprint
+            USP: After the sprint
           </p>
-          <h2 className="mt-4 max-w-[920px] font-display text-[clamp(1.85rem,4.2vw,2.85rem)] font-bold leading-[1.08] tracking-tight text-dark md:mt-5">
-            <span className="text-orange">90 days</span> of content. Made for you. Scheduled for you.
+          <h2 className="relative mt-4 max-w-[920px] font-display text-[clamp(1.95rem,4.4vw,3rem)] font-bold leading-[1.06] tracking-tight text-dark md:mt-5">
+            <span className="text-orange">90 days</span> of content.
+            <br className="hidden sm:block" /> Made for you. Scheduled for you.
           </h2>
-          <p className="mt-4 max-w-[720px] font-body text-base leading-[1.65] text-dark md:mt-5 md:text-lg">
-            After Week 2, the marketing keeps running while you list, sell, and lead. Here&apos;s what lands in your
-            accounts every week.
+          <p className="relative mt-4 max-w-[760px] font-body text-[17px] leading-[1.68] text-dark md:mt-5 md:text-[19px]">
+            After Week 2, the marketing engine keeps running while you list, sell, and lead. Every week your channels
+            stay active with consistent, positioning-led content.
           </p>
-          <div className="mt-10 overflow-hidden rounded-2xl border-2 border-dark bg-[#FAFCFD] md:mt-12 md:rounded-3xl">
+          <div className="relative mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border-2 border-dark bg-[#EAF6FF] px-4 py-3 text-center">
+              <p className="font-display text-2xl font-extrabold leading-none text-dark">36</p>
+              <p className="mt-1 font-body text-[12px] font-bold uppercase tracking-wide text-dark/80">Pieces</p>
+            </div>
+            <div className="rounded-xl border-2 border-dark bg-[#F7F1FF] px-4 py-3 text-center">
+              <p className="font-display text-2xl font-extrabold leading-none text-dark">12</p>
+              <p className="mt-1 font-body text-[12px] font-bold uppercase tracking-wide text-dark/80">Weeks</p>
+            </div>
+            <div className="rounded-xl border-2 border-dark bg-[#FFF5EC] px-4 py-3 text-center">
+              <p className="font-display text-2xl font-extrabold leading-none text-dark">3</p>
+              <p className="mt-1 font-body text-[12px] font-bold uppercase tracking-wide text-dark/80">Channels</p>
+            </div>
+          </div>
+          <div className="relative mt-10 overflow-hidden rounded-2xl border-2 border-dark bg-[#FAFCFD] md:mt-12 md:rounded-3xl">
             <div className="grid divide-y divide-border md:grid-cols-3 md:divide-x md:divide-y-0">
-              <div className="p-6 md:p-8">
+              <div className="border-t-4 border-[#CFE8F9] p-6 md:p-8">
                 <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">Instagram</p>
                 <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
                   2 posts / week
@@ -710,7 +777,7 @@ function ContentNinetyDays() {
                   scheduled in Meta Business Suite.
                 </p>
               </div>
-              <div className="p-6 md:p-8">
+              <div className="border-t-4 border-[#E3D5FB] p-6 md:p-8">
                 <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">LinkedIn</p>
                 <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
                   1 post / week
@@ -720,7 +787,7 @@ function ContentNinetyDays() {
                   agency, not just promote listings.
                 </p>
               </div>
-              <div className="p-6 md:p-8">
+              <div className="border-t-4 border-[#FFE3C7] p-6 md:p-8">
                 <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">Long-form</p>
                 <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
                   1 piece / week
@@ -735,8 +802,8 @@ function ContentNinetyDays() {
             ✓ Every batch delivered Friday, for the following week. ✓ Scheduled in your accounts by us. ✓ 30-minute
             review call + Loom report at days 30, 60, and 90.
           </p>
-          <div className="mt-10 flex flex-col items-stretch gap-8 rounded-xl bg-[#F4F9FB] px-5 py-6 md:flex-row md:items-end md:justify-between md:gap-12 md:px-8 md:py-7">
-            <p className="max-w-xl flex-1 text-left font-body text-sm font-semibold leading-[1.65] text-dark md:text-base">
+          <div className="mt-10 flex flex-col items-stretch gap-8 rounded-xl border-2 border-dark bg-[#F4F9FB] px-5 py-6 md:flex-row md:items-end md:justify-between md:gap-12 md:px-8 md:py-7">
+            <p className="max-w-xl flex-1 text-left font-body text-[15px] font-semibold leading-[1.68] text-dark md:text-[17px]">
               36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On
               your schedule.
             </p>
@@ -766,6 +833,7 @@ function ProblemChecklist() {
           title: "Nothing ticked yet.",
           subtitle: "If a line feels true, tick it, we'll show you a readout.",
           boxClass: "bg-[#ECFDF3]",
+          compact: false,
         }
       : count === 1
         ? {
@@ -774,7 +842,26 @@ function ProblemChecklist() {
             subtitle:
               "We can fix it in the sprint: two weeks to lock positioning, then 90 days of scheduled content.",
             boxClass: "bg-[#FFE8DE]",
+            compact: false,
           }
+        : count === 3
+          ? {
+              emoji: "🤨",
+              title: "Getting expensive to stay generic?",
+              subtitle:
+                "Three signals usually means your brand is leaking margin. Better positioning helps defend fee and shorten vendor hesitation.",
+              boxClass: "bg-[#FFE8DE]",
+              compact: false,
+            }
+        : count === 4
+          ? {
+              emoji: "🧲",
+              title: "Message market fit is close.",
+              subtitle:
+                "Four signals means your team likely does great work, but your story is not pulling the right vendors in. Tight language shifts who says yes.",
+              boxClass: "bg-[#FFD9E0]",
+              compact: false,
+            }
         : count < total
           ? {
               emoji: "😬",
@@ -782,6 +869,7 @@ function ProblemChecklist() {
               subtitle:
                 "Two weeks to lock positioning, then 90 days of content scheduled in your voice. We can help you ship it.",
               boxClass: "bg-[#FFE8DE]",
+              compact: false,
             }
           : {
               emoji: "😬",
@@ -789,6 +877,7 @@ function ProblemChecklist() {
               subtitle:
                 "The sprint is built for teams that feel this across the board. Book when you're ready to tighten the story.",
               boxClass: "bg-[#FFE8DE]",
+              compact: false,
             };
 
   const toggle = (i) => {
@@ -843,17 +932,21 @@ function ProblemChecklist() {
               ))}
             </ul>
           </div>
-          <aside className="flex flex-col justify-center" aria-live="polite" aria-atomic="true">
-            <p className="mb-4 text-center text-4xl leading-none lg:text-left lg:text-5xl" aria-hidden>
+          <aside className="flex flex-col items-center justify-center lg:items-end" aria-live="polite" aria-atomic="true">
+            <p className="mb-4 w-full max-w-[440px] text-center text-4xl leading-none lg:text-[52px]" aria-hidden>
               {message.emoji}
             </p>
             <div
-              className={`rounded-2xl border-2 border-dark p-6 md:p-8 ${message.boxClass}`}
+              className={`w-full rounded-2xl border-2 border-dark ${message.compact ? "max-w-[270px] px-6 py-4 text-center" : "max-w-[440px] p-6 md:p-8"} ${message.boxClass}`}
               role="status"
             >
-              <p className="font-display text-xl font-bold leading-snug text-dark md:text-2xl">{message.title}</p>
+              <p className={`font-display font-bold leading-snug text-dark ${message.compact ? "text-[1.45rem]" : "text-xl md:text-2xl"}`}>
+                {message.title}
+              </p>
               {message.subtitle ? (
-                <p className="mt-3 font-body text-sm leading-[1.65] text-dark md:text-base">{message.subtitle}</p>
+                <p className={`mt-3 font-body text-dark ${message.compact ? "text-sm leading-[1.55]" : "text-sm leading-[1.65] md:text-base"}`}>
+                  {message.subtitle}
+                </p>
               ) : null}
             </div>
           </aside>
@@ -910,7 +1003,7 @@ function FAQs() {
   return (
     <section id="faqs" className="scroll-mt-24 border-b border-border py-20 md:py-28">
       <div className={content}>
-        <h2 className="text-center font-display text-[clamp(1.75rem,4vw,2.5rem)] font-bold tracking-tight text-dark">
+        <h2 className="text-center font-display text-[clamp(1.9rem,4.3vw,2.8rem)] font-bold tracking-tight text-dark">
           Questions we hear a lot.
         </h2>
         <ul className="mx-auto mt-12 max-w-[640px]">
@@ -924,11 +1017,11 @@ function FAQs() {
                   className="flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left"
                   aria-expanded={isOpen}
                 >
-                  <span className="font-display text-base font-semibold leading-snug text-dark">
+                  <span className="font-display text-[1.15rem] font-semibold leading-snug text-dark md:text-[1.3rem]">
                     {item.q}
                   </span>
                   <span
-                    className={`shrink-0 font-body text-xl leading-none transition-colors ${
+                    className={`shrink-0 font-body text-2xl leading-none transition-colors ${
                       isOpen ? "text-orange" : "text-dark/45"
                     }`}
                   >
@@ -937,10 +1030,10 @@ function FAQs() {
                 </button>
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-[800px]" : "max-h-0"
+                    isOpen ? "max-h-[1600px]" : "max-h-0"
                   }`}
                 >
-                  <p className="pb-5 font-body text-sm leading-[1.65] text-dark">{item.a}</p>
+                  <p className="whitespace-pre-line pb-5 font-body text-[15px] leading-[1.72] text-dark md:text-[17px]">{item.a}</p>
                 </div>
               </li>
             );
