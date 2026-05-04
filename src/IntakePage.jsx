@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { CALENDLY_URL, WEB3FORMS_ACCESS_KEY } from "./config.js";
 
 const intakeFieldClass =
@@ -233,12 +234,9 @@ export default function IntakePage() {
     <div className="min-h-screen bg-white font-body text-dark antialiased">
       <header className="border-b border-border px-3 py-4 sm:px-4 lg:px-5">
         <div className="mx-auto w-full max-w-[min(100%,1280px)]">
-          <a
-            href={import.meta.env.BASE_URL}
-            className="font-body text-sm font-medium text-dark/70 transition-colors hover:text-dark"
-          >
+          <Link to="/" className="font-body text-sm font-medium text-dark/70 transition-colors hover:text-dark">
             ← Back to Soubh & Co.
-          </a>
+          </Link>
         </div>
       </header>
       <main className="mx-auto w-full max-w-lg px-3 py-10 sm:px-4 lg:px-5">

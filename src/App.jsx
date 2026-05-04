@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { CALENDLY_URL } from "./config.js";
 import logoPng from "./assets/logo.png";
 import positionPng from "./assets/position.png";
@@ -16,7 +17,7 @@ import brandBai from "./assets/bai.png";
 const CHECKLIST_ITEMS = [
   "Vendors can't tell what makes you different from the agency next door.",
   "Every agent on your team describes the business differently.",
-  "Your social posts are just listing photos — there's no story.",
+  "Your social posts are just listing photos, there's no story.",
   "You're getting beaten on commission, not winning on value.",
   "You've grown the team but the brand still feels like a startup.",
   'You "do everything for everyone" and it shows in your marketing.',
@@ -594,12 +595,12 @@ function SprintTimeline() {
               </p>
               <p className="mt-3 font-body text-[13px] font-normal leading-[1.6] text-dark/80 md:text-sm">
                 15-min{" "}
-                <a
-                  href={`${import.meta.env.BASE_URL}intake`.replace(/\/{2,}/g, "/")}
+                <Link
+                  to="/intake"
                   className="font-semibold text-dark underline decoration-dark/35 underline-offset-[3px] transition-colors hover:text-orange hover:decoration-orange/50"
                 >
                   intake form
-                </a>{" "}
+                </Link>{" "}
                 + send listing presentations + last 30 days of social.
               </p>
             </div>
@@ -757,6 +758,7 @@ function ContentNinetyDays() {
 function ProblemChecklist() {
   const [checked, setChecked] = useState(() => CHECKLIST_ITEMS.map(() => false));
   const count = checked.filter(Boolean).length;
+  const total = CHECKLIST_ITEMS.length;
   const message =
     count === 0
       ? {
@@ -765,12 +767,29 @@ function ProblemChecklist() {
           subtitle: "If a line feels true, tick it, we'll show you a readout.",
           boxClass: "bg-[#ECFDF3]",
         }
-      : {
-          emoji: "😬",
-          title: "No problem!",
-          subtitle: "If you ticked one or more, you've got a positioning problem. We can fix it.",
-          boxClass: "bg-[#FFE8DE]",
-        };
+      : count === 1
+        ? {
+            emoji: "😬",
+            title: "You ticked one line. That's often a positioning problem in disguise.",
+            subtitle:
+              "We can fix it in the sprint: two weeks to lock positioning, then 90 days of scheduled content.",
+            boxClass: "bg-[#FFE8DE]",
+          }
+        : count < total
+          ? {
+              emoji: "😬",
+              title: "You ticked several lines. The pattern is real, and it's exactly what the sprint is for.",
+              subtitle:
+                "Two weeks to lock positioning, then 90 days of content scheduled in your voice. We can help you ship it.",
+              boxClass: "bg-[#FFE8DE]",
+            }
+          : {
+              emoji: "😬",
+              title: "You ticked every line. When it shows up everywhere, positioning is the lever.",
+              subtitle:
+                "The sprint is built for teams that feel this across the board. Book when you're ready to tighten the story.",
+              boxClass: "bg-[#FFE8DE]",
+            };
 
   const toggle = (i) => {
     setChecked((prev) => {
@@ -979,17 +998,12 @@ function Footer() {
           </div>
         </div>
         <nav className="flex flex-wrap gap-6" aria-label="Footer">
-          {["Sprint", "Pricing", "FAQs", "LinkedIn"].map((label) => {
-            const href =
-              label === "Sprint"
-                ? "#sprint"
-                : label === "Pricing"
-                  ? "#pricing"
-                  : label === "FAQs"
-                    ? "#faqs"
-                    : label === "LinkedIn"
-                      ? "https://www.linkedin.com/in/iamsoubh/"
-                      : "#";
+          {[
+            { label: "Sprint", href: "#sprint" },
+            { label: "Pricing", href: "#pricing" },
+            { label: "FAQs", href: "#faqs" },
+            { label: "Soubh's LinkedIn", href: "https://www.linkedin.com/in/iamsoubh/" },
+          ].map(({ label, href }) => {
             const external = href.startsWith("http");
             return (
               <a
