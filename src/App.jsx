@@ -1131,9 +1131,10 @@ export default function App() {
         <LogoStrip />
         <TestimonialThreeCards />
         <DeliverableCards />
+        <ProblemChecklist />
         <SprintTimeline />
         <ContentNinetyDays />
-        <ProblemChecklist />
+        
         <PricingSection />
         <FAQs />
       </main>
