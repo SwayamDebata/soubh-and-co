@@ -72,7 +72,19 @@ function StepProgress({ currentStep = 2 }) {
                       : "border-dark/35 bg-white text-dark/60"
                   }`}
                 >
-                  {s.num}
+                  {currentStep > s.num ? (
+                    <svg className="h-3.5 w-3.5" viewBox="0 0 12 10" fill="none" aria-hidden>
+                      <path
+                        d="M1 5l3.5 3.5L11 1"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ) : (
+                    s.num
+                  )}
                 </span>
               </div>
               <p
