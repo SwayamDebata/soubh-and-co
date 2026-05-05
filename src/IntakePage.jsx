@@ -42,7 +42,9 @@ function StepProgress({ currentStep = 2 }) {
     { num: 2, label: "Intake" },
     { num: 3, label: "Confirmation call (15 min)" },
     { num: 4, label: "Sprint kicks off" },
-  ];
+  ].map((step) =>
+    step.num === 3 && currentStep === 2 ? { ...step, label: "Confirmation call (15 min) - Upcoming" } : step
+  );
   const progressPct = ((currentStep - 1) / (steps.length - 1)) * 100;
 
   return (
@@ -106,7 +108,7 @@ export default function IntakePage() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
-  const activeStep = status === "success" ? 3 : 1;
+  const activeStep = status === "success" ? 3 : 2;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
