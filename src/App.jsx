@@ -740,7 +740,7 @@ function SprintTimeline() {
             <p className="font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 01 - STRATEGY</p>
             <div className="mt-5 space-y-6">
               {WEEK1_ROWS.map((row) => (
-                <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
+                <div key={row.day} className="border-b border-dashed border-dark/30 pb-6 last:border-0 last:pb-0">
                   <WeekCell row={row} />
                 </div>
               ))}
@@ -748,7 +748,7 @@ function SprintTimeline() {
             <p className="mt-10 font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 02 - CONTENT</p>
             <div className="mt-5 space-y-6">
               {WEEK2_ROWS.map((row) => (
-                <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
+                <div key={row.day} className="border-b border-dashed border-dark/30 pb-6 last:border-0 last:pb-0">
                   <WeekCell row={row} />
                 </div>
               ))}

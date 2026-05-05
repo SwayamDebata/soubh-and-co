@@ -261,7 +261,7 @@ export default function IntakePage() {
   }
 
   const labelClass =
-    "block font-display text-[11px] font-bold uppercase tracking-[0.15em] text-dark mb-2";
+    "block font-display text-[12px] font-bold uppercase tracking-[0.14em] text-dark mb-2";
   const inputClass =
     "w-full rounded-lg border-2 border-dark/80 bg-white px-4 py-3 font-body text-base text-dark placeholder:text-dark/35 focus:border-dark focus:outline-none focus:ring-2 focus:ring-dark/15";
   const sectionTitle =
