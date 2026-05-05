@@ -15,12 +15,12 @@ import brandTspg from "./assets/tspg.png";
 import brandBai from "./assets/bai.png";
 
 const CHECKLIST_ITEMS = [
-  "Vendors can't tell what makes you different from the agency next door.",
-  "Every agent on your team describes the business differently.",
-  "Your social posts are just listing photos, there's no story.",
-  "You're getting beaten on commission, not winning on value.",
-  "You've grown the team but the brand still feels like a startup.",
-  'You "do everything for everyone" and it shows in your marketing.',
+  "Vendors don't know what makes you different",
+  "Your team describes the agency five different ways",
+  "Social posts are listing photos, not a story",
+  "Vendors keep negotiating you down on commission",
+  "The brand still feels like a startup",
+  "You say yes to every kind of vendor",
 ];
 
 const FAQ_ITEMS = [
@@ -115,8 +115,8 @@ const DELIVERABLE_CARDS = [
   {
     label: "Deliverable 2",
     heading: "A documented 6-slide pitch deck",
-    body: "A vendor-facing pitch deck built on your new positioning. The deck your principal walks into every appraisal with. Extend it with listing-specific case studies and the deck closes itself.",
-    foot: "6-slide deck · Used in every appraisal",
+    body: "Built on your new positioning. The deck your director walks into every appraisal with, your new hires read in their first week, and your team uses to stay aligned. One source of truth, used everywhere.",
+    foot: "6-slide deck · Appraisals · Onboarding · Alignment",
     image: positionPng2,
     imageAlt: "6-slide pitch deck preview from the sprint.",
   },
@@ -131,19 +131,54 @@ const DELIVERABLE_CARDS = [
 ];
 
 const WEEK1_ROWS = [
-  { day: "Monday", title: "Workshop 1", badge: "75 min", desc: "Present 3–4 positioning options" },
-  { day: "Tuesday", title: "Internal team meeting", badge: "60 min", desc: "Internal call: choose a direction" },
-  { day: "Wednesday", title: "Workshop 2", badge: "75 min", desc: "Refine differentiation + voice" },
-  { day: "Thursday", title: "Workshop 3", badge: "75 min", desc: "Lock the deck" },
-  { day: "Friday", title: "We start drafting the content engine", badge: null, desc: "" },
+  {
+    day: "Monday",
+    title: "Workshop 1",
+    badge: "75 min",
+    desc: "Soubh & Co. shares 3-4 positioning strategies, ranked from safe to bold.",
+  },
+  {
+    day: "Tuesday",
+    title: "Internal team meeting",
+    badge: "60 min",
+    desc: "You and your team pick a direction. We stay out of the room.",
+  },
+  {
+    day: "Wednesday",
+    title: "Workshop 2",
+    badge: "75 min",
+    desc: "Soubh & Co. pressure-tests the direction. We refine the differentiation and lock the voice.",
+  },
+  {
+    day: "Thursday",
+    title: "Workshop 3",
+    badge: "75 min",
+    desc: "Soubh & Co. locks the 6-slide positioning deck. Slide by slide.",
+  },
+  { day: "Friday", title: "Drafting starts", badge: null, desc: "Soubh & Co. starts drafting your content engine." },
 ];
 
 const WEEK2_ROWS = [
-  { day: "Monday", title: "First 4 weeks of content drafted", badge: null, desc: "" },
-  { day: "Tuesday", title: "Live review", badge: "60 min", desc: "V1 of content + voice guide" },
-  { day: "Wednesday", title: "Async revisions", badge: null, desc: "" },
-  { day: "Thursday", title: "Async revisions continued", badge: null, desc: "" },
-  { day: "Friday", title: "Final feedback", badge: null, desc: "Deck + voice guide locked." },
+  {
+    day: "Monday",
+    title: "Content drafting",
+    badge: "Async",
+    desc: "Soubh & Co. drafts the first 4 weeks of content.",
+  },
+  {
+    day: "Tuesday",
+    title: "Live review",
+    badge: "60 min",
+    desc: "We walk you through V1 of the content and the brand voice guide.",
+  },
+  { day: "Wednesday", title: "Async revisions", badge: null, desc: "Updates ship within 24 hours." },
+  { day: "Thursday", title: "Async revisions", badge: null, desc: "Updates ship within 24 hours." },
+  {
+    day: "Friday",
+    title: "Final feedback",
+    badge: null,
+    desc: "Deck locked. Voice guide locked. Month 1 of content scheduled.",
+  },
 ];
 
 const THREE_TESTIMONIALS = [
@@ -185,7 +220,7 @@ const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rou
 const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-[12px] border-[3px] border-dark bg-white px-9 py-3 text-center font-body text-[15px] font-bold leading-snug text-dark sm:px-16 sm:py-3.5 sm:text-[17px] md:px-[5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
 
 const OFFER_INTRO =
-  "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content — without you lifting a finger.";
+  "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content without you lifting a finger.";
 
 const OFFER_WHAT_ITEMS = [
   {
@@ -194,7 +229,7 @@ const OFFER_WHAT_ITEMS = [
   },
   {
     title: "A documented 6-slide pitch deck",
-    body: "Built on your new positioning. The deck your principal walks into every appraisal with. The one that closes listings.",
+    body: "Built on your new positioning. The deck your director walks into every appraisal with, your new hires read in their first week, and your team uses to stay aligned. One source of truth, used everywhere.",
   },
   {
     title: "3 months of content, scheduled in your voice",
@@ -647,22 +682,23 @@ function SprintTimeline() {
                 Your team
               </p>
               <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
-                15-min{" "}
+                Fill out the{" "}
                 <Link
                   to="/intake"
                   className="font-semibold text-dark underline decoration-dark/35 underline-offset-[3px] transition-colors hover:text-orange hover:decoration-orange/50"
                 >
                   intake form
                 </Link>{" "}
-                + send listing presentations + last 30 days of social.
+                . Send us your website, your social handles, and anything you give vendors before an appraisal even if
+                it's rough.
               </p>
             </div>
             <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
               <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
-                Our team
+                Soubh & Co.
               </p>
               <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
-                Audit competitors, social, REA/Domain footprint, 5 comparable agencies.
+                We dig into your website, your social, and three boutique agencies you're up against.
               </p>
             </div>
           </div>
@@ -683,7 +719,7 @@ function SprintTimeline() {
           <div className="hidden md:grid md:grid-cols-6">
             <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
               <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-                WEEK 01 · STRATEGY
+                WEEK 01 - STRATEGY
               </span>
             </div>
             {WEEK1_ROWS.map((row) => (
@@ -693,7 +729,7 @@ function SprintTimeline() {
           <div className="hidden border-t border-border md:grid md:grid-cols-6">
             <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
               <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-                WEEK 02 · CONTENT
+                WEEK 02 - CONTENT
               </span>
             </div>
             {WEEK2_ROWS.map((row) => (
@@ -701,7 +737,7 @@ function SprintTimeline() {
             ))}
           </div>
           <div className="border-t border-border p-6 md:hidden">
-            <p className="font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 01 · STRATEGY</p>
+            <p className="font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 01 - STRATEGY</p>
             <div className="mt-5 space-y-6">
               {WEEK1_ROWS.map((row) => (
                 <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
@@ -709,7 +745,7 @@ function SprintTimeline() {
                 </div>
               ))}
             </div>
-            <p className="mt-10 font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 02 · CONTENT</p>
+            <p className="mt-10 font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 02 - CONTENT</p>
             <div className="mt-5 space-y-6">
               {WEEK2_ROWS.map((row) => (
                 <div key={row.day} className="border-b border-dotted border-border pb-6 last:border-0 last:pb-0">
@@ -723,13 +759,17 @@ function SprintTimeline() {
         <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white">
           <div className="p-5 md:p-6">
             <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-              MONTHS 01–03 · CONTENT ENGINE
+              MONTHS 01-03 - CONTENT ENGINE
             </span>
           </div>
           <ul className="space-y-4 border-t border-border p-5 font-body text-[15px] font-normal leading-[1.65] text-dark/85 md:space-y-5 md:p-6 md:pt-6 md:text-base">
-            <li>Weekly content batches. Scheduled by us.</li>
-            <li>Monthly Loom report + 30-minute review call.</li>
+            <li>Soubh & Co. delivers next week's content batch every Friday and schedules it in your accounts.</li>
+            <li>Day 30, Day 60, Day 90: Loom report and a 30-minute review call.</li>
+            <li>You list, sell, and lead. The marketing keeps running.</li>
           </ul>
+          <p className="border-t border-border px-5 py-5 font-body text-[15px] font-semibold leading-[1.65] text-dark md:px-6 md:text-base">
+            Total time from your team across 14 weeks: about 10 hours.
+          </p>
         </div>
       </div>
     </section>
@@ -847,22 +887,13 @@ function ProblemChecklist() {
             boxClass: "bg-[#FFE8DE]",
             compact: false,
           }
-        : count === 3
+        : count >= 3
           ? {
-              emoji: "🤨",
-              title: "Getting expensive to stay generic?",
+              emoji: "😬",
+              title: "You've got a positioning problem.",
               subtitle:
-                "Three signals usually means your brand is leaking margin. Better positioning helps defend fee and shorten vendor hesitation.",
+                "Three ticks is the line. The good news: it's the most fixable thing on your list.",
               boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            }
-        : count === 4
-          ? {
-              emoji: "🧲",
-              title: "Message market fit is close.",
-              subtitle:
-                "Four signals means your team likely does great work, but your story is not pulling the right vendors in. Tight language shifts who says yes.",
-              boxClass: "bg-[#FFD9E0]",
               compact: false,
             }
         : count < total
@@ -994,7 +1025,7 @@ function PricingSection() {
         </div>
         <p className="mx-auto mt-8 max-w-[640px] text-center font-body text-xs leading-[1.65] text-mid md:text-sm">
           All prices in AUD, ex-GST. 50% on signing, 50% at start of Week 2. From client #4 onward, pricing scales by
-          agency size — $8,500 / $14,500 / $22,000.
+          agency size - $8,500 / $14,500 / $22,000.
         </p>
       </div>
     </section>
@@ -1065,7 +1096,7 @@ function FinalCTA() {
           </a>
         </div>
         <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
-          Founding pricing — $5,000 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
+          Founding pricing - $5,000 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
         </p>
       </div>
     </section>
