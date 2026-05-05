@@ -1,549 +1,617 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CALENDLY_URL, WEB3FORMS_ACCESS_KEY } from "./config.js";
-
-const intakeFieldClass =
-  "mt-1.5 w-full rounded-lg border-2 border-dark bg-white px-3 py-2.5 font-body text-sm text-dark outline-none transition-shadow placeholder:text-dark/35 focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2";
-const intakeLabelClass = "block font-body text-[11px] font-bold uppercase tracking-wide text-dark";
+import { WEB3FORMS_ACCESS_KEY } from "./config";
 
 const GCI_OPTIONS = [
-  { value: "under_2m", label: "Under $2M" },
-  { value: "2m_4m", label: "$2M – $4M" },
-  { value: "over_4m", label: "More than $4M" },
+  "Under $2M",
+  "$2M–$4M",
+  "More than $4M",
 ];
 
-const Q10_OPTIONS = [
-  { value: "principal", label: "The principal (me)" },
-  { value: "dedicated", label: "A dedicated in-house marketing person" },
-  { value: "admin", label: "An admin / receptionist who also does marketing" },
-  { value: "external", label: "An external freelancer or agency" },
-  { value: "nobody", label: "Nobody — it's ad hoc" },
+const MARKETING_OPTIONS = [
+  "The director (me)",
+  "A dedicated in-house marketing person",
+  "An admin / receptionist who also does marketing",
+  "An external freelancer or agency",
+  "Nobody - it's ad hoc",
 ];
+
+const LINKEDIN_URL = "https://www.linkedin.com/in/iamsoubh/";
 
 const initialForm = {
-  full_name: "",
-  email: "",
-  agency_name: "",
-  q1_barbecue: "",
+  contactName: "",
+  contactEmail: "",
+  contactPhone: "",
+  q1_agency: "",
   q2_gci: "",
-  q3_suburbs: "",
-  q4_competitors: "",
-  q5_franchise: "",
+  q3_barbecue: "",
+  q4_suburbs: "",
+  q5_competitors: "",
   q6_bs_claims: "",
   q7_best_client: "",
   q8_vendor_not_want: "",
-  q9_why_chosen: "",
+  q9_why_pick_you: "",
   q10_marketing: "",
-  q11_links: "",
+  q11_assets: "",
   q12_success: "",
 };
 
-function Helper({ children }) {
-  return <p className="mt-1.5 font-body text-xs leading-relaxed text-dark/60">{children}</p>;
-}
-
-function SectionTitle({ n, title }) {
-  return (
-    <h2 className="mt-12 border-b-2 border-dark pb-2 font-display text-lg font-bold tracking-tight text-dark first:mt-0 md:text-xl">
-      Section {n} — {title}
-    </h2>
-  );
-}
-
-function IntakeForm() {
-  const [form, setForm] = useState(initialForm);
-  const [files, setFiles] = useState([]);
-  const [status, setStatus] = useState("idle");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  function setField(key, value) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setErrorMessage("");
-    if (!WEB3FORMS_ACCESS_KEY) {
-      setStatus("error");
-      setErrorMessage(
-        "Add VITE_WEB3FORMS_ACCESS_KEY to your .env file (free key at web3forms.com) to enable submissions here, or book a call on Calendly."
-      );
-      return;
-    }
-
-    const list = Array.from(files || []);
-    const hasLinks = form.q11_links.trim().length >= 15;
-    const hasFiles = list.length >= 1;
-    if (!hasLinks && !hasFiles) {
-      setErrorMessage("For Q11, either attach PDFs or paste shareable links (Drive / Dropbox).");
-      return;
-    }
-    if (!form.q2_gci) {
-      setErrorMessage("Please select your GCI range (Q2).");
-      return;
-    }
-    if (!form.q10_marketing) {
-      setErrorMessage("Please select who runs marketing (Q10).");
-      return;
-    }
-    for (const f of list) {
-      if (f.size > 10 * 1024 * 1024) {
-        setErrorMessage(`"${f.name}" is over 10MB. Use links instead or compress the PDF.`);
-        return;
-      }
-      if (!/pdf$/i.test(f.name) && f.type !== "application/pdf") {
-        setErrorMessage(`"${f.name}" should be a PDF.`);
-        return;
-      }
-    }
-
-    setStatus("sending");
-
-    const q11FileSummary =
-      list.length > 0
-        ? list.map((f) => `${f.name} (${Math.round(f.size / 1024)} KB)`).join(", ")
-        : "(no files attached)";
-
-    const message = [
-      "Soubh & Co. Sprint — Intake (12 questions)",
-      "",
-      "CONTACT",
-      `Name: ${form.full_name}`,
-      `Email: ${form.email}`,
-      `Agency: ${form.agency_name}`,
-      "",
-      "SECTION 1 — Your agency",
-      `Q1 Barbecue pitch: ${form.q1_barbecue}`,
-      `Q2 GCI: ${form.q2_gci}`,
-      `Q3 Suburbs/regions: ${form.q3_suburbs}`,
-      "",
-      "SECTION 2 — Your market",
-      `Q4 Competitors: ${form.q4_competitors}`,
-      `Q5 Franchise losses: ${form.q5_franchise}`,
-      `Q6 Competitor BS: ${form.q6_bs_claims}`,
-      "",
-      "SECTION 3 — Your vendors",
-      `Q7 Best client: ${form.q7_best_client}`,
-      `Q8 Vendor you do NOT want: ${form.q8_vendor_not_want}`,
-      `Q9 Why they pick you: ${form.q9_why_chosen}`,
-      "",
-      "SECTION 4 — Your marketing",
-      `Q10 Who runs marketing: ${form.q10_marketing}`,
-      `Q11 Decks/presentations (links): ${form.q11_links || "(see filenames only)"}`,
-      `Q11 Files attached (names): ${q11FileSummary}`,
-      `Q12 Success definition: ${form.q12_success}`,
-    ].join("\n");
-
-    const payload = {
-      access_key: WEB3FORMS_ACCESS_KEY,
-      subject: "Soubh & Co — Sprint intake (12 Q)",
-      name: form.full_name,
-      email: form.email,
-      from_name: `${form.full_name} (${form.agency_name})`,
-      replyto: form.email,
-      message,
-      agency_name: form.agency_name,
-      q1_barbecue: form.q1_barbecue,
-      q2_gci: form.q2_gci,
-      q3_suburbs: form.q3_suburbs,
-      q4_competitors: form.q4_competitors,
-      q5_franchise: form.q5_franchise,
-      q6_bs_claims: form.q6_bs_claims,
-      q7_best_client: form.q7_best_client,
-      q8_vendor_not_want: form.q8_vendor_not_want,
-      q9_why_chosen: form.q9_why_chosen,
-      q10_marketing: form.q10_marketing,
-      q11_links: form.q11_links,
-      q11_files_list: q11FileSummary,
-      q12_success: form.q12_success,
-    };
-
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setStatus("sent");
-        setForm(initialForm);
-        setFiles([]);
-      } else {
-        setStatus("error");
-        setErrorMessage(data.message || "Something went wrong. Try again or use Calendly.");
-      }
-    } catch {
-      setStatus("error");
-      setErrorMessage("Network error. Try again or book via Calendly.");
-    }
-  }
-
-  if (status === "sent") {
-    return (
-      <div className="rounded-lg border-2 border-dark bg-[#F4FAF4] p-6 font-body text-sm leading-relaxed text-dark md:p-8">
-        <p className="font-display text-lg font-bold text-dark">Got it.</p>
-        <p className="mt-3 text-dark/85">
-          We&apos;ll review everything in the next 48 hours. If we have follow-up questions, they&apos;ll come from
-          hello@iamsoubh.com
-        </p>
-        <p className="mt-3 text-dark/85">
-          Otherwise, expect your kickoff email by the Friday before sprint week (we&apos;ll confirm dates in reply).
-        </p>
-        <p className="mt-4 text-dark/70">— Soubh</p>
-        <button
-          type="button"
-          onClick={() => {
-            setStatus("idle");
-            setErrorMessage("");
-          }}
-          className="mt-6 font-body text-sm font-semibold text-orange underline underline-offset-2 hover:text-dark"
-        >
-          Submit another response
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-0" aria-busy={status === "sending"}>
-      <div className="rounded-2xl border-2 border-dark bg-[#FAFCFD] p-5 md:p-6">
-        <p className="font-display text-xl font-bold text-dark md:text-2xl">Soubh &amp; Co. Sprint — Intake</p>
-        <p className="mt-3 font-body text-sm leading-relaxed text-dark/80 md:text-[15px]">
-          12 questions. About 12 minutes. The more honest you are, the sharper the strategies we come back with, there
-          are no points for being polite about your own business.
-        </p>
-      </div>
-
-      <div className="mt-8 space-y-5 rounded-2xl border-2 border-dark bg-white p-5 md:p-6">
-        <p className={intakeLabelClass}>Your details (for this submission)</p>
-        <div>
-          <label htmlFor="full_name" className={intakeLabelClass}>
-            Full name
-          </label>
-          <input
-            id="full_name"
-            required
-            autoComplete="name"
-            value={form.full_name}
-            onChange={(ev) => setField("full_name", ev.target.value)}
-            className={intakeFieldClass}
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className={intakeLabelClass}>
-            Work email
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            autoComplete="email"
-            value={form.email}
-            onChange={(ev) => setField("email", ev.target.value)}
-            className={intakeFieldClass}
-          />
-        </div>
-        <div>
-          <label htmlFor="agency_name" className={intakeLabelClass}>
-            Agency name
-          </label>
-          <input
-            id="agency_name"
-            required
-            value={form.agency_name}
-            onChange={(ev) => setField("agency_name", ev.target.value)}
-            className={intakeFieldClass}
-          />
-        </div>
-      </div>
-
-      <SectionTitle n={1} title="Your agency" />
-      <div className="mt-6 space-y-6">
-        <div>
-          <label htmlFor="q1" className={intakeLabelClass}>
-            Q1. In one sentence, how do you describe what your agency does to someone at a barbecue?
-          </label>
-          <textarea
-            id="q1"
-            required
-            rows={4}
-            value={form.q1_barbecue}
-            onChange={(ev) => setField("q1_barbecue", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[6rem] resize-y`}
-          />
-          <Helper>This is where most agencies write something generic. Resist that.</Helper>
-        </div>
-        <fieldset>
-          <legend className={intakeLabelClass}>Q2. Annual GCI range (your honest range, not your LinkedIn version)</legend>
-          <div className="mt-3 space-y-2">
-            {GCI_OPTIONS.map((o) => (
-              <label key={o.value} className="flex cursor-pointer items-center gap-3 font-body text-sm text-dark">
-                <input
-                  type="radio"
-                  name="q2_gci"
-                  value={o.value}
-                  checked={form.q2_gci === o.value}
-                  onChange={() => setField("q2_gci", o.value)}
-                  className="h-4 w-4 border-2 border-dark text-orange focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
-                />
-                {o.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <div>
-          <label htmlFor="q3" className={intakeLabelClass}>
-            Q3. What suburbs or regions do you primarily list and sell in?
-          </label>
-          <textarea
-            id="q3"
-            required
-            rows={3}
-            value={form.q3_suburbs}
-            onChange={(ev) => setField("q3_suburbs", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[5rem] resize-y`}
-          />
-        </div>
-      </div>
-
-      <SectionTitle n={2} title="Your market" />
-      <div className="mt-6 space-y-6">
-        <div>
-          <label htmlFor="q4" className={intakeLabelClass}>
-            Q4. Name 3 boutique or independent agencies you actually compete with for vendors. (Not the franchises.)
-          </label>
-          <textarea
-            id="q4"
-            required
-            rows={4}
-            value={form.q4_competitors}
-            onChange={(ev) => setField("q4_competitors", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[6rem] resize-y`}
-          />
-        </div>
-        <div>
-          <label htmlFor="q5" className={intakeLabelClass}>
-            Q5. What franchise do you lose listings to most often, and what&apos;s the real reason they win?
-          </label>
-          <textarea
-            id="q5"
-            required
-            rows={4}
-            value={form.q5_franchise}
-            onChange={(ev) => setField("q5_franchise", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[6rem] resize-y`}
-          />
-        </div>
-        <div>
-          <label htmlFor="q6" className={intakeLabelClass}>
-            Q6. What do your competitors say about themselves that you think is BS, but vendors seem to believe?
-          </label>
-          <textarea
-            id="q6"
-            required
-            rows={4}
-            value={form.q6_bs_claims}
-            onChange={(ev) => setField("q6_bs_claims", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[6rem] resize-y`}
-          />
-          <Helper>
-            Be specific. &quot;They claim to be local experts but they&apos;re not from the area&quot; beats &quot;they
-            exaggerate.&quot;
-          </Helper>
-        </div>
-      </div>
-
-      <SectionTitle n={3} title="Your vendors" />
-      <div className="mt-6 space-y-6">
-        <div>
-          <label htmlFor="q7" className={intakeLabelClass}>
-            Q7. Describe your single best client of the last 12 months. Property type, suburb, price bracket, what they
-            were like to deal with.
-          </label>
-          <textarea
-            id="q7"
-            required
-            rows={5}
-            value={form.q7_best_client}
-            onChange={(ev) => setField("q7_best_client", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[7rem] resize-y`}
-          />
-        </div>
-        <div>
-          <label htmlFor="q8" className={intakeLabelClass}>
-            Q8. What kind of vendor do you NOT want? Be specific.
-          </label>
-          <textarea
-            id="q8"
-            required
-            rows={4}
-            value={form.q8_vendor_not_want}
-            onChange={(ev) => setField("q8_vendor_not_want", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[6rem] resize-y`}
-          />
-          <Helper>This question matters more than the previous one. The &quot;no&quot; defines the brand.</Helper>
-        </div>
-        <div>
-          <label htmlFor="q9" className={intakeLabelClass}>
-            Q9. When a vendor picks you over another agency, what&apos;s the reason they usually give?
-          </label>
-          <textarea
-            id="q9"
-            required
-            rows={4}
-            value={form.q9_why_chosen}
-            onChange={(ev) => setField("q9_why_chosen", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[6rem] resize-y`}
-          />
-        </div>
-      </div>
-
-      <SectionTitle n={4} title="Your marketing" />
-      <div className="mt-6 space-y-6">
-        <fieldset>
-          <legend className={intakeLabelClass}>Q10. Who currently runs marketing at the agency?</legend>
-          <div className="mt-3 space-y-2">
-            {Q10_OPTIONS.map((o) => (
-              <label key={o.value} className="flex cursor-pointer items-center gap-3 font-body text-sm text-dark">
-                <input
-                  type="radio"
-                  name="q10_marketing"
-                  value={o.value}
-                  checked={form.q10_marketing === o.value}
-                  onChange={() => setField("q10_marketing", o.value)}
-                  className="h-4 w-4 border-2 border-dark text-orange focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
-                />
-                {o.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <div>
-          <label htmlFor="q11_files" className={intakeLabelClass}>
-            Q11. Upload 2–3 of your most recent listing presentations or pitch decks (PDF, max 10MB each)
-          </label>
-          <input
-            id="q11_files"
-            type="file"
-            accept=".pdf,application/pdf"
-            multiple
-            onChange={(ev) => setFiles(ev.target.files ? Array.from(ev.target.files) : [])}
-            className="mt-2 block w-full font-body text-sm text-dark file:mr-3 file:rounded-md file:border-2 file:border-dark file:bg-white file:px-3 file:py-2 file:font-semibold file:text-dark hover:file:bg-zinc-50"
-          />
-          <label htmlFor="q11_links" className={`${intakeLabelClass} mt-4`}>
-            Or paste shareable links (Drive / Dropbox). Required if you skip files.
-          </label>
-          <textarea
-            id="q11_links"
-            rows={3}
-            value={form.q11_links}
-            onChange={(ev) => setField("q11_links", ev.target.value)}
-            placeholder="https://..."
-            className={`${intakeFieldClass} min-h-[4.5rem] resize-y`}
-          />
-          <Helper>The actual document you give vendors. Not a polished version. The real one.</Helper>
-        </div>
-        <div>
-          <label htmlFor="q12" className={intakeLabelClass}>
-            Q12. What does success from this sprint look like for you, in plain English?
-          </label>
-          <textarea
-            id="q12"
-            required
-            rows={5}
-            value={form.q12_success}
-            onChange={(ev) => setField("q12_success", ev.target.value)}
-            className={`${intakeFieldClass} min-h-[7rem] resize-y`}
-          />
-          <Helper>&quot;More leads&quot; is not the answer. Be specific about what would change about your business.</Helper>
-        </div>
-      </div>
-
-      {errorMessage ? (
-        <p className="mt-6 font-body text-sm leading-snug text-red-700" role="alert">
-          {errorMessage}{" "}
-          <a href={CALENDLY_URL} className="font-semibold underline underline-offset-2" target="_blank" rel="noopener noreferrer">
-            Open Calendly
-          </a>
-        </p>
-      ) : null}
-
-      <button
-        type="submit"
-        disabled={status === "sending"}
-        className="mt-8 inline-flex w-full items-center justify-center rounded-lg border-[3px] border-dark bg-orange px-5 py-3 font-body text-[15px] font-bold text-white transition-[transform,box-shadow] duration-200 ease-out shadow-none hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D] disabled:translate-x-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none sm:w-auto"
-      >
-        {status === "sending" ? "Sending…" : "Submit intake"}
-      </button>
-    </form>
-  );
-}
-
-function BookingPathway() {
+function StepProgress({ currentStep = 2 }) {
   const steps = [
-    { n: "1", title: "Calendly booking", detail: "5 fields. Meet link + calendar. Lead." },
-    { n: "2", title: "Confirmation email", detail: "Immediate. Prep for the call." },
-    { n: "3", title: "Reminder (24h)", detail: "Automated before the call." },
-    { n: "4", title: "The call (25 min)", detail: "Fit vs not a fit." },
-    { n: "5a", title: "Proposal (fit)", detail: "Intake link + 50% invoice." },
-    { n: "5b", title: "Decline (not fit)", detail: "Polite, specific next step." },
-    { n: "6", title: "Intake submitted", detail: "This form (~12 min)." },
-    { n: "7", title: "Deposit paid", detail: "Slot locked." },
-    { n: "8", title: "Kickoff email", detail: "Friday before sprint week." },
-    { n: "9", title: "Sprint begins", detail: "Agreed Monday." },
+    { num: 1, label: "You read the offer" },
+    { num: 2, label: "Intake" },
+    { num: 3, label: "Confirmation call (15 min)" },
+    { num: 4, label: "Sprint kicks off" },
   ];
+  const progressPct = ((currentStep - 1) / (steps.length - 1)) * 100;
+
   return (
-    <div className="rounded-2xl border-2 border-dark bg-white p-5 shadow-[6px_6px_0_0_rgba(13,13,13,0.08)] md:p-8">
-      <p className="font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid">Part 1 — Booking pathway</p>
-      <h2 className="mt-2 font-display text-xl font-bold tracking-tight text-dark md:text-2xl">
-        One form, one clear funnel from booking to sprint kickoff.
-      </h2>
-      <p className="mt-3 font-body text-sm leading-relaxed text-dark/80 md:text-[15px]">
-        LinkedIn / homepage / quiz → Calendly → emails → call → proposal or decline → this intake → deposit → kickoff
-        → sprint Monday.
+    <div className="mb-12 rounded-2xl border-2 border-dark/15 bg-white px-4 py-7 sm:px-8">
+      <p className="mb-1 font-display text-[10px] font-bold uppercase tracking-[0.2em] text-dark/45">
+        Progress
       </p>
-      <ol className="mt-6 space-y-3 border-t border-border pt-6">
-        {steps.map((s) => (
-          <li key={s.n} className="flex gap-3 font-body text-sm leading-snug text-dark md:text-[15px]">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 border-dark bg-[#EAF6FF] text-xs font-bold">
-              {s.n}
-            </span>
-            <span>
-              <span className="font-semibold">{s.title}.</span> {s.detail}
-            </span>
-          </li>
-        ))}
-      </ol>
-      <p className="mt-6 font-body text-xs leading-relaxed text-dark/60">
-        Stage copy for Calendly, confirmation, proposal, and kickoff lives in your playbook. This page is the Stage 6
-        intake only.
+      <p className="mb-6 font-body text-sm text-dark/65">
+        Track where you are across the 4-step process.
       </p>
+      <div className="mx-auto max-w-4xl">
+        <div className="relative">
+          <div className="absolute left-[12.5%] right-[12.5%] top-4 hidden h-[2px] bg-dark/15 md:block" />
+          <div
+            className="absolute left-[12.5%] top-4 hidden h-[2px] bg-orange/75 md:block"
+            style={{ width: `${progressPct * 0.75}%` }}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-y-6 md:grid-cols-4 md:gap-4">
+          {steps.map((s) => (
+            <div key={s.num} className="flex flex-col items-center">
+              <div className="flex w-full items-center justify-center">
+                <span
+                  className={`z-10 flex h-8 w-8 items-center justify-center rounded-full border font-mono text-xs font-bold ${
+                    currentStep >= s.num
+                      ? "border-orange bg-orange text-white"
+                      : "border-dark/35 bg-white text-dark/60"
+                  }`}
+                >
+                  {s.num}
+                </span>
+              </div>
+              <p
+                className={`mt-2 max-w-[170px] text-center font-body text-xs leading-snug ${
+                  currentStep >= s.num ? "text-dark" : "text-dark/65"
+                }`}
+              >
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function IntakePage() {
+  const [form, setForm] = useState(initialForm);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+  const activeStep = status === "success" ? 3 : 1;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const buildMessage = () => {
+    const lines = [
+      "═══ INTAKE FORM ═══",
+      "",
+      "--- Contact ---",
+      `Name: ${form.contactName}`,
+      `Email: ${form.contactEmail}`,
+      `Phone: ${form.contactPhone}`,
+      "",
+      "--- Section 01 - Your Agency ---",
+      `Q1 Agency name & base: ${form.q1_agency}`,
+      `Q2 Annual GCI range: ${form.q2_gci}`,
+      `Q3 Barbecue pitch: ${form.q3_barbecue}`,
+      "",
+      "--- Section 02 - Your Market ---",
+      `Q4 Suburbs/regions: ${form.q4_suburbs}`,
+      `Q5 Three boutique competitors: ${form.q5_competitors}`,
+      `Q6 BS competitors claim: ${form.q6_bs_claims}`,
+      "",
+      "--- Section 03 - Your Vendors ---",
+      `Q7 Best client (12 mo): ${form.q7_best_client}`,
+      `Q8 Vendor you do NOT want: ${form.q8_vendor_not_want}`,
+      `Q9 Why vendors pick you: ${form.q9_why_pick_you}`,
+      "",
+      "--- Section 04 - Your Marketing ---",
+      `Q10 Who runs marketing: ${form.q10_marketing}`,
+      `Q11 Website, social, pre-appraisal: ${form.q11_assets}`,
+      `Q12 Success from sprint: ${form.q12_success}`,
+    ];
+    return lines.join("\n");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setError("Form is not configured. Add VITE_WEB3FORMS_ACCESS_KEY to .env");
+      return;
+    }
+    if (
+      !form.contactName.trim() ||
+      !form.contactEmail.trim() ||
+      !form.contactPhone.trim() ||
+      !form.q1_agency.trim() ||
+      !form.q2_gci ||
+      !form.q3_barbecue.trim() ||
+      !form.q4_suburbs.trim() ||
+      !form.q5_competitors.trim() ||
+      !form.q6_bs_claims.trim() ||
+      !form.q7_best_client.trim() ||
+      !form.q8_vendor_not_want.trim() ||
+      !form.q9_why_pick_you.trim() ||
+      !form.q10_marketing ||
+      !form.q11_assets.trim() ||
+      !form.q12_success.trim()
+    ) {
+      setError("Please fill in every field before submitting.");
+      return;
+    }
+
+    setStatus("submitting");
+    const message = buildMessage();
+
+    try {
+      const fd = new FormData();
+      fd.append("access_key", WEB3FORMS_ACCESS_KEY);
+      fd.append("subject", `Intake - ${form.q1_agency.slice(0, 60)}`);
+      fd.append("from_name", form.contactName.trim());
+      fd.append("email", form.contactEmail.trim());
+      fd.append("replyto", form.contactEmail.trim());
+      fd.append("message", message);
+
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: fd,
+      });
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.message || "Something went wrong.");
+      }
+      setStatus("success");
+      setForm(initialForm);
+    } catch (err) {
+      setError(err.message || "Failed to send. Try again or email directly.");
+      setStatus("idle");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="min-h-screen bg-white text-dark">
+        <header className="border-b border-dark/10 bg-white px-6 py-5">
+          <div className="mx-auto flex max-w-3xl items-center justify-between">
+            <Link
+              to="/"
+              className="font-display text-sm font-bold uppercase tracking-wide text-dark underline decoration-dark/30 underline-offset-4 hover:decoration-dark"
+            >
+              ← Back to offer
+            </Link>
+          </div>
+        </header>
+        <main className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+          <StepProgress currentStep={activeStep} />
+          <p className="font-display text-xs font-bold uppercase tracking-[0.2em] text-dark/50">
+            Submitted.
+          </p>
+          <h1 className="mt-4 font-display text-3xl font-bold uppercase leading-tight tracking-tight text-dark md:text-4xl">
+            You're between step 02 and step 03 now.
+          </h1>
+          <div className="mt-10 space-y-6 font-body text-base leading-relaxed text-dark/85 md:text-lg">
+            <p>
+              We've got your intake. Within 48 hours, you'll hear from us at the email you submitted
+              with our initial read and a short call booked in.
+            </p>
+            <p className="font-semibold text-dark">That call is 15 minutes. We'll cover three things:</p>
+            <ul className="list-disc space-y-2 pl-6 text-dark/85">
+              <li>Our first read on where your positioning sits in the market</li>
+              <li>Confirm the sprint is the right move for your agency</li>
+              <li>Walk through the deposit and lock the kickoff date</li>
+            </ul>
+            <p>
+              If anything urgent comes up, hit reply on the confirmation email or{" "}
+              <a
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-dark underline decoration-dark/30 underline-offset-4 hover:decoration-dark"
+              >
+                DM Soubh on LinkedIn
+              </a>
+              .
+            </p>
+            <p className="pt-4 font-display text-sm text-dark/60">- Soubh</p>
+            <div className="pt-4">
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center rounded-xl border-2 border-dark bg-orange px-6 py-3 font-display text-base font-bold uppercase tracking-wide text-white transition-shadow hover:shadow-[4px_4px_0_0_rgba(13,13,13,0.25)]"
+              >
+                Back to offer
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  const labelClass =
+    "block font-display text-[11px] font-bold uppercase tracking-[0.15em] text-dark mb-2";
+  const inputClass =
+    "w-full rounded-lg border-2 border-dark/80 bg-white px-4 py-3 font-body text-base text-dark placeholder:text-dark/35 focus:border-dark focus:outline-none focus:ring-2 focus:ring-dark/15";
+  const sectionTitle =
+    "font-display text-lg font-bold uppercase tracking-wide text-dark border-b border-dark/15 pb-3 mb-8";
+
   return (
-    <div className="min-h-screen bg-white font-body text-dark antialiased">
-      <header className="border-b border-border px-3 py-4 sm:px-4 lg:px-5">
-        <div className="mx-auto w-full max-w-[min(100%,1280px)]">
-          <Link to="/" className="font-body text-sm font-medium text-dark/70 transition-colors hover:text-dark">
-            ← Back to Soubh &amp; Co.
+    <div className="min-h-screen bg-white text-dark">
+      <header className="border-b border-dark/10 bg-white px-6 py-5">
+        <div className="mx-auto flex max-w-3xl items-center justify-between">
+          <Link
+            to="/"
+            className="font-display text-sm font-bold uppercase tracking-wide text-dark underline decoration-dark/30 underline-offset-4 hover:decoration-dark"
+          >
+            ← Back to offer
           </Link>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-2xl px-3 py-10 sm:px-4 lg:max-w-3xl lg:px-5">
-        <h1 className="font-display text-[clamp(1.65rem,4vw,2.35rem)] font-bold tracking-tight text-dark">
-          Soubh &amp; Co. — Intake form + booking pathway
+
+      <main className="mx-auto max-w-3xl px-6 py-12 md:py-16">
+        <StepProgress currentStep={activeStep} />
+
+        <p className="font-display text-xs font-bold uppercase tracking-[0.2em] text-dark/50">
+          You're step {String(activeStep).padStart(2, "0")}.
+        </p>
+        <h1 className="mt-4 font-display text-3xl font-bold uppercase leading-tight tracking-tight text-dark md:text-4xl">
+          Intake
         </h1>
-        <div className="mt-10 space-y-12">
-          <BookingPathway />
-          <div>
-            <p className="font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid">Part 2 — Intake</p>
-            <IntakeForm />
+
+        <div className="mt-8 space-y-6 font-body text-base leading-relaxed text-dark/85 md:text-lg">
+          <p>
+            Most directors book a call first. You went straight to intake. We'll catch up after.
+          </p>
+          <p>
+            This intake takes about 12 minutes. The more honest you are, the sharper the strategies
+            we come back with. We'll review what you've sent within 48 hours and book a short call
+            to walk through what's next.
+          </p>
+          <p className="font-semibold text-dark">
+            No call needed before the form. The call comes after, once we've reviewed your answers
+            and shaped the first read.
+          </p>
+        </div>
+
+        <div className="mt-12 space-y-8">
+          <div className="border border-dark/15 bg-white p-6 md:p-8">
+            <h2 className="font-display text-sm font-bold uppercase tracking-wide text-dark">
+              What happens after you submit
+            </h2>
+            <ul className="mt-4 list-disc space-y-3 pl-5 font-body text-sm leading-relaxed text-dark/85 md:text-base">
+              <li>You'll get a confirmation email immediately.</li>
+              <li>
+                Within 48 hours, we'll review everything you've sent and reach out to book a
+                15-minute confirmation call. That call is short and direct, we'll share our initial
+                read on your positioning landscape, confirm fit, and walk through deposit + sprint
+                kickoff.
+              </li>
+              <li>
+                If we don't think the sprint is the right move for your agency, we'll tell you
+                straight on the call. No pitch.
+              </li>
+            </ul>
+          </div>
+          <div className="border border-dark/15 bg-white p-6 md:p-8">
+            <h2 className="font-display text-sm font-bold uppercase tracking-wide text-dark">
+              What we don't ask for
+            </h2>
+            <ul className="mt-4 list-disc space-y-3 pl-5 font-body text-sm leading-relaxed text-dark/85 md:text-base">
+              <li>We don't need polished documents. Send us what you actually have, however rough.</li>
+              <li>We don't need exact GCI to the dollar. A range is enough.</li>
+              <li>We don't need you to write essays. One honest sentence beats five polite ones.</li>
+            </ul>
           </div>
         </div>
+
+        <form onSubmit={handleSubmit} className="mt-14 space-y-14">
+          <div>
+            <h2 className={sectionTitle}>Your contact</h2>
+            <p className="-mt-4 mb-6 font-body text-sm text-dark/65">
+              So we can reach you after we review your answers.
+            </p>
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="contactName" className={labelClass}>
+                  Your name
+                </label>
+                <input
+                  id="contactName"
+                  name="contactName"
+                  type="text"
+                  value={form.contactName}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="name"
+                />
+              </div>
+              <div>
+                <label htmlFor="contactEmail" className={labelClass}>
+                  Your email
+                </label>
+                <input
+                  id="contactEmail"
+                  name="contactEmail"
+                  type="email"
+                  value={form.contactEmail}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="email"
+                />
+              </div>
+              <div>
+                <label htmlFor="contactPhone" className={labelClass}>
+                  Phone number
+                </label>
+                <input
+                  id="contactPhone"
+                  name="contactPhone"
+                  type="tel"
+                  value={form.contactPhone}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="tel"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className={sectionTitle}>Section 01 - Your Agency</h2>
+            <div className="space-y-8">
+              <div>
+                <label htmlFor="q1_agency" className={labelClass}>
+                  Q1. What's your agency's name and where are you based?
+                </label>
+                <input
+                  id="q1_agency"
+                  name="q1_agency"
+                  type="text"
+                  value={form.q1_agency}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Short answer"
+                />
+              </div>
+              <div>
+                <span className={labelClass}>
+                  Q2. Annual GCI range - your honest range, not your LinkedIn version.
+                </span>
+                <div className="space-y-3">
+                  {GCI_OPTIONS.map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex cursor-pointer items-center gap-3 font-body text-base text-dark"
+                    >
+                      <input
+                        type="radio"
+                        name="q2_gci"
+                        value={opt}
+                        checked={form.q2_gci === opt}
+                        onChange={handleChange}
+                        className="h-4 w-4 border-dark text-dark focus:ring-dark"
+                      />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label htmlFor="q3_barbecue" className={labelClass}>
+                  Q3. In one sentence - how do you describe what your agency does to someone at a
+                  barbecue?
+                </label>
+                <p className="mb-2 font-body text-sm italic text-dark/55">
+                  This is where most agencies write something generic. Resist that.
+                </p>
+                <textarea
+                  id="q3_barbecue"
+                  name="q3_barbecue"
+                  rows={4}
+                  value={form.q3_barbecue}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[100px]`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className={sectionTitle}>Section 02 - Your Market</h2>
+            <div className="space-y-8">
+              <div>
+                <label htmlFor="q4_suburbs" className={labelClass}>
+                  Q4. What suburbs or regions do you primarily list and sell in?
+                </label>
+                <input
+                  id="q4_suburbs"
+                  name="q4_suburbs"
+                  type="text"
+                  value={form.q4_suburbs}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label htmlFor="q5_competitors" className={labelClass}>
+                  Q5. Name 3 boutique or independent agencies you actually compete with for vendors.
+                  (Not the franchises.)
+                </label>
+                <textarea
+                  id="q5_competitors"
+                  name="q5_competitors"
+                  rows={4}
+                  value={form.q5_competitors}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[100px]`}
+                />
+              </div>
+              <div>
+                <label htmlFor="q6_bs_claims" className={labelClass}>
+                  Q6. What do those competitors say about themselves that you think is BS - but
+                  vendors seem to believe?
+                </label>
+                <p className="mb-2 font-body text-sm italic text-dark/55">
+                  Be specific. "They claim to be 'local experts' but they're not from the area"
+                  beats "they exaggerate."
+                </p>
+                <textarea
+                  id="q6_bs_claims"
+                  name="q6_bs_claims"
+                  rows={4}
+                  value={form.q6_bs_claims}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[100px]`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className={sectionTitle}>Section 03 - Your Vendors</h2>
+            <div className="space-y-8">
+              <div>
+                <label htmlFor="q7_best_client" className={labelClass}>
+                  Q7. Describe your single best client of the last 12 months. Property type, suburb,
+                  price bracket, what they were like to deal with.
+                </label>
+                <textarea
+                  id="q7_best_client"
+                  name="q7_best_client"
+                  rows={5}
+                  value={form.q7_best_client}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[120px]`}
+                />
+              </div>
+              <div>
+                <label htmlFor="q8_vendor_not_want" className={labelClass}>
+                  Q8. What kind of vendor do you NOT want? Be specific.
+                </label>
+                <p className="mb-2 font-body text-sm italic text-dark/55">
+                  This question matters more than the previous one. The "no" defines the brand.
+                </p>
+                <textarea
+                  id="q8_vendor_not_want"
+                  name="q8_vendor_not_want"
+                  rows={4}
+                  value={form.q8_vendor_not_want}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[100px]`}
+                />
+              </div>
+              <div>
+                <label htmlFor="q9_why_pick_you" className={labelClass}>
+                  Q9. When a vendor picks you over another agency, what's the reason they usually
+                  give?
+                </label>
+                <textarea
+                  id="q9_why_pick_you"
+                  name="q9_why_pick_you"
+                  rows={4}
+                  value={form.q9_why_pick_you}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[100px]`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className={sectionTitle}>Section 04 - Your Marketing</h2>
+            <div className="space-y-8">
+              <div>
+                <span className={labelClass}>Q10. Who currently runs marketing at the agency?</span>
+                <div className="space-y-3">
+                  {MARKETING_OPTIONS.map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex cursor-pointer items-center gap-3 font-body text-base text-dark"
+                    >
+                      <input
+                        type="radio"
+                        name="q10_marketing"
+                        value={opt}
+                        checked={form.q10_marketing === opt}
+                        onChange={handleChange}
+                        className="h-4 w-4 border-dark text-dark focus:ring-dark"
+                      />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label htmlFor="q11_assets" className={labelClass}>
+                  Q11. Send us your website, your social handles, and anything you give vendors
+                  before an appraisal - even if it's rough.
+                </label>
+                <p className="mb-2 font-body text-sm italic text-dark/55">
+                  Don't polish anything. We get more value from the rough versions.
+                </p>
+                <textarea
+                  id="q11_assets"
+                  name="q11_assets"
+                  rows={5}
+                  value={form.q11_assets}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[120px]`}
+                />
+              </div>
+              <div>
+                <label htmlFor="q12_success" className={labelClass}>
+                  Q12. What does success from this sprint look like for you, in plain English?
+                </label>
+                <p className="mb-2 font-body text-sm italic text-dark/55">
+                  "More leads" is not the answer. Be specific about what would change about your
+                  business.
+                </p>
+                <textarea
+                  id="q12_success"
+                  name="q12_success"
+                  rows={4}
+                  value={form.q12_success}
+                  onChange={handleChange}
+                  className={`${inputClass} resize-y min-h-[100px]`}
+                />
+              </div>
+            </div>
+          </div>
+
+          {error && (
+            <p className="font-body text-sm font-semibold text-red-800" role="alert">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={status === "submitting"}
+            className="mx-auto block w-full max-w-[440px] rounded-2xl border-4 border-dark bg-orange px-6 py-3 text-center font-display text-2xl font-bold capitalize tracking-tight text-white shadow-[6px_6px_0_0_#0D0D0D] transition-all hover:-translate-y-0.5 hover:shadow-[8px_8px_0_0_#0D0D0D] disabled:opacity-50 md:text-3xl"
+          >
+            {status === "submitting" ? "Sending…" : "Submit intake"}
+          </button>
+        </form>
       </main>
     </div>
   );

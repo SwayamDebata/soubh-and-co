@@ -11,6 +11,7 @@ export default {
       colors: {
         orange: "#08608f",
         dark: "#0D0D0D",
+        cream: "#FAF7F2",
         mid: "#6B6B6B",
         border: "#E5E5E5",
       },
