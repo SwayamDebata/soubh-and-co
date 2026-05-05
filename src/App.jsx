@@ -13,6 +13,7 @@ import brandArum from "./assets/arum.png";
 import brandCarismatic from "./assets/carismatic.png";
 import brandTspg from "./assets/tspg.png";
 import brandBai from "./assets/bai.png";
+import founderImage from "./assets/LNS06367.jpeg";
 
 const CHECKLIST_ITEMS = [
   "Vendors don't know what makes you different",
@@ -300,6 +301,9 @@ function Nav() {
               <a href="#sprint" className={linkClass}>
                 Sprint
               </a>
+              <a href="#founder" className={linkClass}>
+                About Founder
+              </a>
               <a href="#pricing" className={linkClass}>
                 Pricing
               </a>
@@ -387,6 +391,9 @@ function Nav() {
               <nav className="flex flex-col items-center gap-10 sm:gap-11" aria-label="Mobile primary">
                 <a href="#sprint" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
                   Sprint
+                </a>
+                <a href="#founder" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
+                  About Founder
                 </a>
                 <a href="#pricing" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
                   Pricing
@@ -530,6 +537,81 @@ function DeliverableCards() {
               </article>
             );
           })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FounderSection() {
+  return (
+    <section id="founder" className="scroll-mt-24 border-b border-border bg-white py-20 md:py-28">
+      <div className={contentWide}>
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
+          <div className="order-2 lg:order-1">
+            <p className="font-body text-xs font-bold uppercase tracking-[0.18em] text-mid">Who&apos;s behind this</p>
+            <h2 className="mt-4 font-display text-[clamp(2rem,4.4vw,3.1rem)] font-bold leading-[1.05] tracking-tight text-dark">
+              I&apos;m Soubh. I run Soubh &amp; Co.
+            </h2>
+            <div className="mt-6 space-y-5 font-body text-[17px] leading-[1.72] text-dark/85 md:text-[19px]">
+              <p>
+                Spent the last four years building brands across Australia, including four real estate agencies you&apos;ve
+                probably never heard of, but their vendors definitely have.
+              </p>
+              <p>
+                Every engagement converged on the same insight: positioning has to come before marketing. So I built a
+                sprint that does only that.
+              </p>
+              <p>
+                If you want the long version of the work,{" "}
+                <a
+                  href="https://iamsoubh.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                >
+                  iamsoubh.com
+                </a>
+                .
+              </p>
+              <p>
+                If you want to see the daily posts,{" "}
+                <a
+                  href="https://www.linkedin.com/in/iamsoubh/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                >
+                  LinkedIn
+                </a>
+                .
+              </p>
+              <p>
+                If you want to skip both and just talk,{" "}
+                <a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                >
+                  reserve a sprint →
+                </a>
+                .
+              </p>
+              <p className="pt-1 font-display text-sm text-dark/60">- Soubh</p>
+            </div>
+          </div>
+          <div className="order-1 lg:order-2">
+            <div className="mx-auto max-w-[440px] overflow-hidden rounded-[28px] border-[3px] border-dark bg-[#EAF3F8] shadow-[10px_10px_0_0_rgba(13,13,13,0.12)] lg:ml-auto">
+              <img
+                src={founderImage}
+                alt="Soubh portrait"
+                className="block h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1162,6 +1244,7 @@ export default function App() {
         <LogoStrip />
         <TestimonialThreeCards />
         <DeliverableCards />
+        <FounderSection />
         <ProblemChecklist />
         <SprintTimeline />
         <ContentNinetyDays />
