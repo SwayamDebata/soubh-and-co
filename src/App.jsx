@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CALENDLY_URL } from "./config.js";
 import logoPng from "./assets/logo.png";
 import positionPng from "./assets/position.png";
 import positionPng2 from "./assets/position2.png";
@@ -102,7 +101,7 @@ Either way, you own everything we built. There's no lock-in.`,
 ];
 
 const HERO_BODY =
-  "Soubh & Co. is a marketing consultancy built for boutique Australian real estate agencies. We define your positioning, build your pitch deck, and run your social for 90 days.";
+  "Soubh & Co. is a marketing consultancy built for boutique Australian real estate agencies. We define your positioning, build your positioning deck, and run your social for 90 days.";
 
 const DELIVERABLE_CARDS = [
   {
@@ -312,9 +311,7 @@ function Nav() {
               </a>
             </nav>
             <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/book"
               className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex md:!px-5`}
             >
               Reserve your sprint
@@ -402,13 +399,7 @@ function Nav() {
                   FAQs
                 </a>
               </nav>
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${ctaPrimary} w-full max-w-md`}
-                onClick={() => setMenuOpen(false)}
-              >
+              <a href="/book" className={`${ctaPrimary} w-full max-w-md`} onClick={() => setMenuOpen(false)}>
                 Reserve your sprint
                 <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
                   Founding pricing. 3 spots.
@@ -462,16 +453,14 @@ function Hero() {
     <section className="border-b border-border pb-12 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-24">
       <div className={contentWide}>
         <h1 className="max-w-[920px] font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
-          You&apos;re the best-kept secret in your suburb. That&apos;s the problem
+          Your agency sounds like every other agency on the high street
         </h1>
         <p className="mt-6 max-w-[640px] font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
           {HERO_BODY}
         </p>
         <div className="mt-10 flex w-full max-w-lg flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
           <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/book"
             className={`${ctaPrimary} w-full sm:w-auto`}
           >
             Reserve your sprint
@@ -589,9 +578,7 @@ function FounderSection() {
               <p>
                 If you want to skip both and just talk,{" "}
                 <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/book"
                   className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
                 >
                   reserve a sprint →
@@ -932,12 +919,7 @@ function ContentNinetyDays() {
               36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On
               your schedule.
             </p>
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${ctaPrimary} w-full shrink-0 md:w-auto`}
-            >
+            <a href="/book" className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
               Reserve your sprint →
             </a>
           </div>
@@ -1096,12 +1078,7 @@ function PricingSection() {
           </p>
         </div>
         <div className="mt-10 flex justify-center">
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${ctaPrimary} w-full max-w-md sm:w-auto`}
-          >
+          <a href="/book" className={`${ctaPrimary} w-full max-w-md sm:w-auto`}>
             Reserve your sprint →
           </a>
         </div>
@@ -1168,12 +1145,7 @@ function FinalCTA() {
           Stop being the best-kept secret in your suburb.
         </h2>
         <div className="mt-10 flex justify-center px-0">
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}
-          >
+          <a href="/book" className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}>
             Reserve your sprint →
           </a>
         </div>
