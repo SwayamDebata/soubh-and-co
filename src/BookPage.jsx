@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logoPng from "./assets/logo.png";
 import avatarMarkZammit from "./assets/Mark Zammit.png";
@@ -144,6 +144,8 @@ function StepTimeline() {
 }
 
 function CalendlyInline() {
+  const [embedHeight, setEmbedHeight] = useState(1200);
+
   useEffect(() => {
     const src = "https://assets.calendly.com/assets/external/widget.js";
     if (document.querySelector(`script[src="${src}"]`)) return;
@@ -156,11 +158,28 @@ function CalendlyInline() {
     };
   }, []);
 
+  useEffect(() => {
+    const onCalendlyResize = (event) => {
+      if (!event?.data || typeof event.data !== "object") return;
+      if (!String(event.origin || "").includes("calendly.com")) return;
+      if (event.data.event !== "calendly.page_height") return;
+
+      const nextHeight = event.data.payload?.height;
+      if (typeof nextHeight !== "number" || nextHeight < 600) return;
+      const paddedHeight = Math.ceil(nextHeight) + 40;
+      setEmbedHeight((currentHeight) => Math.max(currentHeight, paddedHeight));
+    };
+
+    window.addEventListener("message", onCalendlyResize);
+    return () => window.removeEventListener("message", onCalendlyResize);
+  }, []);
+
   return (
     <div
-      className="calendly-inline-widget mt-6 h-[88vh] rounded-xl border border-dark/15 md:h-[920px]"
+      className="calendly-inline-widget mt-6 overflow-hidden rounded-xl border border-dark/15"
       data-url={CALENDLY_EMBED_URL}
-      style={{ minWidth: "320px" }}
+      data-resize="true"
+      style={{ minWidth: "320px", height: `${embedHeight}px` }}
     />
   );
 }
@@ -203,7 +222,7 @@ export default function BookPage() {
 
         <StepTimeline />
 
-        <section className="border-b border-dark/10 py-16 md:py-20">
+        {/* <section className="border-b border-dark/10 py-16 md:py-20">
           <div className="mx-auto max-w-[920px] px-3 sm:px-4 lg:px-5">
             <div className="border border-dark/15 bg-white p-6 md:p-8">
               <h2 className="font-display text-[clamp(1.6rem,3.4vw,2.35rem)] font-bold tracking-tight text-dark">
@@ -229,7 +248,7 @@ export default function BookPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         <section
           id="calendly-embed"
