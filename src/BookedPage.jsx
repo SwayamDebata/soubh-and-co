@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logoPng from "./assets/logo.png";
 
 const NEXT_STEPS = [
@@ -139,6 +140,17 @@ function LightFooter() {
 }
 
 export default function BookedPage() {
+  const { search } = useLocation();
+  const inviteeName = useMemo(() => {
+    const params = new URLSearchParams(search);
+    return (
+      params.get("invitee_first_name") ||
+      params.get("invitee_full_name") ||
+      params.get("invitee_last_name") ||
+      ""
+    ).trim();
+  }, [search]);
+
   return (
     <div className="min-h-screen bg-[#FAF8F3] text-dark">
       <BookedNav />
@@ -150,9 +162,16 @@ export default function BookedPage() {
               <span className="mr-2 text-[#B85C3A]">✓</span>
               You&apos;re locked in.
             </h1>
+            {inviteeName ? (
+              <p className="mt-3 font-body text-[16px] font-semibold text-dark/85 md:text-[17px]">Nice one, {inviteeName}.</p>
+            ) : null}
             <p className="mt-5 font-body text-[17px] leading-[1.72] text-dark/85 md:text-[19px]">
               Check your inbox. A confirmation email is on its way with the Google Meet link, calendar invite, and the
               option to reschedule if anything comes up.
+            </p>
+            <p className="mt-4 font-body text-[14px] leading-[1.7] text-dark/70 md:text-[15px]">
+              Calendly sends the calendar file through that confirmation email. Use the save-to-calendar option there to
+              add it in one click.
             </p>
           </div>
         </section>
