@@ -237,6 +237,28 @@ const OFFER_WHAT_ITEMS = [
   },
 ];
 
+/** Reprised from #pricing copy: Fletch-style tier column in sprint panel */
+const SPRINT_PRICING_TIERS = [
+  {
+    accent: "bg-[#DCEAF2]",
+    label: "Founding cohort (first 3 agencies)",
+    price: "$5,000",
+    detail: "Flat rate for the first three spots; standard tiers after.",
+  },
+  {
+    accent: "bg-[#E8F0E8]",
+    label: "Boutique · lighter footprint",
+    price: "$8,500",
+    detail: "From client #4 when scope and team size are smaller.",
+  },
+  {
+    accent: "bg-[#EDE8F5]",
+    label: "Growing & larger agencies",
+    price: "$14,500 – $22,000",
+    detail: "More surface area to align and more content to ship.",
+  },
+];
+
 function renderBoldSegments(text) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
@@ -426,19 +448,19 @@ function BrandsBar() {
   const row1 = BRAND_LOGOS.slice(0, 3);
   const row2 = BRAND_LOGOS.slice(3, 5);
   const logoClass =
-    "h-11 w-auto max-w-[min(44vw,12.5rem)] object-contain object-center sm:h-12 sm:max-w-[min(38vw,14rem)] md:h-[3.25rem] md:max-w-[15rem] lg:h-14 lg:max-w-[17rem]";
+    "h-12 w-auto max-w-[min(46vw,13.5rem)] object-contain object-center sm:h-[3.35rem] sm:max-w-[min(40vw,15rem)] md:h-14 md:max-w-[16rem] lg:h-16 lg:max-w-[18.5rem]";
   return (
-    <div>
-      <p className="mb-6 text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-8 md:text-xs">
+    <div className="w-full text-left">
+      <p className="mb-6 font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-8 md:text-xs">
         Past work across Australia.
       </p>
-      <div className="mx-auto flex w-full max-w-[min(100%,1040px)] flex-col items-center gap-10 md:gap-14">
-        <div className="flex w-full flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 md:gap-x-20 lg:gap-x-24">
+      <div className="flex w-full max-w-[min(100%,1040px)] flex-col items-start gap-8 md:gap-10">
+        <div className="flex w-full flex-wrap items-center justify-start gap-x-10 gap-y-6 sm:gap-x-12 md:gap-x-14 lg:gap-x-16">
           {row1.map(({ src, alt }) => (
             <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
           ))}
         </div>
-        <div className="flex w-full flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 md:gap-x-20 lg:gap-x-24">
+        <div className="flex w-full max-w-[min(100%,720px)] flex-wrap items-center justify-start gap-x-10 gap-y-6 sm:gap-x-12 md:gap-x-14 lg:gap-x-16">
           {row2.map(({ src, alt }) => (
             <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
           ))}
@@ -450,15 +472,15 @@ function BrandsBar() {
 
 function Hero() {
   return (
-    <section className="pb-8 pt-12 sm:pb-10 sm:pt-16 md:pb-12 md:pt-20">
+    <section className="pb-8 pt-12 text-left sm:pb-10 sm:pt-16 md:pb-12 md:pt-20">
       <div className={contentWide}>
-        <h1 className="max-w-[920px] font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
+        <h1 className="max-w-[920px] text-balance font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
           Your agency sounds like every other agency on the high street
         </h1>
-        <p className="mt-6 max-w-[640px] font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
+        <p className="mt-6 max-w-[640px] text-pretty font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
           {HERO_BODY}
         </p>
-        <div className="mt-10 flex w-full max-w-lg flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
+        <div className="mt-10 flex w-full max-w-lg flex-col items-start gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
           <a
             href="/book"
             className={`${ctaPrimary} w-full sm:w-auto`}
@@ -666,31 +688,56 @@ function SprintCallout() {
     <section id="sprint" className="scroll-mt-24 py-14 md:py-20">
       <div className={contentOffer}>
         <div className="overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
-          <div className="grid divide-y divide-border md:grid-cols-2 md:divide-x md:divide-y-0">
-            <div className="p-7 md:p-9 lg:p-10">
-              <h2 className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-dark md:text-[2.25rem] lg:text-[2.35rem]">
+          <div className="grid divide-y divide-border text-left lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:items-start">
+            <div className="p-6 md:p-7 lg:p-8">
+              <h2 className="text-balance font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-dark md:text-[2.25rem] lg:text-[2.35rem]">
                 <span className="block">The Real Estate</span>
                 <span className="block">Positioning Sprint</span>
               </h2>
-              <p className="mt-5 font-body text-[15px] leading-[1.65] text-dark md:text-base lg:mt-6">
+              <p className="mt-4 font-body text-[15px] leading-[1.6] text-dark md:text-base">
                 {OFFER_INTRO}
               </p>
             </div>
-            <div className="p-7 md:p-9 lg:p-10">
+            <div className="p-6 md:p-7 lg:p-8">
               <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">What you get:</p>
-              <ul className="mt-6 space-y-8 md:space-y-9">
+              <ul className="mt-5 space-y-5 md:space-y-6">
                 {OFFER_WHAT_ITEMS.map((item) => (
-                  <li key={item.title} className="flex gap-4">
-                    <span className="mt-0.5 shrink-0 font-body text-lg leading-none text-dark" aria-hidden>
+                  <li key={item.title} className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 font-body text-base leading-none text-dark" aria-hidden>
                       ✓
                     </span>
                     <div>
                       <p className="font-body text-sm font-bold leading-snug text-dark">{item.title}</p>
-                      <p className="mt-2 font-body text-sm leading-[1.65] text-dark">{item.body}</p>
+                      <p className="mt-1.5 font-body text-sm leading-[1.55] text-dark">{item.body}</p>
                     </div>
                   </li>
                 ))}
               </ul>
+            </div>
+            <div className="p-6 md:p-7 lg:p-8">
+              <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">
+                Pricing by agency size
+              </p>
+              <ul className="mt-5 space-y-3">
+                {SPRINT_PRICING_TIERS.map((tier) => (
+                  <li key={tier.label} className="flex gap-0 overflow-hidden rounded-lg border border-dark/10">
+                    <span className={`w-1.5 shrink-0 ${tier.accent}`} aria-hidden />
+                    <div className="min-w-0 flex-1 py-2.5 pl-3 pr-2.5">
+                      <p className="font-body text-[12px] font-semibold leading-snug text-dark">{tier.label}</p>
+                      <p className="mt-1 font-display text-xl font-extrabold tracking-tight text-dark md:text-2xl">
+                        {tier.price}
+                        <span className="ml-1 font-body text-[10px] font-semibold normal-case tracking-normal text-mid">
+                          AUD
+                        </span>
+                      </p>
+                      <p className="mt-1 font-body text-[12px] leading-snug text-dark/75">{tier.detail}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 font-body text-[11px] leading-snug text-mid">
+                AUD ex-GST · 50% on signing, 50% at start of Week 2 · After founding, we quote the tier that fits.
+              </p>
             </div>
           </div>
         </div>
