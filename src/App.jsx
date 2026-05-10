@@ -429,7 +429,7 @@ function BrandsBar() {
     "h-11 w-auto max-w-[min(44vw,12.5rem)] object-contain object-center sm:h-12 sm:max-w-[min(38vw,14rem)] md:h-[3.25rem] md:max-w-[15rem] lg:h-14 lg:max-w-[17rem]";
   return (
     <div>
-      <p className="mb-10 text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-12 md:text-xs">
+      <p className="mb-6 text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-8 md:text-xs">
         Past work across Australia.
       </p>
       <div className="mx-auto flex w-full max-w-[min(100%,1040px)] flex-col items-center gap-10 md:gap-14">
@@ -450,7 +450,7 @@ function BrandsBar() {
 
 function Hero() {
   return (
-    <section className="pb-12 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-24">
+    <section className="pb-8 pt-12 sm:pb-10 sm:pt-16 md:pb-12 md:pt-20">
       <div className={contentWide}>
         <h1 className="max-w-[920px] font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
           Your agency sounds like every other agency on the high street
@@ -607,7 +607,7 @@ function FounderSection() {
 
 function LogoStrip() {
   return (
-    <section className="py-20 md:py-28" aria-label="Brands">
+    <section className="py-12 md:py-16" aria-label="Brands">
       <div className={contentWide}>
         <BrandsBar />
       </div>
@@ -618,7 +618,7 @@ function LogoStrip() {
 function TestimonialThreeCards() {
   const items = THREE_TESTIMONIALS;
   return (
-    <section className="py-24 md:py-36" aria-label="Client testimonials">
+    <section className="py-14 md:py-20" aria-label="Client testimonials">
       <div className={contentWide}>
         <div className="grid gap-10 md:grid-cols-3 md:gap-12">
           {items.map((item) => (
@@ -663,7 +663,7 @@ function TestimonialThreeCards() {
 
 function SprintCallout() {
   return (
-    <section id="sprint" className="scroll-mt-24 py-20 md:py-28">
+    <section id="sprint" className="scroll-mt-24 py-14 md:py-20">
       <div className={contentOffer}>
         <div className="overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
           <div className="grid divide-y divide-border md:grid-cols-2 md:divide-x md:divide-y-0">
