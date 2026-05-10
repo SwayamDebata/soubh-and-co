@@ -426,19 +426,19 @@ function BrandsBar() {
   const row1 = BRAND_LOGOS.slice(0, 3);
   const row2 = BRAND_LOGOS.slice(3, 5);
   const logoClass =
-    "h-8 w-auto max-w-[min(42vw,11rem)] object-contain object-center sm:h-9 sm:max-w-[min(36vw,12.5rem)] md:h-10 md:max-w-[13.5rem] lg:h-11 lg:max-w-[15rem]";
+    "h-11 w-auto max-w-[min(44vw,12.5rem)] object-contain object-center sm:h-12 sm:max-w-[min(38vw,14rem)] md:h-[3.25rem] md:max-w-[15rem] lg:h-14 lg:max-w-[17rem]";
   return (
     <div>
-      <p className="mb-8 text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-10 md:text-xs">
+      <p className="mb-10 text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-12 md:text-xs">
         Past work across Australia.
       </p>
-      <div className="mx-auto flex w-full max-w-[min(100%,920px)] flex-col items-center gap-9 md:gap-11">
-        <div className="flex w-full flex-wrap items-center justify-center gap-x-10 gap-y-7 sm:gap-x-14 md:gap-x-16 lg:gap-x-20">
+      <div className="mx-auto flex w-full max-w-[min(100%,1040px)] flex-col items-center gap-10 md:gap-14">
+        <div className="flex w-full flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 md:gap-x-20 lg:gap-x-24">
           {row1.map(({ src, alt }) => (
             <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
           ))}
         </div>
-        <div className="flex w-full flex-wrap items-center justify-center gap-x-10 gap-y-7 sm:gap-x-14 md:gap-x-16 lg:gap-x-20">
+        <div className="flex w-full flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 md:gap-x-20 lg:gap-x-24">
           {row2.map(({ src, alt }) => (
             <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
           ))}
@@ -450,7 +450,7 @@ function BrandsBar() {
 
 function Hero() {
   return (
-    <section className="border-b border-border pb-12 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-24">
+    <section className="pb-12 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-24">
       <div className={contentWide}>
         <h1 className="max-w-[920px] font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
           Your agency sounds like every other agency on the high street
@@ -607,7 +607,7 @@ function FounderSection() {
 
 function LogoStrip() {
   return (
-    <section className="border-b border-border py-16 md:py-20">
+    <section className="py-20 md:py-28" aria-label="Brands">
       <div className={contentWide}>
         <BrandsBar />
       </div>
@@ -618,15 +618,9 @@ function LogoStrip() {
 function TestimonialThreeCards() {
   const items = THREE_TESTIMONIALS;
   return (
-    <section className="border-b border-border py-24 md:py-32">
+    <section className="py-24 md:py-36" aria-label="Client testimonials">
       <div className={contentWide}>
-        <h2 className="text-center font-display text-[clamp(1.85rem,4.2vw,2.65rem)] font-bold tracking-tight text-dark">
-          Testimonials
-        </h2>
-        <p className="mx-auto mt-3 max-w-lg text-center font-body text-[15px] leading-snug text-dark/65 md:text-base">
-          What principals say after working with us.
-        </p>
-        <div className="mt-12 grid gap-8 md:mt-14 md:grid-cols-3 md:gap-10">
+        <div className="grid gap-10 md:grid-cols-3 md:gap-12">
           {items.map((item) => (
             <article key={item.name} className="flex flex-col">
               <p className="font-body text-[15px] font-medium leading-[1.72] text-dark md:text-[17px]">
@@ -669,7 +663,7 @@ function TestimonialThreeCards() {
 
 function SprintCallout() {
   return (
-    <section id="sprint" className="scroll-mt-24 border-b border-border py-20 md:py-28">
+    <section id="sprint" className="scroll-mt-24 py-20 md:py-28">
       <div className={contentOffer}>
         <div className="overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
           <div className="grid divide-y divide-border md:grid-cols-2 md:divide-x md:divide-y-0">
@@ -1212,12 +1206,12 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
-        <SprintCallout />
         <LogoStrip />
+        <SprintCallout />
         <TestimonialThreeCards />
+        <ProblemChecklist />
         <DeliverableCards />
         <FounderSection />
-        <ProblemChecklist />
         <SprintTimeline />
         <ContentNinetyDays />
         
