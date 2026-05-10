@@ -237,27 +237,13 @@ const OFFER_WHAT_ITEMS = [
   },
 ];
 
-/** Reprised from #pricing copy: Fletch-style tier column in sprint panel */
-const SPRINT_PRICING_TIERS = [
-  {
-    accent: "bg-[#DCEAF2]",
-    label: "Founding cohort (first 3 agencies)",
-    price: "$5,000",
-    detail: "Flat rate for the first three spots; standard tiers after.",
-  },
-  {
-    accent: "bg-[#E8F0E8]",
-    label: "Boutique · lighter footprint",
-    price: "$8,500",
-    detail: "From client #4 when scope and team size are smaller.",
-  },
-  {
-    accent: "bg-[#EDE8F5]",
-    label: "Growing & larger agencies",
-    price: "$14,500 – $22,000",
-    detail: "More surface area to align and more content to ship.",
-  },
-];
+/** Single offering shown in sprint panel (matches founding #pricing) */
+const SPRINT_PANEL_PRICING = {
+  accent: "bg-[#DCEAF2]",
+  label: "Founding cohort (first 3 agencies)",
+  price: "$5,000",
+  detail: "One flat rate for the first three spots while we sharpen the sprint for Australian boutiques.",
+};
 
 function renderBoldSegments(text) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -443,28 +429,19 @@ const BRAND_LOGOS = [
   { src: brandCarismatic, alt: "Carismatic" },
 ];
 
-/** Fletch-style: two centered rows (3 + 2), generous gaps, even logo height */
+/** Fletch-style: centered logo wall; one row from md up, wraps on small screens */
 function BrandsBar() {
-  const row1 = BRAND_LOGOS.slice(0, 3);
-  const row2 = BRAND_LOGOS.slice(3, 5);
   const logoClass =
-    "h-12 w-auto max-w-[min(46vw,13.5rem)] object-contain object-center sm:h-[3.35rem] sm:max-w-[min(40vw,15rem)] md:h-14 md:max-w-[16rem] lg:h-16 lg:max-w-[18.5rem]";
+    "h-10 w-auto max-w-[42%] shrink-0 object-contain object-center sm:h-11 sm:max-w-[31%] md:h-12 md:max-w-[10.5rem] lg:h-[3.35rem] lg:max-w-[11.5rem] xl:h-14 xl:max-w-[12.5rem]";
   return (
-    <div className="w-full text-left">
-      <p className="mb-6 font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-8 md:text-xs">
+    <div className="w-full text-center">
+      <p className="mb-8 font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-10 md:text-xs">
         Past work across Australia.
       </p>
-      <div className="flex w-full max-w-[min(100%,1040px)] flex-col items-start gap-8 md:gap-10">
-        <div className="flex w-full flex-wrap items-center justify-start gap-x-10 gap-y-6 sm:gap-x-12 md:gap-x-14 lg:gap-x-16">
-          {row1.map(({ src, alt }) => (
-            <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
-          ))}
-        </div>
-        <div className="flex w-full max-w-[min(100%,720px)] flex-wrap items-center justify-start gap-x-10 gap-y-6 sm:gap-x-12 md:gap-x-14 lg:gap-x-16">
-          {row2.map(({ src, alt }) => (
-            <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
-          ))}
-        </div>
+      <div className="mx-auto flex w-full max-w-[min(100%,1240px)] flex-wrap items-center justify-center gap-x-5 gap-y-7 sm:gap-x-7 sm:gap-y-8 lg:flex-nowrap lg:justify-center lg:gap-x-7 xl:gap-x-9">
+        {BRAND_LOGOS.map(({ src, alt }) => (
+          <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
+        ))}
       </div>
     </div>
   );
@@ -688,7 +665,7 @@ function SprintCallout() {
     <section id="sprint" className="scroll-mt-24 py-14 md:py-20">
       <div className={contentOffer}>
         <div className="overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
-          <div className="grid divide-y divide-border text-left lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:items-start">
+          <div className="grid divide-y divide-border text-left lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:items-stretch">
             <div className="p-6 md:p-7 lg:p-8">
               <h2 className="text-balance font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-dark md:text-[2.25rem] lg:text-[2.35rem]">
                 <span className="block">The Real Estate</span>
@@ -715,28 +692,22 @@ function SprintCallout() {
               </ul>
             </div>
             <div className="p-6 md:p-7 lg:p-8">
-              <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">
-                Pricing by agency size
-              </p>
-              <ul className="mt-5 space-y-3">
-                {SPRINT_PRICING_TIERS.map((tier) => (
-                  <li key={tier.label} className="flex gap-0 overflow-hidden rounded-lg border border-dark/10">
-                    <span className={`w-1.5 shrink-0 ${tier.accent}`} aria-hidden />
-                    <div className="min-w-0 flex-1 py-2.5 pl-3 pr-2.5">
-                      <p className="font-body text-[12px] font-semibold leading-snug text-dark">{tier.label}</p>
-                      <p className="mt-1 font-display text-xl font-extrabold tracking-tight text-dark md:text-2xl">
-                        {tier.price}
-                        <span className="ml-1 font-body text-[10px] font-semibold normal-case tracking-normal text-mid">
-                          AUD
-                        </span>
-                      </p>
-                      <p className="mt-1 font-body text-[12px] leading-snug text-dark/75">{tier.detail}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">Pricing</p>
+              <div className="mt-5 flex gap-0 overflow-hidden rounded-lg border border-dark/10">
+                <span className={`w-1.5 shrink-0 ${SPRINT_PANEL_PRICING.accent}`} aria-hidden />
+                <div className="min-w-0 flex-1 py-2.5 pl-3 pr-2.5">
+                  <p className="font-body text-[12px] font-semibold leading-snug text-dark">{SPRINT_PANEL_PRICING.label}</p>
+                  <p className="mt-1 font-display text-xl font-extrabold tracking-tight text-dark md:text-2xl">
+                    {SPRINT_PANEL_PRICING.price}
+                    <span className="ml-1 font-body text-[10px] font-semibold normal-case tracking-normal text-mid">
+                      AUD
+                    </span>
+                  </p>
+                  <p className="mt-1 font-body text-[12px] leading-snug text-dark/75">{SPRINT_PANEL_PRICING.detail}</p>
+                </div>
+              </div>
               <p className="mt-4 font-body text-[11px] leading-snug text-mid">
-                AUD ex-GST · 50% on signing, 50% at start of Week 2 · After founding, we quote the tier that fits.
+                All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
               </p>
             </div>
           </div>
