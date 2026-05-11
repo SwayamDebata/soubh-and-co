@@ -114,7 +114,7 @@ const DELIVERABLE_CARDS = [
   },
   {
     label: "Deliverable 2",
-    heading: "A documented 6-slide pitch deck",
+    heading: "A documented 6-slide positioning deck",
     body: "Built on your new positioning. The deck your director walks into every appraisal with, your new hires read in their first week, and your team uses to stay aligned. One source of truth, used everywhere.",
     foot: "6-slide deck · Appraisals · Onboarding · Alignment",
     image: positionPng2,
