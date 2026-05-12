@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Bricolage Grotesque"', "sans-serif"],
+        /* Helvetica Now: add @font-face in index.css when you have licensed files; until then macOS uses Neue. */
+        display: ['"Helvetica Now"', '"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
         body: ["Inter", "sans-serif"],
         sans: ["Inter", "sans-serif"],
       },
