@@ -501,9 +501,8 @@ function DeliverableCards() {
               <article key={card.label}>
                 <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-0 xl:gap-x-20">
                   <div
-                    className={`flex w-full min-w-0 flex-col justify-center lg:max-w-xl ${
-                      imageLeft ? "lg:order-2 lg:justify-self-end" : "lg:justify-self-start"
-                    }`}
+                    className={`flex w-full min-w-0 flex-col justify-center lg:max-w-xl ${imageLeft ? "lg:order-2 lg:justify-self-end" : "lg:justify-self-start"
+                      }`}
                   >
                     <p className="font-body text-xs font-bold uppercase tracking-[0.18em] text-mid">{card.label}</p>
                     <h3 className="mt-3 font-display text-[clamp(1.35rem,3.2vw,2rem)] font-bold leading-[1.12] tracking-tight text-dark md:text-[1.75rem] lg:mt-4 lg:text-[2rem]">
@@ -515,9 +514,8 @@ function DeliverableCards() {
                     </p>
                   </div>
                   <div
-                    className={`w-full min-w-[240px] shrink-0 ${
-                      imageLeft ? "lg:order-1 lg:justify-self-start" : "lg:justify-self-end"
-                    }`}
+                    className={`w-full min-w-[240px] shrink-0 ${imageLeft ? "lg:order-1 lg:justify-self-start" : "lg:justify-self-end"
+                      }`}
                   >
                     <DeliverableImageStack src={card.image} alt={card.imageAlt} />
                   </div>
@@ -948,32 +946,32 @@ function ProblemChecklist() {
   const message =
     count === 0
       ? {
-          emoji: "😊",
-          title: "Nothing ticked yet.",
-          subtitle: "If a line feels true, tick it, we'll show you a readout.",
-          boxClass: "bg-[#ECFDF3]",
-          compact: false,
-        }
+        emoji: "😊",
+        title: "Nothing ticked yet.",
+        subtitle: "If a line feels true, tick it, we'll show you a readout.",
+        boxClass: "bg-[#ECFDF3]",
+        compact: false,
+      }
       : count === 1
         ? {
+          emoji: "😬",
+          title: "You ticked one line. That's often a positioning problem in disguise.",
+          subtitle:
+            "We can fix it in the sprint: two weeks to lock positioning, then 90 days of scheduled content.",
+          boxClass: "bg-[#FFE8DE]",
+          compact: false,
+        }
+        : count >= 3
+          ? {
             emoji: "😬",
-            title: "You ticked one line. That's often a positioning problem in disguise.",
+            title: "You've got a positioning problem.",
             subtitle:
-              "We can fix it in the sprint: two weeks to lock positioning, then 90 days of scheduled content.",
+              "Three ticks is the line. The good news: it's the most fixable thing on your list.",
             boxClass: "bg-[#FFE8DE]",
             compact: false,
           }
-        : count >= 3
-          ? {
-              emoji: "😬",
-              title: "You've got a positioning problem.",
-              subtitle:
-                "Three ticks is the line. The good news: it's the most fixable thing on your list.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            }
-        : count < total
-          ? {
+          : count < total
+            ? {
               emoji: "😬",
               title: "You ticked several lines. The pattern is real, and it's exactly what the sprint is for.",
               subtitle:
@@ -981,7 +979,7 @@ function ProblemChecklist() {
               boxClass: "bg-[#FFE8DE]",
               compact: false,
             }
-          : {
+            : {
               emoji: "😬",
               title: "You ticked every line. When it shows up everywhere, positioning is the lever.",
               subtitle:
@@ -1031,9 +1029,8 @@ function ProblemChecklist() {
                       )}
                     </span>
                     <span
-                      className={`font-body text-[15px] leading-snug transition-colors ${
-                        checked[i] ? "text-orange" : "text-dark group-hover:text-orange"
-                      }`}
+                      className={`font-body text-[15px] leading-snug transition-colors ${checked[i] ? "text-orange" : "text-dark group-hover:text-orange"
+                        }`}
                     >
                       {item}
                     </span>
@@ -1126,17 +1123,15 @@ function FAQs() {
                     {item.q}
                   </span>
                   <span
-                    className={`shrink-0 font-body text-2xl leading-none transition-colors ${
-                      isOpen ? "text-orange" : "text-dark/45"
-                    }`}
+                    className={`shrink-0 font-body text-2xl leading-none transition-colors ${isOpen ? "text-orange" : "text-dark/45"
+                      }`}
                   >
                     {isOpen ? "−" : "+"}
                   </span>
                 </button>
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-[1600px]" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[1600px]" : "max-h-0"
+                    }`}
                 >
                   <p className="whitespace-pre-line pb-5 font-body text-[15px] leading-[1.72] text-dark md:text-[17px]">{item.a}</p>
                 </div>
@@ -1232,7 +1227,7 @@ export default function App() {
         <FounderSection />
         <SprintTimeline />
         <ContentNinetyDays />
-        
+
         <PricingSection />
         <FAQs />
       </main>

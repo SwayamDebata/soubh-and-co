@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import IntakePage from "./IntakePage.jsx";
 import BookPage from "./BookPage.jsx";
 import BookedPage from "./BookedPage.jsx";
+import SprintStoryPage from "./SprintStoryPage.jsx";
 
 const basename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/book" element={<BookPage />} />
         <Route path="/booked" element={<BookedPage />} />
         <Route path="/intake" element={<IntakePage />} />
+        <Route path="/how-the-sprint-works" element={<SprintStoryPage />} />
         <Route path="/*" element={<App />} />
       </Routes>
     </BrowserRouter>
