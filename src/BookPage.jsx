@@ -1,37 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import FadeIn from "./components/FadeIn";
+import TestimonialCarousel from "./components/TestimonialCarousel";
 import logoPng from "./assets/logo.png";
-import avatarMarkZammit from "./assets/Mark Zammit.png";
-import avatarJasonMcCall from "./assets/Jason McCall.png";
-import avatarArshakWasim from "./assets/Arshak Wasim.png";
 import { BOOKING_TIMELINE_LINE_CLASS, bookingTimelineMarkerClass } from "./bookingTimelineShared.js";
 
 const CALENDLY_EMBED_URL =
   "https://calendly.com/hello-iamsoubh/positioning-chat-soubh-co?hide_event_type_details=0&hide_gdpr_banner=1&primary_color=08608F&text_color=1A1A1A&background_color=FFFFFF";
-
-const TESTIMONIALS = [
-  {
-    text: "I've been working with him for years and I still can't say his name right. But I can tell you this: his work is unforgettable.",
-    name: "Mark Zammit",
-    role: "Director, Zammit Real Estate",
-    avatar: avatarMarkZammit,
-    initials: "MZ",
-  },
-  {
-    text: "Attention to detail and a keen understanding of our business needs have made him an invaluable partner.",
-    name: "Jason McCall",
-    role: "Director, The SMSF Property Guy",
-    avatar: avatarJasonMcCall,
-    initials: "JM",
-  },
-  {
-    text: "Transformed my scattered online presence into a cohesive, powerful brand that now attracts high-quality leads daily.",
-    name: "Arshak Wasim",
-    role: "Director, Arum & Co",
-    avatar: avatarArshakWasim,
-    initials: "AW",
-  },
-];
 
 const TIMELINE_STEPS = [
   {
@@ -66,21 +43,19 @@ function BookNav() {
           <span className="font-display text-xl font-bold tracking-tight text-dark">Soubh &amp; Co.</span>
         </Link>
         <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
-          <a href="/#sprint" className={navLink}>
+          <motion.a href="/#sprint" className={navLink} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
             Sprint
-          </a>
-          <a href="/#pricing" className={navLink}>
+          </motion.a>
+          <motion.a href="/#pricing" className={navLink} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
             Pricing
-          </a>
-          <a href="/#faqs" className={navLink}>
+          </motion.a>
+          <motion.a href="/#faqs" className={navLink} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
             FAQs
-          </a>
-          <a
-            href="#calendly-embed"
-            className="inline-flex items-center justify-center rounded-[12px] border-[3px] border-dark bg-orange px-5 py-2.5 font-body text-sm font-bold text-white transition-[transform,box-shadow] hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D]"
+          </motion.a>
+          <Button asChild className="rounded-lg bg-orange px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
           >
-            Reserve your sprint
-          </a>
+            <a href="#calendly-embed">Book a call</a>
+          </Button>
         </nav>
       </div>
     </header>
@@ -89,57 +64,59 @@ function BookNav() {
 
 function StepTimeline() {
   return (
-    <section className="border-b border-dark/10 py-16 md:py-20">
-      <div className="mx-auto max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
-        <div className="hidden md:block">
-          <div className="relative mb-5 px-5">
-            <span className={BOOKING_TIMELINE_LINE_CLASS} aria-hidden />
-            <div className="relative z-10 grid grid-cols-4">
-              {TIMELINE_STEPS.map((_, idx) => (
-                <div key={`dot-${idx}`} className="flex justify-center">
-                  <span className={bookingTimelineMarkerClass(idx === 0 ? "current" : "upcoming")}>
-                    {idx + 1}
-                  </span>
-                </div>
+    <FadeIn>
+      <section className="border-b border-dark/10 py-16 md:py-20">
+        <div className="mx-auto max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
+          <div className="hidden md:block">
+            <div className="relative mb-5 px-5">
+              <span className={BOOKING_TIMELINE_LINE_CLASS} aria-hidden />
+              <div className="relative z-10 grid grid-cols-4">
+                {TIMELINE_STEPS.map((_, idx) => (
+                  <div key={`dot-${idx}`} className="flex justify-center">
+                    <span className={bookingTimelineMarkerClass(idx === 0 ? "current" : "upcoming")}>
+                      {idx + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-4 gap-5">
+              {TIMELINE_STEPS.map((step, idx) => (
+                <motion.div key={step.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}>
+                  <h3
+                    className={`font-display text-[1.2rem] font-bold tracking-tight ${
+                      idx === 0 ? "text-orange" : "text-dark"
+                    }`}
+                  >
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 font-body text-[15px] leading-[1.72] text-dark/80">{step.details}</p>
+                </motion.div>
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid gap-7 md:hidden">
             {TIMELINE_STEPS.map((step, idx) => (
-              <div key={step.title}>
-                <h3
-                  className={`font-display text-[1.2rem] font-bold tracking-tight ${
-                    idx === 0 ? "text-orange" : "text-dark"
-                  }`}
-                >
-                  {step.title}
-                </h3>
+              <motion.div key={step.title} className="relative px-1" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}>
+                <div className="flex items-center gap-3">
+                  <span className={bookingTimelineMarkerClass(idx === 0 ? "current" : "upcoming")}>
+                    {idx + 1}
+                  </span>
+                  <h3
+                    className={`font-display text-lg font-bold tracking-tight ${
+                      idx === 0 ? "text-orange" : "text-dark"
+                    }`}
+                  >
+                    {step.title}
+                  </h3>
+                </div>
                 <p className="mt-3 font-body text-[15px] leading-[1.72] text-dark/80">{step.details}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-        <div className="grid gap-7 md:hidden">
-          {TIMELINE_STEPS.map((step, idx) => (
-            <div key={step.title} className="relative px-1">
-              <div className="flex items-center gap-3">
-                <span className={bookingTimelineMarkerClass(idx === 0 ? "current" : "upcoming")}>
-                  {idx + 1}
-                </span>
-                <h3
-                  className={`font-display text-lg font-bold tracking-tight ${
-                    idx === 0 ? "text-orange" : "text-dark"
-                  }`}
-                >
-                  {step.title}
-                </h3>
-              </div>
-              <p className="mt-3 font-body text-[15px] leading-[1.72] text-dark/80">{step.details}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+      </section>
+    </FadeIn>
   );
 }
 
@@ -260,49 +237,7 @@ export default function BookPage() {
           </div>
         </section>
 
-        <section className="py-16 md:py-20">
-          <div className="mx-auto max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
-            <h2 className="text-center font-display text-[clamp(1.6rem,3.5vw,2.3rem)] font-bold tracking-tight text-dark">
-              Trusted by boutique agency directors
-            </h2>
-            <div className="mt-10 grid gap-8 md:mt-14 md:grid-cols-3 md:gap-10">
-              {TESTIMONIALS.map((item) => (
-                <article key={item.name} className="flex flex-col">
-                  <p className="font-body text-[15px] font-medium leading-[1.72] text-dark md:text-[17px]">
-                    <span className="font-display text-[1.35em] font-bold leading-none text-orange/35" aria-hidden="true">
-                      &ldquo;
-                    </span>
-                    {item.text}
-                    <span className="font-display text-[1.35em] font-bold leading-none text-orange/35" aria-hidden="true">
-                      &rdquo;
-                    </span>
-                  </p>
-                  <div className="mt-8 flex items-center gap-4 pt-1">
-                    {item.avatar ? (
-                      <img
-                        src={item.avatar}
-                        alt=""
-                        width={48}
-                        height={48}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-12 w-12 shrink-0 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F0F0F0] font-body text-sm font-medium text-dark">
-                        {item.initials}
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-body text-base font-semibold text-dark">{item.name}</p>
-                      <p className="mt-0.5 font-body text-sm text-dark/70">{item.role}</p>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <TestimonialCarousel />
       </main>
 
       <BookFooter />

@@ -1,5 +1,9 @@
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import FadeIn from "./components/FadeIn";
 import logoPng from "./assets/logo.png";
 import { BOOKING_TIMELINE_LINE_CLASS, bookingTimelineMarkerClass } from "./bookingTimelineShared.js";
 
@@ -36,9 +40,11 @@ function BookedNav() {
           <img src={logoPng} alt="" className="h-10 w-auto" aria-hidden />
           <span className="font-display text-xl font-bold tracking-tight text-dark">Soubh &amp; Co.</span>
         </Link>
-        <a href="/book" className="font-body text-sm font-semibold text-dark underline underline-offset-4 hover:text-orange">
-          Back to booking page
-        </a>
+        <Button asChild variant="link" className="font-body text-sm font-semibold text-dark underline underline-offset-4 hover:text-orange"
+        >
+          <a href="/book"
+          >Back to booking page</a>
+        </Button>
       </div>
     </header>
   );
@@ -46,55 +52,57 @@ function BookedNav() {
 
 function TimelineState() {
   return (
-    <div className="mt-10">
-      <div className="hidden md:block">
-        <div className="relative mb-5 px-5">
-          <span className={BOOKING_TIMELINE_LINE_CLASS} aria-hidden />
-          <div className="relative z-10 grid grid-cols-4">
+    <FadeIn>
+      <div className="mt-10">
+        <div className="hidden md:block">
+          <div className="relative mb-5 px-5">
+            <span className={BOOKING_TIMELINE_LINE_CLASS} aria-hidden />
+            <div className="relative z-10 grid grid-cols-4">
+              {NEXT_STEPS.map((step, idx) => (
+                <div key={`dot-${step.title}`} className="flex justify-center">
+                  <span className={bookingTimelineMarkerClass(step.state)}>
+                    {step.state === "done" ? "✓" : idx + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-5">
             {NEXT_STEPS.map((step, idx) => (
-              <div key={`dot-${step.title}`} className="flex justify-center">
-                <span className={bookingTimelineMarkerClass(step.state)}>
-                  {step.state === "done" ? "✓" : idx + 1}
-                </span>
-              </div>
+              <motion.div key={step.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}>
+                <h3
+                  className={`font-display text-[1.2rem] font-bold tracking-tight ${
+                    step.state === "current" ? "text-orange" : "text-dark"
+                  }`}
+                >
+                  {step.title}
+                </h3>
+                <p className="mt-3 font-body text-[15px] leading-[1.72] text-dark/80">{step.subtitle}</p>
+              </motion.div>
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-5">
-          {NEXT_STEPS.map((step) => (
-            <div key={step.title}>
-              <h3
-                className={`font-display text-[1.2rem] font-bold tracking-tight ${
-                  step.state === "current" ? "text-orange" : "text-dark"
-                }`}
-              >
-                {step.title}
-              </h3>
+        <div className="grid gap-7 md:hidden">
+          {NEXT_STEPS.map((step, idx) => (
+            <motion.div key={step.title} className="relative px-1" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}>
+              <div className="flex items-center gap-3">
+                <span className={bookingTimelineMarkerClass(step.state)}>
+                  {step.state === "done" ? "✓" : idx + 1}
+                </span>
+                <h3
+                  className={`font-display text-lg font-bold tracking-tight ${
+                    step.state === "current" ? "text-orange" : "text-dark"
+                  }`}
+                >
+                  {step.title}
+                </h3>
+              </div>
               <p className="mt-3 font-body text-[15px] leading-[1.72] text-dark/80">{step.subtitle}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-      <div className="grid gap-7 md:hidden">
-        {NEXT_STEPS.map((step, idx) => (
-          <div key={step.title} className="relative px-1">
-            <div className="flex items-center gap-3">
-              <span className={bookingTimelineMarkerClass(step.state)}>
-                {step.state === "done" ? "✓" : idx + 1}
-              </span>
-              <h3
-                className={`font-display text-lg font-bold tracking-tight ${
-                  step.state === "current" ? "text-orange" : "text-dark"
-                }`}
-              >
-                {step.title}
-              </h3>
-            </div>
-            <p className="mt-3 font-body text-[15px] leading-[1.72] text-dark/80">{step.subtitle}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    </FadeIn>
   );
 }
 

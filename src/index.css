@@ -1,10 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-
-/*
- * Display headlines use font-display → "Helvetica Now", …, Helvetica Neue.
- * Helvetica Now is not on Google Fonts. To use the real family, add @font-face
- * rules here pointing to your licensed .woff2 files in /public/fonts/.
- */
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
 
 @tailwind base;
 @tailwind components;
@@ -13,11 +9,75 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    @apply font-sans;
   }
   body {
-    /* Fletch-like body: Inter, black, comfortable measure (~1.65) */
-    @apply overflow-x-hidden bg-white font-body font-normal text-dark antialiased;
-    font-size: 1.0625rem;
-    line-height: 1.65;
+    @apply overflow-x-hidden font-sans font-normal antialiased bg-background text-foreground;
+    font-size: 1rem;
+    line-height: 1.6;
   }
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: 'Geist Variable', 'Geist', system-ui, sans-serif;
+  }
+  :root {
+    --background: #ffffff;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-foreground: #09090b;
+    --popover: #ffffff;
+    --popover-foreground: #09090b;
+    --primary: #08608f;
+    --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #08608f;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: #09090b;
+    --foreground: #fafafa;
+    --card: #18181b;
+    --card-foreground: #fafafa;
+    --popover: #18181b;
+    --popover-foreground: #fafafa;
+    --primary: #08608f;
+    --primary-foreground: #ffffff;
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --accent: #27272a;
+    --accent-foreground: #fafafa;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #08608f;
+  }
+  * {
+    @apply border-border;
+    outline-color: var(--ring);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
 }
