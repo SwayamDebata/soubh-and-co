@@ -989,50 +989,51 @@ function ProblemChecklist() {
   const [checked, setChecked] = useState(() => CHECKLIST_ITEMS.map(() => false));
   const count = checked.filter(Boolean).length;
   const total = CHECKLIST_ITEMS.length;
-  const message =
-    count === 0
-      ? {
-          emoji: "😊",
-          title: "Nothing ticked yet.",
-          subtitle: "If a line feels true, tick it, we'll show you a readout.",
-          boxClass: "bg-[#ECFDF3]",
-          compact: false,
-        }
-      : count === 1
-        ? {
-            emoji: "😬",
-            title: "You ticked one line. That's often a positioning problem in disguise.",
-            subtitle:
-              "We can fix it in the sprint: two weeks to lock positioning, then 90 days of scheduled content.",
-            boxClass: "bg-[#FFE8DE]",
-            compact: false,
-          }
-        : count >= 3
-          ? {
-              emoji: "😬",
-              title: "You've got a positioning problem.",
-              subtitle:
-                "Three ticks is the line. The good news: it's the most fixable thing on your list.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            }
-        : count < total
-          ? {
-              emoji: "😬",
-              title: "You ticked several lines. The pattern is real, and it's exactly what the sprint is for.",
-              subtitle:
-                "Two weeks to lock positioning, then 90 days of content scheduled in your voice. We can help you ship it.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            }
-          : {
-              emoji: "😬",
-              title: "You ticked every line. When it shows up everywhere, positioning is the lever.",
-              subtitle:
-                "The sprint is built for teams that feel this across the board. Book when you're ready to tighten the story.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            };
+
+  const message = (() => {
+    if (count === 0)
+      return {
+        severity: "neutral",
+        label: "Diagnosis",
+        title: "Nothing ticked yet.",
+        subtitle: "If a line feels true, tick it and we'll show you a readout.",
+        labelClass: "text-muted-foreground",
+        titleClass: "text-foreground",
+        showCta: false,
+      };
+    if (count === 1 || count === 2)
+      return {
+        severity: "early",
+        label: "Early signal",
+        title: count === 1 ? "One line ticked." : "A pattern is forming.",
+        subtitle:
+          "Even a single unchecked box is often a positioning problem in disguise. The sprint locks your story in two weeks.",
+        labelClass: "text-primary",
+        titleClass: "text-primary",
+        showCta: false,
+      };
+    if (count >= 3 && count < total)
+      return {
+        severity: "confirmed",
+        label: "Problem confirmed",
+        title: "You've got a positioning problem.",
+        subtitle:
+          "Three or more ticks means the pattern is real. The good news: it's the most fixable thing on your list.",
+        labelClass: "text-primary",
+        titleClass: "text-primary",
+        showCta: true,
+      };
+    return {
+      severity: "critical",
+      label: "Critical",
+      title: "Positioning is your biggest lever.",
+      subtitle:
+        "Every line ticked. The sprint was built for teams that feel this across the board.",
+      labelClass: "text-orange",
+      titleClass: "text-orange",
+      showCta: true,
+    };
+  })();
 
   const toggle = (i) => {
     setChecked((prev) => {
@@ -1045,60 +1046,141 @@ function ProblemChecklist() {
   return (
     <section className="border-b border-border py-20 md:py-28">
       <div className={contentWide}>
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch lg:gap-20">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-20">
+          {/* Left — checklist */}
           <FadeIn direction="left">
             <div>
-              <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.38] tracking-tight text-dark md:leading-[1.45]">
-                Do you have a positioning
-                <br />
-                problem?
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Self-diagnosis
+              </p>
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-tight text-foreground md:leading-[1.2]">
+                Do you have a positioning problem?
               </h2>
-              <p className="mt-3 font-body text-sm italic text-dark">(Tick all that apply.)</p>
+              <p className="mt-3 font-body text-sm italic text-muted-foreground">
+                Tick all that apply.
+              </p>
               <ul className="mt-8">
                 {CHECKLIST_ITEMS.map((item, i) => (
-                  <li key={item} className="border-t border-border py-4 first:border-t-0 first:pt-0">
+                  <motion.li
+                    key={item}
+                    initial={{ opacity: 0, x: -12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.35,
+                      delay: i * 0.06,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                    className="border-t border-border first:border-t-0"
+                  >
                     <motion.label
-                      className="group flex cursor-pointer items-start gap-4"
-                      whileHover={{ x: 4 }}
+                      className={`group flex cursor-pointer items-start gap-4 rounded-xl px-3 py-4 transition-colors duration-200 ${
+                        checked[i]
+                          ? "bg-primary/[0.03]"
+                          : "hover:bg-muted/40"
+                      }`}
+                      whileHover={{ x: 3 }}
                       transition={{ duration: 0.15 }}
                     >
                       <Checkbox
                         checked={checked[i]}
                         onCheckedChange={() => toggle(i)}
-                        className="mt-0.5 shrink-0 h-4 w-4 border-dark data-[state=checked]:bg-orange data-[state=checked]:border-orange"
+                        className="mt-0.5 shrink-0 h-[18px] w-[18px] rounded-[4px] border-border transition-colors data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                       />
                       <span
                         className={`font-body text-[15px] leading-snug transition-colors ${
-                          checked[i] ? "text-orange" : "text-dark group-hover:text-orange"
+                          checked[i]
+                            ? "font-medium text-primary"
+                            : "text-foreground"
                         }`}
                       >
                         {item}
                       </span>
                     </motion.label>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
           </FadeIn>
+
+          {/* Right — diagnosis card */}
           <FadeIn direction="right">
-            <aside className="flex flex-col items-center justify-center lg:items-end" aria-live="polite" aria-atomic="true">
-              <p className="mb-4 w-full max-w-[440px] text-center text-4xl leading-none lg:text-[52px]" aria-hidden>
-                {message.emoji}
-              </p>
-              <div
-                className={`w-full rounded-xl border border-border ${message.compact ? "max-w-[270px] px-6 py-4 text-center" : "max-w-[440px] p-6 md:p-8"} ${message.boxClass}`}
-                role="status"
-              >
-                <p className={`font-display font-bold leading-snug text-dark ${message.compact ? "text-[1.45rem]" : "text-xl md:text-2xl"}`}>
-                  {message.title}
-                </p>
-                {message.subtitle ? (
-                  <p className={`mt-3 font-body text-dark ${message.compact ? "text-sm leading-[1.55]" : "text-sm leading-[1.65] md:text-base"}`}>
-                    {message.subtitle}
-                  </p>
-                ) : null}
-              </div>
-            </aside>
+            <div className="lg:sticky lg:top-32">
+              <Card className="!py-0">
+                <div className="p-6 md:p-8">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={message.severity}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                    >
+                      {/* Header row */}
+                      <div className="flex items-center justify-between">
+                        <p
+                          className={`text-[11px] font-bold uppercase tracking-[0.18em] ${message.labelClass}`}
+                        >
+                          {message.label}
+                        </p>
+                        <p className="text-[11px] font-semibold tabular-nums tracking-wide text-muted-foreground">
+                          {count}/{total}
+                        </p>
+                      </div>
+
+                      {/* Progress bar */}
+                      <div className="mt-4 flex gap-1.5">
+                        {CHECKLIST_ITEMS.map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className={`h-1 flex-1 rounded-full ${
+                              checked[i] ? "bg-primary" : "bg-border"
+                            }`}
+                            layout
+                            transition={{ duration: 0.3 }}
+                          />
+                        ))}
+                      </div>
+
+                      <h3
+                        className={`mt-6 font-display text-xl font-bold leading-snug md:text-2xl ${message.titleClass}`}
+                      >
+                        {message.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-[1.65] text-muted-foreground md:text-base">
+                        {message.subtitle}
+                      </p>
+
+                      <AnimatePresence>
+                        {message.showCta && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                            animate={{
+                              opacity: 1,
+                              height: "auto",
+                              marginTop: 24,
+                            }}
+                            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                            transition={{
+                              duration: 0.3,
+                              ease: [0.25, 0.1, 0.25, 1],
+                            }}
+                            className="overflow-hidden"
+                          >
+                            <Button
+                              asChild
+                              className={`${ctaPrimary} w-full`}
+                            >
+                              <a href="/book">Book a call →</a>
+                            </Button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </Card>
+            </div>
           </FadeIn>
         </div>
       </div>
