@@ -683,7 +683,7 @@ function LogoStrip() {
 
 function SprintCallout() {
   return (
-    <section id="sprint" className="scroll-mt-24 bg-cream py-14 md:py-20">
+    <section id="sprint" className="scroll-mt-24 bg-secondary py-14 md:py-20">
       <div className={contentOffer}>
         <FadeIn>
           <div className="grid gap-5 text-left md:grid-cols-2 lg:grid-cols-3">
