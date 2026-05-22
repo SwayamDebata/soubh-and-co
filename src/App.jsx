@@ -14,6 +14,8 @@ import positionPng2 from "./assets/position2.png";
 import positionPng3 from "./assets/position3.png";
 import brandZammit from "./assets/zammit.png";
 import avatarMarkZammit from "./assets/Mark Zammit.png";
+import avatarJasonMcCall from "./assets/Jason McCall.png";
+import avatarArshakWasim from "./assets/Arshak Wasim.png";
 import TestimonialCarousel from "./components/TestimonialCarousel";
 import brandArum from "./assets/arum.png";
 import brandCarismatic from "./assets/carismatic.png";
@@ -440,31 +442,68 @@ function BrandsBar() {
 
 function Hero() {
   return (
-    <section className="pb-8 pt-12 text-left sm:pb-10 sm:pt-16 md:pb-12 md:pt-20">
+    <section className="pb-20 pt-24 text-left sm:pb-24 sm:pt-28 md:pb-32 md:pt-36">
       <div className={contentWide}>
         <FadeIn direction="up" delay={0}>
-          <h1 className="max-w-[920px] text-balance font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+            Australian boutique real estate
+          </p>
+        </FadeIn>
+
+        <FadeIn direction="up" delay={0.05}>
+          <h1 className="mt-6 max-w-[1000px] text-balance font-display text-[clamp(3rem,7.2vw,5.75rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-foreground">
             Your agency sounds like every other agency on the high street
           </h1>
         </FadeIn>
+
         <FadeIn direction="up" delay={0.1}>
-          <p className="mt-6 max-w-[640px] text-pretty font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
+          <p className="mt-10 max-w-[540px] text-pretty font-body text-base font-normal leading-[1.65] text-muted-foreground md:text-[17px]">
             {HERO_BODY}
           </p>
         </FadeIn>
-        <FadeIn direction="up" delay={0.2}>
-          <div className="mt-10 flex w-full max-w-lg flex-col items-start gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
+
+        <FadeIn direction="up" delay={0.15}>
+          <div className="mt-12 flex w-full max-w-lg flex-col items-start gap-4 sm:max-w-none sm:flex-row sm:items-center sm:gap-5">
             <Button asChild className={`${ctaPrimary} w-full sm:w-auto`}>
-              <a href="/book">
-                Book a call
-                <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-                  Founding pricing. 3 spots.
-                </span>
-              </a>
+              <a href="/book">Book a call</a>
             </Button>
             <Button asChild variant="outline" className={`${ctaSecondary} w-full sm:w-auto`}>
-              <a href="#deliverables">See deliverables ↓</a>
+              <a href="#deliverables">See deliverables</a>
             </Button>
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Founding pricing. 3 spots. No pitch on the call.
+          </p>
+        </FadeIn>
+
+        <FadeIn direction="up" delay={0.2}>
+          <div className="mt-14 flex items-center gap-4">
+            <div className="flex -space-x-2">
+              <img
+                src={avatarMarkZammit}
+                alt=""
+                className="h-9 w-9 rounded-full border-2 border-background object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                src={avatarJasonMcCall}
+                alt=""
+                className="h-9 w-9 rounded-full border-2 border-background object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                src={avatarArshakWasim}
+                alt=""
+                className="h-9 w-9 rounded-full border-2 border-background object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Trusted by boutique agency directors
+            </p>
           </div>
         </FadeIn>
       </div>
@@ -533,74 +572,96 @@ function FounderSection() {
   return (
     <section id="founder" className="scroll-mt-24 border-b border-border bg-white py-20 md:py-28">
       <div className={contentWide}>
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
-          <FadeIn direction="left" className="order-2 lg:order-1">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* Left — Photo */}
+          <FadeIn direction="left">
+            <div className="flex items-center justify-center lg:justify-start">
+              <motion.div
+                className="w-full max-w-[420px] overflow-hidden rounded-2xl border border-border"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <img
+                  src={founderImage}
+                  alt="Soubh portrait"
+                  className="block h-auto w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </motion.div>
+            </div>
+          </FadeIn>
+
+          {/* Right — All text */}
+          <FadeIn direction="right">
             <div>
-              <p className="font-body text-xs font-bold uppercase tracking-[0.18em] text-mid">Who&apos;s behind this</p>
-              <h2 className="mt-4 font-display text-[clamp(2rem,4.4vw,3.1rem)] font-bold leading-[1.05] tracking-tight text-dark">
-                I&apos;m Soubh. I run Soubh &amp; Co.
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Who&apos;s behind this
+              </p>
+              <h2 className="mt-4 font-display text-[clamp(2.25rem,4.5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+                I&apos;m Soubh.
+                <br />
+                I run Soubh &amp; Co.
               </h2>
-              <div className="mt-6 space-y-5 font-body text-[17px] leading-[1.72] text-dark/85 md:text-[19px]">
+
+              <div className="mt-8 space-y-5 text-[16px] leading-[1.7] text-muted-foreground md:text-[17px]">
                 <p>
-                  Spent the last four years building brands across Australia, including four real estate agencies you&apos;ve
-                  probably never heard of, but their vendors definitely have.
+                  Spent the last four years building brands across Australia, including real estate agencies
+                  you&apos;ve probably never heard of — but their vendors definitely have.
                 </p>
                 <p>
-                  Every engagement converged on the same insight: positioning has to come before marketing. So I built a
-                  sprint that does only that.
+                  Every engagement converged on the same insight: positioning has to come before marketing. So I
+                  built a sprint that does only that.
                 </p>
                 <p>
-                  If you want the long version of the work,{" "}
+                  See the work on{" "}
                   <a
                     href="https://iamsoubh.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                    className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
                   >
                     iamsoubh.com
                   </a>
-                  .
-                </p>
-                <p>
-                  If you want to see the daily posts,{" "}
+                  {" "}or the daily posts on{" "}
                   <a
                     href="https://www.linkedin.com/in/iamsoubh/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                    className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
                   >
                     LinkedIn
                   </a>
                   .
                 </p>
-                <p>
-                  If you want to skip both and just talk,{" "}
-                  <a
-                    href="/book"
-                    className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
-                  >
-                    book a call →
-                  </a>
-                  .
-                </p>
-                <p className="pt-1 font-display text-sm text-dark/60">- Soubh</p>
               </div>
+
+              {/* Stats */}
+              <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-8">
+                <div>
+                  <p className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">4+</p>
+                  <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Years</p>
+                </div>
+                <div className="border-l border-border pl-4 md:pl-6">
+                  <p className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">50+</p>
+                  <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Campaigns</p>
+                </div>
+                <div className="border-l border-border pl-4 md:pl-6">
+                  <p className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">4.9</p>
+                  <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Rating</p>
+                </div>
+              </div>
+
+              <p className="mt-8 text-sm text-muted-foreground">
+                Want to talk?{" "}
+                <a
+                  href="/book"
+                  className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                >
+                  Book a call →
+                </a>
+              </p>
             </div>
-          </FadeIn>
-          <FadeIn direction="right" className="order-1 lg:order-2">
-            <motion.div
-              className="mx-auto max-w-[440px] overflow-hidden rounded-xl border border-border bg-secondary lg:ml-auto"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <img
-                src={founderImage}
-                alt="Soubh portrait"
-                className="block h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </motion.div>
           </FadeIn>
         </div>
       </div>
@@ -622,90 +683,93 @@ function LogoStrip() {
 
 function SprintCallout() {
   return (
-    <section id="sprint" className="scroll-mt-24 py-14 md:py-20">
+    <section id="sprint" className="scroll-mt-24 bg-cream py-14 md:py-20">
       <div className={contentOffer}>
         <FadeIn>
-          <div className="grid gap-5 text-left lg:grid-cols-3 lg:items-stretch">
-            {/* Title */}
+          <div className="grid gap-5 text-left md:grid-cols-2 lg:grid-cols-3">
+            {/* Title + Intro — top left, spans 2 cols */}
             <motion.div
+              className="md:col-span-2"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               whileHover={{ y: -4 }}
             >
-              <Card className="h-full !py-0">
-                <div className="p-6 md:p-7 lg:p-8">
-                  <h2 className="text-balance font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-foreground md:text-[2.25rem] lg:text-[2.35rem]">
+              <Card className="h-full !py-0 rounded-3xl bg-white border-border">
+                <div className="p-8 md:p-10 lg:p-12">
+                  <h2 className="max-w-[680px] text-balance font-display text-[clamp(2rem,4.5vw,3.25rem)] font-extrabold leading-[1.05] tracking-tight text-foreground">
                     <span className="block">The Real Estate</span>
                     <span className="block">Positioning Sprint</span>
                   </h2>
-                  <p className="mt-4 font-body text-[15px] leading-[1.6] text-foreground md:text-base">
+                  <p className="mt-5 max-w-[560px] text-[15px] leading-[1.65] text-muted-foreground md:text-base">
                     {OFFER_INTRO}
                   </p>
                 </div>
               </Card>
             </motion.div>
 
-            {/* Checklist */}
+            {/* Pricing — top right */}
             <motion.div
+              className="lg:col-span-1"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={{ y: -4 }}
             >
-              <Card className="h-full !py-0">
-                <div className="p-6 md:p-7 lg:p-8">
-                  <p className="font-body text-xs font-bold uppercase tracking-widest text-muted-foreground">What you get:</p>
-                  <ul className="mt-5 space-y-5 md:space-y-6">
-                    {OFFER_WHAT_ITEMS.map((item) => (
-                      <li key={item.title} className="flex gap-3">
-                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground" aria-hidden>
-                          <Check size={12} strokeWidth={3} />
+              <Card className="h-full !py-0 rounded-3xl bg-white border-border">
+                <div className="flex h-full flex-col p-8 md:p-10">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Pricing</p>
+                  <div className="mt-6 flex gap-0 overflow-hidden rounded-xl border border-border">
+                    <span className={`w-1.5 shrink-0 ${SPRINT_PANEL_PRICING.accent}`} aria-hidden />
+                    <div className="min-w-0 flex-1 py-3 pl-4 pr-3">
+                      <p className="text-[13px] font-semibold leading-snug text-foreground">{SPRINT_PANEL_PRICING.label}</p>
+                      <p className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-foreground md:text-3xl">
+                        {SPRINT_PANEL_PRICING.price}
+                        <span className="ml-1 font-body text-[11px] font-semibold normal-case tracking-normal text-muted-foreground">
+                          AUD
                         </span>
-                        <div>
-                          <p className="font-body text-sm font-bold leading-snug text-foreground">{item.title}</p>
-                          <p className="mt-1.5 font-body text-sm leading-[1.55] text-muted-foreground">{item.body}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                      </p>
+                      <p className="mt-2 text-[13px] leading-snug text-muted-foreground">{SPRINT_PANEL_PRICING.detail}</p>
+                    </div>
+                  </div>
+                  <p className="mt-5 text-[12px] leading-snug text-muted-foreground">
+                    All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
+                  </p>
+                  <div className="mt-auto pt-8">
+                    <Button asChild className={`${ctaPrimary} w-full`}>
+                      <a href="/book">Book a call →</a>
+                    </Button>
+                  </div>
                 </div>
               </Card>
             </motion.div>
 
-            {/* Pricing */}
+            {/* What you get — bottom, full width */}
             <motion.div
+              className="md:col-span-2 lg:col-span-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               whileHover={{ y: -4 }}
             >
-              <Card className="h-full !py-0">
-                <div className="flex h-full flex-col p-6 md:p-7 lg:p-8">
-                  <p className="font-body text-xs font-bold uppercase tracking-widest text-muted-foreground">Pricing</p>
-                  <div className="mt-5 flex gap-0 overflow-hidden rounded-lg border border-border">
-                    <span className={`w-1.5 shrink-0 ${SPRINT_PANEL_PRICING.accent}`} aria-hidden />
-                    <div className="min-w-0 flex-1 py-2.5 pl-3 pr-2.5">
-                      <p className="font-body text-[12px] font-semibold leading-snug text-foreground">{SPRINT_PANEL_PRICING.label}</p>
-                      <p className="mt-1 font-display text-xl font-extrabold tracking-tight text-foreground md:text-2xl">
-                        {SPRINT_PANEL_PRICING.price}
-                        <span className="ml-1 font-body text-[10px] font-semibold normal-case tracking-normal text-muted-foreground">
-                          AUD
-                        </span>
-                      </p>
-                      <p className="mt-1 font-body text-[12px] leading-snug text-muted-foreground">{SPRINT_PANEL_PRICING.detail}</p>
-                    </div>
-                  </div>
-                  <p className="mt-4 font-body text-[11px] leading-snug text-muted-foreground">
-                    All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
-                  </p>
-                  <div className="mt-auto pt-6">
-                    <Button asChild className={`${ctaPrimary} w-full`}>
-                      <a href="/book">Book a call →</a>
-                    </Button>
+              <Card className="h-full !py-0 rounded-3xl bg-white border-border">
+                <div className="p-8 md:p-10 lg:p-12">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">What you get</p>
+                  <div className="mt-8 grid gap-8 md:grid-cols-3 md:gap-10">
+                    {OFFER_WHAT_ITEMS.map((item) => (
+                      <div key={item.title} className="flex gap-3.5">
+                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                          <Check size={14} strokeWidth={3} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold leading-snug text-foreground">{item.title}</p>
+                          <p className="mt-1.5 text-sm leading-[1.6] text-muted-foreground">{item.body}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </Card>
@@ -882,101 +946,129 @@ function SprintTimeline() {
 }
 
 function ContentNinetyDays() {
+  const stats = [
+    { num: "36", label: "Pieces" },
+    { num: "12", label: "Weeks" },
+    { num: "3", label: "Channels" },
+  ];
+
+  const channels = [
+    {
+      name: "Instagram",
+      freq: "2 posts / week",
+      desc: "Listing-led, voice-aligned. Captions, hashtags, and scheduling included.",
+      accent: "bg-primary/30",
+    },
+    {
+      name: "LinkedIn",
+      freq: "1 post / week",
+      desc: "Founder-fronted thought pieces. Built to position the agency, not just listings.",
+      accent: "bg-primary/20",
+    },
+    {
+      name: "Long-form",
+      freq: "1 piece / week",
+      desc: "Newsletter, blog, or vendor letter. Written and published on a regular cadence.",
+      accent: "bg-primary/10",
+    },
+  ];
+
   return (
     <FadeIn>
       <section className="border-b border-border bg-gradient-to-b from-[#DCEAF2] via-[#EAF3F8] to-[#F4F8FB] py-20 md:py-28">
         <div className={contentWide}>
-          <Card className="relative overflow-hidden rounded-xl border border-border bg-white p-8 md:p-10 lg:p-12">
-            <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-primary/10 blur-3xl" aria-hidden />
-            <div className="pointer-events-none absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" aria-hidden />
-            <Badge className="inline-flex w-fit rounded-lg border border-border bg-primary px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary md:text-[11px]">
-              USP: After the sprint
-            </Badge>
-            <h2 className="relative mt-4 max-w-[920px] font-display text-[clamp(1.95rem,4.4vw,3rem)] font-bold leading-[1.06] tracking-tight text-dark md:mt-5">
-              <span className="text-orange">90 days</span> of content.
-              <br className="hidden sm:block" /> Made for you. Scheduled for you.
-            </h2>
-            <p className="relative mt-4 max-w-[760px] font-body text-[17px] leading-[1.68] text-dark md:mt-5 md:text-[19px]">
-              After Week 2, the marketing engine keeps running while you list, sell, and lead. Every week your channels
-              stay active with consistent, positioning-led content.
-            </p>
-            <motion.div
-              className="relative mt-8 grid gap-3 sm:grid-cols-3"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-            >
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.4 }}
-                className="rounded-xl border border-border bg-secondary/50 px-4 py-3 text-center"
-              >
-                <p className="text-2xl font-bold leading-none text-foreground">36</p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">Pieces</p>
-              </motion.div>
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.4 }}
-                className="rounded-xl border border-border bg-secondary/50 px-4 py-3 text-center"
-              >
-                <p className="text-2xl font-bold leading-none text-foreground">12</p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">Weeks</p>
-              </motion.div>
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.4 }}
-                className="rounded-xl border border-border bg-secondary/50 px-4 py-3 text-center"
-              >
-                <p className="text-2xl font-bold leading-none text-foreground">3</p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">Channels</p>
-              </motion.div>
-            </motion.div>
-            <div className="relative mt-10 overflow-hidden rounded-xl border border-border bg-muted/30 md:mt-12">
-              <div className="grid divide-y divide-border md:grid-cols-3 md:divide-x md:divide-y-0">
-                <div className="border-t-4 border-primary/30 p-6 md:p-8">
-                  <p className="text-sm font-bold uppercase tracking-wide text-foreground">Instagram</p>
-                  <p className="mt-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-                    2 posts / week
-                  </p>
-                  <p className="mt-4 text-sm leading-[1.65] text-muted-foreground">
-                    Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched,
-                    scheduled in Meta Business Suite.
-                  </p>
+          <Card className="overflow-hidden rounded-3xl border border-border bg-white p-8 md:p-10 lg:p-12">
+            <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+              {/* Left — copy + CTA */}
+              <div className="flex flex-col">
+                <Badge className="inline-flex w-fit rounded-full border border-border bg-primary px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary md:text-[11px]">
+                  USP: After the sprint
+                </Badge>
+
+                <h2 className="mt-5 font-display text-[clamp(1.95rem,4.4vw,3rem)] font-bold leading-[1.06] tracking-tight text-foreground">
+                  <span className="text-primary">90 days</span> of content.
+                  <br className="hidden sm:block" /> Made for you. Scheduled for you.
+                </h2>
+
+                <p className="mt-4 max-w-[480px] text-[16px] leading-[1.6] text-muted-foreground md:mt-5 md:text-[17px]">
+                  After Week 2, the marketing engine keeps running while you list, sell, and lead.
+                </p>
+
+                <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Check size={14} className="text-primary" strokeWidth={3} />
+                    Delivered Friday for the next week
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Check size={14} className="text-primary" strokeWidth={3} />
+                    Scheduled in your accounts
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Check size={14} className="text-primary" strokeWidth={3} />
+                    Review call at days 30, 60, 90
+                  </span>
                 </div>
-                <div className="border-t-4 border-primary/20 p-6 md:p-8">
-                  <p className="text-sm font-bold uppercase tracking-wide text-foreground">LinkedIn</p>
-                  <p className="mt-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-                    1 post / week
-                  </p>
-                  <p className="mt-4 text-sm leading-[1.65] text-muted-foreground">
-                    Founder-fronted thought pieces from the principal&apos;s profile + agency page. Built to position the
-                    agency, not just promote listings.
-                  </p>
-                </div>
-                <div className="border-t-4 border-primary/10 p-6 md:p-8">
-                  <p className="text-sm font-bold uppercase tracking-wide text-foreground">Long-form</p>
-                  <p className="mt-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-                    1 piece / week
-                  </p>
-                  <p className="mt-4 text-sm leading-[1.65] text-muted-foreground">
-                    Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.
-                  </p>
+
+                <div className="mt-auto pt-10">
+                  <div className="flex flex-col items-stretch gap-5 rounded-2xl border border-border bg-secondary/40 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8 md:py-7">
+                    <p className="max-w-md text-[15px] font-semibold leading-[1.6] text-foreground md:text-base">
+                      36 pieces across 3 channels in 12 weeks. Written in your voice. Mapped to your positioning.
+                    </p>
+                    <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
+                      <a href="/book">Book a call →</a>
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <p className="mx-auto mt-8 max-w-[900px] text-center text-sm font-medium leading-[1.65] text-muted-foreground md:mt-10 md:text-[15px]">
-              ✓ Every batch delivered Friday, for the following week. ✓ Scheduled in your accounts by us. ✓ 30-minute
-              review call + Loom report at days 30, 60, and 90.
-            </p>
-            <div className="mt-10 flex flex-col items-stretch gap-8 rounded-xl border border-border bg-secondary/40 px-5 py-6 md:flex-row md:items-end md:justify-between md:gap-12 md:px-8 md:py-7">
-              <p className="max-w-xl flex-1 text-left text-[15px] font-semibold leading-[1.68] text-foreground md:text-[17px]">
-                36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On
-                your schedule.
-              </p>
-              <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
-                <a href="/book">Book a call →</a>
-              </Button>
+
+              {/* Right — box sections */}
+              <div className="space-y-5">
+                {/* Stats */}
+                <motion.div
+                  className="grid grid-cols-3 gap-3"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+                >
+                  {stats.map((stat) => (
+                    <motion.div
+                      key={stat.label}
+                      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                      transition={{ duration: 0.4 }}
+                      className="flex flex-col items-center justify-center rounded-2xl border border-border bg-background px-4 py-5"
+                    >
+                      <p className="text-2xl font-extrabold leading-none tracking-tight text-foreground md:text-3xl">
+                        {stat.num}
+                      </p>
+                      <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
+                        {stat.label}
+                      </p>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {/* Channel cards */}
+                <div className="space-y-3">
+                  {channels.map((ch) => (
+                    <motion.div
+                      key={ch.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4 }}
+                      className="relative overflow-hidden rounded-2xl border border-border bg-background p-5 md:p-6"
+                    >
+                      <div className={`absolute left-0 top-0 h-full w-1 ${ch.accent}`} />
+                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
+                      <p className="mt-1.5 text-xl font-bold tracking-tight text-foreground md:text-2xl">
+                        {ch.freq}
+                      </p>
+                      <p className="mt-2 text-sm leading-[1.6] text-muted-foreground">{ch.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </Card>
         </div>
