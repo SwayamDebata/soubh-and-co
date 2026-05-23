@@ -977,102 +977,114 @@ function ContentNinetyDays() {
 
   return (
     <FadeIn>
-      <section className="border-b border-border bg-gradient-to-b from-[#DCEAF2] via-[#EAF3F8] to-[#F4F8FB] py-20 md:py-28">
+      <section className="border-b border-border bg-background py-20 md:py-28">
         <div className={contentWide}>
-          <Card className="overflow-hidden rounded-3xl border border-border bg-white p-8 md:p-10 lg:p-12">
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-              {/* Left — copy + CTA */}
-              <div className="flex flex-col">
-                <Badge className="inline-flex w-fit rounded-full border border-border bg-primary px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary md:text-[11px]">
-                  USP: After the sprint
-                </Badge>
+          {/* Header */}
+          <div className="mx-auto max-w-[920px] text-center">
+            <Badge className="inline-flex w-fit rounded-full border border-border bg-primary px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary md:text-[11px]">
+              USP: After the sprint
+            </Badge>
 
-                <h2 className="mt-5 font-display text-[clamp(1.95rem,4.4vw,3rem)] font-bold leading-[1.06] tracking-tight text-foreground">
-                  <span className="text-primary">90 days</span> of content.
-                  <br className="hidden sm:block" /> Made for you. Scheduled for you.
-                </h2>
+            <h2 className="mt-5 font-display text-[clamp(2.25rem,5.5vw,4rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+              <span className="text-primary">90 days</span> of content.
+              <br className="hidden sm:block" /> Made for you. Scheduled for you.
+            </h2>
 
-                <p className="mt-4 max-w-[480px] text-[16px] leading-[1.6] text-muted-foreground md:mt-5 md:text-[17px]">
-                  After Week 2, the marketing engine keeps running while you list, sell, and lead.
-                </p>
+            <p className="mx-auto mt-4 max-w-[560px] text-[16px] leading-[1.6] text-muted-foreground md:mt-5 md:text-[18px]">
+              After Week 2, the marketing engine keeps running while you list, sell, and lead.
+            </p>
+          </div>
 
-                <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Check size={14} className="text-primary" strokeWidth={3} />
-                    Delivered Friday for the next week
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Check size={14} className="text-primary" strokeWidth={3} />
-                    Scheduled in your accounts
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Check size={14} className="text-primary" strokeWidth={3} />
-                    Review call at days 30, 60, 90
-                  </span>
-                </div>
-
-                <div className="mt-auto pt-10">
-                  <div className="flex flex-col items-stretch gap-5 rounded-2xl border border-border bg-secondary/40 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8 md:py-7">
-                    <p className="max-w-md text-[15px] font-semibold leading-[1.6] text-foreground md:text-base">
-                      36 pieces across 3 channels in 12 weeks. Written in your voice. Mapped to your positioning.
-                    </p>
-                    <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
-                      <a href="/book">Book a 20-minute qualifying call →</a>
-                    </Button>
+          {/* Bento Grid */}
+          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {/* Main stat card — spans 2 cols */}
+            <motion.div
+              className="md:col-span-2"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -6 }}
+            >
+              <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-8 md:p-10">
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 font-display text-[9rem] font-extrabold leading-none text-primary/[0.04] select-none md:text-[13rem] lg:text-[16rem]">
+                  36
+                </span>
+                <div className="relative z-10">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Content volume</p>
+                  <p className="mt-2 font-display text-5xl font-extrabold tracking-tight text-foreground md:text-6xl">36 pieces</p>
+                  <p className="mt-2 max-w-md text-[15px] leading-[1.65] text-muted-foreground">
+                    Across Instagram, LinkedIn, and long-form — all written in your voice and scheduled before you lift a finger.
+                  </p>
+                  <div className="mt-6 flex gap-3">
+                    {stats.slice(1).map((s) => (
+                      <div
+                        key={s.label}
+                        className="rounded-xl bg-secondary/50 px-5 py-3 text-center transition-colors hover:bg-secondary">
+                        <p className="text-xl font-extrabold text-foreground">{s.num}</p>
+                        <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s.label}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              </Card>
+            </motion.div>
 
-              {/* Right — box sections */}
-              <div className="space-y-5">
-                {/* Stats */}
-                <motion.div
-                  className="grid grid-cols-3 gap-3"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-                >
-                  {stats.map((stat) => (
-                    <motion.div
-                      key={stat.label}
-                      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                      transition={{ duration: 0.4 }}
-                      className="flex flex-col items-center justify-center rounded-2xl border border-border bg-background px-4 py-5"
-                    >
-                      <p className="text-2xl font-extrabold leading-none tracking-tight text-foreground md:text-3xl">
-                        {stat.num}
-                      </p>
-                      <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
-                        {stat.label}
-                      </p>
-                    </motion.div>
-                  ))}
-                </motion.div>
+            {/* Channel cards — bento items */}
+            {channels.map((ch, i) => (
+              <motion.div
+                key={ch.name}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 * (i + 1) }}
+                whileHover={{ y: -6, boxShadow: "0 20px 50px -12px rgba(0,0,0,0.1)" }}
+              >
+                <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8">
+                  <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-primary/[0.04] md:h-32 md:w-32" />
+                  <div className="relative z-10">
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
+                    <p className="mt-3 font-display text-3xl font-bold tracking-tight text-foreground md:text-[2.5rem]">
+                      {ch.freq}
+                    </p>
+                    <p className="mt-3 text-sm leading-[1.65] text-muted-foreground">{ch.desc}</p>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
 
-                {/* Channel cards */}
-                <div className="space-y-3">
-                  {channels.map((ch) => (
-                    <motion.div
-                      key={ch.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4 }}
-                      className="relative overflow-hidden rounded-2xl border border-border bg-background p-5 md:p-6"
-                    >
-                      <div className={`absolute left-0 top-0 h-full w-1 ${ch.accent}`} />
-                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
-                      <p className="mt-1.5 text-xl font-bold tracking-tight text-foreground md:text-2xl">
-                        {ch.freq}
-                      </p>
-                      <p className="mt-2 text-sm leading-[1.6] text-muted-foreground">{ch.desc}</p>
-                    </motion.div>
-                  ))}
+            {/* Bottom process + CTA — full width */}
+            <motion.div
+              className="md:col-span-2 lg:col-span-3"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="rounded-3xl border-border bg-white p-6 md:p-8">
+                <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} className="text-primary" strokeWidth={3} />
+                      Delivered Friday for the next week
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} className="text-primary" strokeWidth={3} />
+                      Scheduled in your accounts
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} className="text-primary" strokeWidth={3} />
+                      Review call at days 30, 60, 90
+                    </span>
+                  </div>
+                  <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
+                    <a href="/book">Book a 20-minute qualifying call →</a>
+                  </Button>
                 </div>
-              </div>
-            </div>
-          </Card>
+              </Card>
+            </motion.div>
+          </div>
         </div>
       </section>
     </FadeIn>
