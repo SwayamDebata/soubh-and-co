@@ -972,30 +972,33 @@ function ContentChart() {
       <div className="flex items-end gap-[3px] sm:gap-1.5 h-44 sm:h-52">
         {weeks.map((d, i) => {
           const total = d.ig + d.li + d.lf;
-          const heightPct = total === 0 ? 4 : (total / max) * 100;
+          const heightPct = total === 0 ? 6 : (total / max) * 100;
           return (
             <div
               key={d.w}
-              className="relative flex-1 flex flex-col justify-end"
+              className="relative flex-1 h-full flex flex-col justify-end"
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
             >
-              <motion.div
-                className="w-full flex flex-col justify-end rounded-t-[4px] overflow-hidden"
-                initial={{ height: 0 }}
-                animate={inView ? { height: `${heightPct}%` } : { height: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25, delay: i * 0.04 }}
-              >
-                {d.lf > 0 && (
-                  <div className="w-full bg-primary/15" style={{ height: `${(d.lf / total) * 100}%` }} />
-                )}
-                {d.li > 0 && (
-                  <div className="w-full bg-primary/25" style={{ height: `${(d.li / total) * 100}%` }} />
-                )}
-                {d.ig > 0 && (
-                  <div className="w-full bg-primary/40" style={{ height: `${(d.ig / total) * 100}%` }} />
-                )}
-              </motion.div>
+              <div className="w-full flex-1 flex flex-col justify-end">
+                <motion.div
+                  className="w-full flex flex-col justify-end rounded-t-[4px] overflow-hidden origin-bottom"
+                  style={{ height: `${heightPct}%` }}
+                  initial={{ scaleY: 0 }}
+                  animate={inView ? { scaleY: 1 } : { scaleY: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25, delay: i * 0.04 }}
+                >
+                  {d.ig > 0 && (
+                    <div className="w-full bg-primary/40" style={{ height: `${(d.ig / total) * 100}%` }} />
+                  )}
+                  {d.li > 0 && (
+                    <div className="w-full bg-primary/25" style={{ height: `${(d.li / total) * 100}%` }} />
+                  )}
+                  {d.lf > 0 && (
+                    <div className="w-full bg-primary/15" style={{ height: `${(d.lf / total) * 100}%` }} />
+                  )}
+                </motion.div>
+              </div>
               <p className="mt-1.5 text-center text-[9px] font-semibold text-muted-foreground sm:text-[11px]">{d.w}</p>
 
               {hovered === i && (
@@ -1021,6 +1024,33 @@ function ContentChart() {
   );
 }
 
+function InstaLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function LinkedInLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
+
+function NewsletterLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
+
 function ContentNinetyDays() {
   const stats = [
     { num: "36", label: "Pieces" },
@@ -1033,19 +1063,22 @@ function ContentNinetyDays() {
       name: "Instagram",
       freq: "2 posts / week",
       desc: "Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched, scheduled in Meta Business Suite.",
-      bg: positionPng,
+      Logo: InstaLogo,
+      accent: "bg-primary/30",
     },
     {
       name: "LinkedIn",
       freq: "1 post / week",
       desc: "Founder-fronted thought pieces from the principal's profile + agency page. Built to position the agency, not just promote listings.",
-      bg: positionPng2,
+      Logo: LinkedInLogo,
+      accent: "bg-primary/20",
     },
     {
       name: "Long-form",
       freq: "1 piece / week",
       desc: "Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.",
-      bg: positionPng3,
+      Logo: NewsletterLogo,
+      accent: "bg-primary/10",
     },
   ];
 
@@ -1105,30 +1138,31 @@ function ContentNinetyDays() {
             </motion.div>
 
             {/* Channel cards — image backgrounds */}
-            {channels.map((ch, i) => (
-              <motion.div
-                key={ch.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 * (i + 1) }}
-                whileHover={{ y: -6, boxShadow: "0 20px 50px -12px rgba(0,0,0,0.12)" }}
-              >
-                <Card className="relative h-full overflow-hidden rounded-3xl border-border">
-                  <div className="absolute inset-0">
-                    <img src={ch.bg} alt="" className="h-full w-full object-cover" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20" />
-                  </div>
-                  <div className="relative z-10 flex h-full flex-col p-6 md:p-8">
-                    <p className="text-xs font-bold uppercase tracking-widest text-white/70">{ch.name}</p>
-                    <p className="mt-3 font-display text-3xl font-bold tracking-tight text-white md:text-[2.25rem]">
-                      {ch.freq}
-                    </p>
-                    <p className="mt-3 text-sm leading-[1.65] text-white/80">{ch.desc}</p>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
+            {channels.map((ch, i) => {
+              const Logo = ch.Logo;
+              return (
+                <motion.div
+                  key={ch.name}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 * (i + 1) }}
+                  whileHover={{ y: -6, boxShadow: "0 20px 50px -12px rgba(0,0,0,0.08)" }}
+                >
+                  <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8">
+                    <div className={`absolute left-0 top-0 h-full w-1 ${ch.accent}`} />
+                    <div className="relative z-10">
+                      <Logo className="h-10 w-10 text-primary" />
+                      <p className="mt-5 text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
+                      <p className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground md:text-[2.25rem]">
+                        {ch.freq}
+                      </p>
+                      <p className="mt-3 text-sm leading-[1.65] text-muted-foreground">{ch.desc}</p>
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
 
             {/* Bottom process + CTA — full width */}
             <motion.div
