@@ -958,19 +958,19 @@ function ContentNinetyDays() {
     {
       name: "Instagram",
       freq: "2 posts / week",
-      desc: "Listing-led, voice-aligned. Captions, hashtags, and scheduling included.",
+      desc: "Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched, scheduled in Meta Business Suite.",
       accent: "bg-primary/30",
     },
     {
       name: "LinkedIn",
       freq: "1 post / week",
-      desc: "Founder-fronted thought pieces. Built to position the agency, not just listings.",
+      desc: "Founder-fronted thought pieces from the principal's profile + agency page. Built to position the agency, not just promote listings.",
       accent: "bg-primary/20",
     },
     {
       name: "Long-form",
       freq: "1 piece / week",
-      desc: "Newsletter, blog, or vendor letter. Written and published on a regular cadence.",
+      desc: "Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.",
       accent: "bg-primary/10",
     },
   ];
@@ -990,8 +990,8 @@ function ContentNinetyDays() {
               <br className="hidden sm:block" /> Made for you. Scheduled for you.
             </h2>
 
-            <p className="mx-auto mt-4 max-w-[560px] text-[16px] leading-[1.6] text-muted-foreground md:mt-5 md:text-[18px]">
-              After Week 2, the marketing engine keeps running while you list, sell, and lead.
+            <p className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.65] text-muted-foreground md:mt-5 md:text-[18px]">
+              After Week 2, the marketing engine keeps running while you list, sell, and lead. Every week your channels stay active with consistent, positioning-led content.
             </p>
           </div>
 
@@ -1063,19 +1063,22 @@ function ContentNinetyDays() {
               whileHover={{ y: -4 }}
             >
               <Card className="rounded-3xl border-border bg-white p-6 md:p-8">
-                <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+                <p className="mb-5 text-center text-[15px] font-semibold leading-[1.6] text-foreground md:text-left md:text-base">
+                  36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On your schedule.
+                </p>
+                <div className="flex flex-col items-center justify-between gap-6 border-t border-border pt-5 md:flex-row">
                   <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                     <span className="inline-flex items-center gap-1.5">
                       <Check size={14} className="text-primary" strokeWidth={3} />
-                      Delivered Friday for the next week
+                      Every batch delivered Friday, for the following week.
                     </span>
                     <span className="inline-flex items-center gap-1.5">
                       <Check size={14} className="text-primary" strokeWidth={3} />
-                      Scheduled in your accounts
+                      Scheduled in your accounts by us.
                     </span>
                     <span className="inline-flex items-center gap-1.5">
                       <Check size={14} className="text-primary" strokeWidth={3} />
-                      Review call at days 30, 60, 90
+                      30-minute review call + Loom report at days 30, 60, and 90.
                     </span>
                   </div>
                   <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
