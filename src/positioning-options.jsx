@@ -29,7 +29,7 @@ function CardContent({ card }) {
           </div>
           <div style={{ fontSize: 10, color: "#999", lineHeight: 1.6, marginBottom: 13, maxWidth: 420 }}>{card.sub}</div>
           <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
-            <div style={{ background: "#08608f", color: "white", fontSize: 9, fontWeight: 700, padding: "5px 11px", borderRadius: 2 }}>Book a call</div>
+            <div style={{ background: "#08608f", color: "white", fontSize: 9, fontWeight: 700, padding: "5px 11px", borderRadius: 2 }}>Book a 20-minute qualifying call</div>
             <div style={{ border: "1px solid #D5D5D5", color: "#999", fontSize: 9, fontWeight: 500, padding: "4px 10px", borderRadius: 2 }}>See past work →</div>
           </div>
         </div>

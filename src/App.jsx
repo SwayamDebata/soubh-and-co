@@ -293,7 +293,7 @@ function Nav() {
               href="/book"
               className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex md:!px-5`}
             >
-              Book a call
+              Book a 20-minute qualifying call
               <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
                 Founding pricing. 3 spots.
               </span>
@@ -387,7 +387,7 @@ function Nav() {
                 </a>
               </nav>
               <a href="/book" className={`${ctaPrimary} w-full max-w-md`} onClick={() => setMenuOpen(false)}>
-                Book a call
+                Book a 20-minute qualifying call
                 <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
                   Founding pricing. 3 spots.
                 </span>
@@ -465,7 +465,7 @@ function Hero() {
         <FadeIn direction="up" delay={0.15}>
           <div className="mt-12 flex w-full max-w-lg flex-col items-start gap-4 sm:max-w-none sm:flex-row sm:items-center sm:gap-5">
             <Button asChild className={`${ctaPrimary} w-full sm:w-auto`}>
-              <a href="/book">Book a call</a>
+              <a href="/book">Book a 20-minute qualifying call</a>
             </Button>
             <Button asChild variant="outline" className={`${ctaSecondary} w-full sm:w-auto`}>
               <a href="#deliverables">See deliverables</a>
@@ -658,7 +658,7 @@ function FounderSection() {
                   href="/book"
                   className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
                 >
-                  Book a call →
+                  Book a 20-minute qualifying call →
                 </a>
               </p>
             </div>
@@ -739,7 +739,7 @@ function SprintCallout() {
                   </p>
                   <div className="mt-auto pt-8">
                     <Button asChild className={`${ctaPrimary} w-full`}>
-                      <a href="/book">Book a call →</a>
+                      <a href="/book">Book a 20-minute qualifying call →</a>
                     </Button>
                   </div>
                 </div>
@@ -1015,7 +1015,7 @@ function ContentNinetyDays() {
                       36 pieces across 3 channels in 12 weeks. Written in your voice. Mapped to your positioning.
                     </p>
                     <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
-                      <a href="/book">Book a call →</a>
+                      <a href="/book">Book a 20-minute qualifying call →</a>
                     </Button>
                   </div>
                 </div>
@@ -1263,7 +1263,7 @@ function ProblemChecklist() {
                               asChild
                               className={`${ctaPrimary} w-full`}
                             >
-                              <a href="/book">Book a call →</a>
+                              <a href="/book">Book a 20-minute qualifying call →</a>
                             </Button>
                           </motion.div>
                         )}
@@ -1357,7 +1357,7 @@ function PricingSection() {
                     asChild
                     className={`${ctaPrimary} w-full`}
                   >
-                    <a href="/book">Book a call →</a>
+                    <a href="/book">Book a 20-minute qualifying call →</a>
                   </Button>
                   <p className="mt-3 text-center font-body text-xs text-muted-foreground">
                     No pitch on the call. Just 20 minutes to confirm fit.
@@ -1459,7 +1459,7 @@ function FAQs() {
               Still have questions? The fastest way to get answers is on a 20-minute call. No pitch. Just qualification.
             </p>
             <Button asChild className={`${ctaPrimary} shrink-0`}>
-              <a href="/book">Book a call →</a>
+              <a href="/book">Book a 20-minute qualifying call →</a>
             </Button>
           </div>
         </div>
@@ -1651,7 +1651,7 @@ function StickyCTA() {
               size="sm"
               className="shrink-0 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110"
             >
-              <a href="/book">Book a call →</a>
+              <a href="/book">Book a 20-minute qualifying call →</a>
             </Button>
           </div>
         </motion.div>
@@ -1670,7 +1670,7 @@ function FinalCTA() {
           </h2>
           <div className="mt-10 flex justify-center px-0">
             <Button asChild className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}>
-              <a href="/book">Book a call →</a>
+              <a href="/book">Book a 20-minute qualifying call →</a>
             </Button>
           </div>
           <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">

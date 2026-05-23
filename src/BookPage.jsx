@@ -54,7 +54,7 @@ function BookNav() {
           </motion.a>
           <Button asChild className="rounded-lg bg-orange px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
           >
-            <a href="#calendly-embed">Book a call</a>
+            <a href="#calendly-embed">Book a 20-minute qualifying call</a>
           </Button>
         </nav>
       </div>
