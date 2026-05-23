@@ -1285,7 +1285,6 @@ const PRICING_FEATURES = [
   "6-slide pitch deck (source files)",
   "90 days of scheduled content (36 posts)",
   "Monthly review call",
-  "Slack access for async revisions",
 ];
 
 function PricingSection() {
