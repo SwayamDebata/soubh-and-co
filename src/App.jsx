@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -947,6 +947,80 @@ function SprintTimeline() {
   );
 }
 
+function ContentChart() {
+  const weeks = [
+    { w: 1, ig: 0, li: 0, lf: 0 },
+    { w: 2, ig: 1, li: 0, lf: 0 },
+    { w: 3, ig: 1, li: 1, lf: 0 },
+    { w: 4, ig: 2, li: 1, lf: 0 },
+    { w: 5, ig: 2, li: 1, lf: 1 },
+    { w: 6, ig: 2, li: 1, lf: 1 },
+    { w: 7, ig: 2, li: 1, lf: 1 },
+    { w: 8, ig: 2, li: 1, lf: 1 },
+    { w: 9, ig: 2, li: 1, lf: 1 },
+    { w: 10, ig: 2, li: 1, lf: 1 },
+    { w: 11, ig: 2, li: 1, lf: 1 },
+    { w: 12, ig: 2, li: 1, lf: 1 },
+  ];
+  const max = 4;
+  const [hovered, setHovered] = useState(null);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
+
+  return (
+    <div ref={ref} className="relative select-none">
+      <div className="flex items-end gap-[3px] sm:gap-1.5 h-44 sm:h-52">
+        {weeks.map((d, i) => {
+          const total = d.ig + d.li + d.lf;
+          const heightPct = total === 0 ? 4 : (total / max) * 100;
+          return (
+            <div
+              key={d.w}
+              className="relative flex-1 flex flex-col justify-end"
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <motion.div
+                className="w-full flex flex-col justify-end rounded-t-[4px] overflow-hidden"
+                initial={{ height: 0 }}
+                animate={inView ? { height: `${heightPct}%` } : { height: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25, delay: i * 0.04 }}
+              >
+                {d.lf > 0 && (
+                  <div className="w-full bg-primary/15" style={{ height: `${(d.lf / total) * 100}%` }} />
+                )}
+                {d.li > 0 && (
+                  <div className="w-full bg-primary/25" style={{ height: `${(d.li / total) * 100}%` }} />
+                )}
+                {d.ig > 0 && (
+                  <div className="w-full bg-primary/40" style={{ height: `${(d.ig / total) * 100}%` }} />
+                )}
+              </motion.div>
+              <p className="mt-1.5 text-center text-[9px] font-semibold text-muted-foreground sm:text-[11px]">{d.w}</p>
+
+              {hovered === i && (
+                <div className="absolute -top-2 left-1/2 z-20 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white px-3 py-2 shadow-lg">
+                  <p className="whitespace-nowrap text-[11px] font-bold text-foreground">Week {d.w}</p>
+                  <div className="mt-1 space-y-0.5">
+                    {d.ig > 0 && <p className="text-[10px] text-muted-foreground">Instagram: {d.ig}</p>}
+                    {d.li > 0 && <p className="text-[10px] text-muted-foreground">LinkedIn: {d.li}</p>}
+                    {d.lf > 0 && <p className="text-[10px] text-muted-foreground">Long-form: {d.lf}</p>}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex items-center gap-4">
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-sm bg-primary/40" /> Instagram</span>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-sm bg-primary/25" /> LinkedIn</span>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-sm bg-primary/15" /> Long-form</span>
+      </div>
+    </div>
+  );
+}
+
 function ContentNinetyDays() {
   const stats = [
     { num: "36", label: "Pieces" },
@@ -959,19 +1033,19 @@ function ContentNinetyDays() {
       name: "Instagram",
       freq: "2 posts / week",
       desc: "Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched, scheduled in Meta Business Suite.",
-      accent: "bg-primary/30",
+      bg: positionPng,
     },
     {
       name: "LinkedIn",
       freq: "1 post / week",
       desc: "Founder-fronted thought pieces from the principal's profile + agency page. Built to position the agency, not just promote listings.",
-      accent: "bg-primary/20",
+      bg: positionPng2,
     },
     {
       name: "Long-form",
       freq: "1 piece / week",
       desc: "Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.",
-      accent: "bg-primary/10",
+      bg: positionPng3,
     },
   ];
 
@@ -997,7 +1071,7 @@ function ContentNinetyDays() {
 
           {/* Bento Grid */}
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* Main stat card — spans 2 cols */}
+            {/* Interactive chart — spans 2 cols */}
             <motion.div
               className="md:col-span-2"
               initial={{ opacity: 0, y: 24 }}
@@ -1006,31 +1080,31 @@ function ContentNinetyDays() {
               transition={{ duration: 0.5 }}
               whileHover={{ y: -6 }}
             >
-              <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-8 md:p-10">
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 font-display text-[9rem] font-extrabold leading-none text-primary/[0.04] select-none md:text-[13rem] lg:text-[16rem]">
-                  36
-                </span>
-                <div className="relative z-10">
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Content volume</p>
-                  <p className="mt-2 font-display text-5xl font-extrabold tracking-tight text-foreground md:text-6xl">36 pieces</p>
-                  <p className="mt-2 max-w-md text-[15px] leading-[1.65] text-muted-foreground">
-                    Across Instagram, LinkedIn, and long-form — all written in your voice and scheduled before you lift a finger.
-                  </p>
-                  <div className="mt-6 flex gap-3">
-                    {stats.slice(1).map((s) => (
-                      <div
-                        key={s.label}
-                        className="rounded-xl bg-secondary/50 px-5 py-3 text-center transition-colors hover:bg-secondary">
-                        <p className="text-xl font-extrabold text-foreground">{s.num}</p>
-                        <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s.label}</p>
-                      </div>
-                    ))}
+              <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8 lg:p-10">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+                  <div className="flex-1">
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Output cadence</p>
+                    <p className="mt-2 font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">12-week ramp</p>
+                    <p className="mt-2 max-w-sm text-[15px] leading-[1.65] text-muted-foreground">
+                      Starts at Week 3 and builds to a steady 4 pieces per week. Hover any bar to see the channel breakdown.
+                    </p>
+                    <div className="mt-5 flex gap-3">
+                      {stats.map((s) => (
+                        <div key={s.label} className="rounded-xl bg-secondary/50 px-4 py-2.5 text-center">
+                          <p className="text-lg font-extrabold text-foreground">{s.num}</p>
+                          <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex-1 lg:max-w-[380px]">
+                    <ContentChart />
                   </div>
                 </div>
               </Card>
             </motion.div>
 
-            {/* Channel cards — bento items */}
+            {/* Channel cards — image backgrounds */}
             {channels.map((ch, i) => (
               <motion.div
                 key={ch.name}
@@ -1038,16 +1112,19 @@ function ContentNinetyDays() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 * (i + 1) }}
-                whileHover={{ y: -6, boxShadow: "0 20px 50px -12px rgba(0,0,0,0.1)" }}
+                whileHover={{ y: -6, boxShadow: "0 20px 50px -12px rgba(0,0,0,0.12)" }}
               >
-                <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8">
-                  <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-primary/[0.04] md:h-32 md:w-32" />
-                  <div className="relative z-10">
-                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
-                    <p className="mt-3 font-display text-3xl font-bold tracking-tight text-foreground md:text-[2.5rem]">
+                <Card className="relative h-full overflow-hidden rounded-3xl border-border">
+                  <div className="absolute inset-0">
+                    <img src={ch.bg} alt="" className="h-full w-full object-cover" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20" />
+                  </div>
+                  <div className="relative z-10 flex h-full flex-col p-6 md:p-8">
+                    <p className="text-xs font-bold uppercase tracking-widest text-white/70">{ch.name}</p>
+                    <p className="mt-3 font-display text-3xl font-bold tracking-tight text-white md:text-[2.25rem]">
                       {ch.freq}
                     </p>
-                    <p className="mt-3 text-sm leading-[1.65] text-muted-foreground">{ch.desc}</p>
+                    <p className="mt-3 text-sm leading-[1.65] text-white/80">{ch.desc}</p>
                   </div>
                 </Card>
               </motion.div>
