@@ -521,7 +521,7 @@ function DeliverableImageStack({ src, alt }) {
 
 function DeliverableCards() {
   return (
-    <section id="how-it-works" className="scroll-mt-24 border-b border-border bg-background py-16 md:py-24">
+    <section id="how-it-works" className="scroll-mt-24 bg-background py-16 md:py-24">
       <div className={contentWide}>
         <FadeIn>
           <h2 className="mx-auto max-w-[min(100%,920px)] text-center text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[1.04] tracking-tight text-foreground">
@@ -570,7 +570,7 @@ function DeliverableCards() {
 
 function FounderSection() {
   return (
-    <section id="founder" className="scroll-mt-24 border-b border-border bg-white py-20 md:py-28">
+    <section id="founder" className="scroll-mt-24 bg-white py-20 md:py-28">
       <div className={contentWide}>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           {/* Left — Photo */}
@@ -816,7 +816,7 @@ function WeekCell({ row }) {
 function SprintTimeline() {
   return (
     <FadeIn>
-      <section className="border-b border-border py-20 md:py-28">
+      <section className="py-20 md:py-28">
         <div className={contentWide}>
           <h2 className="text-center font-display text-[clamp(1.9rem,4.3vw,2.95rem)] font-bold tracking-tight text-dark">
             Here&apos;s exactly what the sprint looks like.
@@ -1199,7 +1199,7 @@ function ContentNinetyDays() {
 
   return (
     <FadeIn>
-      <section className="border-b border-border bg-background py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <div className={contentWide}>
           {/* Header */}
           <div className="mx-auto max-w-[920px] text-center">
@@ -1385,7 +1385,7 @@ function ProblemChecklist() {
   };
 
   return (
-    <section className="border-b border-border py-20 md:py-28">
+    <section className="py-20 md:py-28">
       <div className={contentWide}>
         <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-20">
           {/* Left — checklist */}
@@ -1546,7 +1546,7 @@ const PRICING_FEATURES = [
 function PricingSection() {
   return (
     <FadeIn>
-      <section id="pricing" className="scroll-mt-24 border-b border-border bg-background py-20 md:py-28">
+      <section id="pricing" className="scroll-mt-24 bg-background py-20 md:py-28">
         <div className={content}>
           <p className="text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground md:text-xs">
             The Investment
@@ -1655,7 +1655,7 @@ function FAQs() {
 
   return (
     <FadeIn>
-      <section id="faqs" className="scroll-mt-24 border-b border-border py-20 md:py-28">
+      <section id="faqs" className="scroll-mt-24 py-20 md:py-28">
         <div className={contentWide}>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
             {/* Left heading */}
@@ -1734,7 +1734,7 @@ function ContactSection() {
 
   return (
     <FadeIn>
-      <section id="contact" className="scroll-mt-24 border-b border-border py-20 md:py-28">
+      <section id="contact" className="scroll-mt-24 py-20 md:py-28">
         <div className={contentWide}>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left: form */}
@@ -1918,7 +1918,7 @@ function StickyCTA() {
 function FinalCTA() {
   return (
     <FadeIn>
-      <section className="border-b border-border py-20 md:py-24">
+      <section className="py-20 md:py-24">
         <div className={content}>
           <h2 className="mx-auto max-w-[720px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-dark">
             Stop being the best-kept secret in your suburb.

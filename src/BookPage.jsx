@@ -65,7 +65,7 @@ function BookNav() {
 function StepTimeline() {
   return (
     <FadeIn>
-      <section className="border-b border-dark/10 py-16 md:py-20">
+      <section className="py-16 md:py-20">
         <div className="mx-auto max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
           <div className="hidden md:block">
             <div className="relative mb-5 px-5">
@@ -229,7 +229,7 @@ export default function BookPage() {
 
         <section
           id="calendly-embed"
-          className="border-b border-dark/10 bg-gradient-to-b from-[#DCEAF2] via-[#EAF3F8] to-[#F4F8FB] py-16 md:py-20"
+          className="bg-gradient-to-b from-[#DCEAF2] via-[#EAF3F8] to-[#F4F8FB] py-16 md:py-20"
         >
           <div className="mx-auto max-w-[1024px] px-3 sm:px-4 lg:px-5">
             <p className="font-body text-center text-[17px] font-semibold text-dark md:text-[18px]">Pick a time that works.</p>

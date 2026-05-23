@@ -149,7 +149,7 @@ export default function BookedPage() {
       <BookedNav />
 
       <main>
-        <section className="border-b border-dark/10 py-16 md:py-20">
+        <section className="py-16 md:py-20">
           <div className="mx-auto max-w-[920px] px-3 sm:px-4 lg:px-5">
             <h1 className="font-display text-[clamp(2rem,5vw,3.3rem)] font-bold leading-[1.05] tracking-tight text-dark">
               <span className="mr-2 text-orange">✓</span>
@@ -166,7 +166,7 @@ export default function BookedPage() {
           </div>
         </section>
 
-        <section className="border-b border-dark/10 py-16 md:py-20">
+        <section className="py-16 md:py-20">
           <div className="mx-auto max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
             <h2 className="font-display text-[clamp(1.6rem,3.4vw,2.4rem)] font-bold tracking-tight text-dark">
               What happens next
@@ -175,7 +175,7 @@ export default function BookedPage() {
           </div>
         </section>
 
-        <section className="border-b border-dark/10 py-16 md:py-20">
+        <section className="py-16 md:py-20">
           <div className="mx-auto max-w-[920px] px-3 sm:px-4 lg:px-5">
             <div className="border border-dark/15 bg-white p-6 md:p-8">
               <h2 className="font-display text-[clamp(1.55rem,3.2vw,2.1rem)] font-bold tracking-tight text-dark">
