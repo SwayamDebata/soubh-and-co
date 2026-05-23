@@ -947,6 +947,32 @@ function SprintTimeline() {
   );
 }
 
+function smoothPathThrough(points, skipMove = false) {
+  if (points.length < 2) return "";
+  let d = skipMove ? "" : `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[Math.max(0, i - 1)];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[Math.min(points.length - 1, i + 2)];
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }
+  return d;
+}
+
+function areaPath(topPoints, bottomPoints) {
+  let d = smoothPathThrough(topPoints);
+  d += ` L ${bottomPoints[bottomPoints.length - 1].x.toFixed(1)} ${bottomPoints[bottomPoints.length - 1].y.toFixed(1)}`;
+  const reversedBottom = [...bottomPoints].reverse();
+  d += smoothPathThrough(reversedBottom, true);
+  d += " Z";
+  return d;
+}
+
 function ContentChart() {
   const weeks = [
     { w: 1, ig: 0, li: 0, lf: 0 },
@@ -967,58 +993,147 @@ function ContentChart() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
 
+  const width = 1000;
+  const height = 220;
+  const pad = { top: 10, right: 10, bottom: 24, left: 10 };
+  const chartW = width - pad.left - pad.right;
+  const chartH = height - pad.top - pad.bottom;
+
+  const getX = (i) => pad.left + (i / (weeks.length - 1)) * chartW;
+  const getY = (val) => pad.top + chartH - (val / max) * chartH;
+
+  const igTop = weeks.map((d, i) => ({ x: getX(i), y: getY(d.ig) }));
+  const igBottom = weeks.map((d, i) => ({ x: getX(i), y: getY(0) }));
+
+  const liTop = weeks.map((d, i) => ({ x: getX(i), y: getY(d.ig + d.li) }));
+  const liBottom = [...igTop];
+
+  const lfTop = weeks.map((d, i) => ({ x: getX(i), y: getY(d.ig + d.li + d.lf) }));
+  const lfBottom = [...liTop];
+
+  const pathIg = areaPath(igTop, igBottom);
+  const pathLi = areaPath(liTop, liBottom);
+  const pathLf = areaPath(lfTop, lfBottom);
+
   return (
-    <div ref={ref} className="relative select-none">
-      <div className="flex items-end gap-[3px] sm:gap-1.5 h-44 sm:h-52">
-        {weeks.map((d, i) => {
-          const total = d.ig + d.li + d.lf;
-          const heightPct = total === 0 ? 6 : (total / max) * 100;
+    <div ref={ref} className="relative w-full select-none" style={{ height: 180 }}>
+      <svg viewBox={`0 0 ${width} ${height}`} className="absolute inset-0 h-full w-full overflow-visible" preserveAspectRatio="none">
+        {/* Grid lines */}
+        {[1, 2, 3].map((tick) => (
+          <line
+            key={tick}
+            x1={pad.left}
+            y1={getY(tick)}
+            x2={width - pad.right}
+            y2={getY(tick)}
+            stroke="#E5E5E5"
+            strokeWidth={1}
+            strokeDasharray="4 4"
+          />
+        ))}
+
+        {/* Stacked areas */}
+        <motion.path
+          d={pathIg}
+          fill="#08608f"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        />
+        <motion.path
+          d={pathLi}
+          fill="#3BA3C9"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+        />
+        <motion.path
+          d={pathLf}
+          fill="#A8D8EA"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        />
+
+        {/* Hover line */}
+        {hovered !== null && (
+          <line
+            x1={getX(hovered)}
+            y1={pad.top}
+            x2={getX(hovered)}
+            y2={height - pad.bottom}
+            stroke="#0D0D0D"
+            strokeWidth={1}
+            strokeDasharray="4 4"
+            opacity={0.2}
+          />
+        )}
+
+        {/* Hover targets */}
+        {weeks.map((_, i) => {
+          const sectionW = chartW / (weeks.length - 1);
           return (
-            <div
-              key={d.w}
-              className="relative flex-1 h-full flex flex-col justify-end"
+            <rect
+              key={i}
+              x={getX(i) - sectionW / 2}
+              y={pad.top}
+              width={sectionW}
+              height={chartH}
+              fill="transparent"
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
-            >
-              <div className="w-full flex-1 flex flex-col justify-end">
-                <motion.div
-                  className="w-full flex flex-col justify-end rounded-t-[4px] overflow-hidden origin-bottom"
-                  style={{ height: `${heightPct}%` }}
-                  initial={{ scaleY: 0 }}
-                  animate={inView ? { scaleY: 1 } : { scaleY: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25, delay: i * 0.04 }}
-                >
-                  {d.ig > 0 && (
-                    <div className="w-full bg-primary/40" style={{ height: `${(d.ig / total) * 100}%` }} />
-                  )}
-                  {d.li > 0 && (
-                    <div className="w-full bg-primary/25" style={{ height: `${(d.li / total) * 100}%` }} />
-                  )}
-                  {d.lf > 0 && (
-                    <div className="w-full bg-primary/15" style={{ height: `${(d.lf / total) * 100}%` }} />
-                  )}
-                </motion.div>
-              </div>
-              <p className="mt-1.5 text-center text-[9px] font-semibold text-muted-foreground sm:text-[11px]">{d.w}</p>
-
-              {hovered === i && (
-                <div className="absolute -top-2 left-1/2 z-20 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white px-3 py-2 shadow-lg">
-                  <p className="whitespace-nowrap text-[11px] font-bold text-foreground">Week {d.w}</p>
-                  <div className="mt-1 space-y-0.5">
-                    {d.ig > 0 && <p className="text-[10px] text-muted-foreground">Instagram: {d.ig}</p>}
-                    {d.li > 0 && <p className="text-[10px] text-muted-foreground">LinkedIn: {d.li}</p>}
-                    {d.lf > 0 && <p className="text-[10px] text-muted-foreground">Long-form: {d.lf}</p>}
-                  </div>
-                </div>
-              )}
-            </div>
+            />
           );
         })}
-      </div>
-      <div className="mt-3 flex items-center gap-4">
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-sm bg-primary/40" /> Instagram</span>
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-sm bg-primary/25" /> LinkedIn</span>
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-sm bg-primary/15" /> Long-form</span>
+
+        {/* X-axis labels */}
+        {weeks.map((d, i) => (
+          <text
+            key={d.w}
+            x={getX(i)}
+            y={height - 4}
+            textAnchor="middle"
+            className="text-[10px] font-semibold fill-muted-foreground"
+          >
+            {d.w}
+          </text>
+        ))}
+      </svg>
+
+      {/* Tooltip */}
+      {hovered !== null && (
+        <div
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white px-3 py-2 shadow-lg"
+          style={{
+            left: `${(getX(hovered) / width) * 100}%`,
+            top: `${((Math.min(lfTop[hovered].y, liTop[hovered].y, igTop[hovered].y) - pad.top) / height) * 100}%`,
+          }}
+        >
+          <p className="whitespace-nowrap text-[11px] font-bold text-foreground">Week {weeks[hovered].w}</p>
+          <div className="mt-1 space-y-0.5">
+            {weeks[hovered].ig > 0 && (
+              <p className="text-[10px] text-muted-foreground">Instagram: {weeks[hovered].ig}</p>
+            )}
+            {weeks[hovered].li > 0 && (
+              <p className="text-[10px] text-muted-foreground">LinkedIn: {weeks[hovered].li}</p>
+            )}
+            {weeks[hovered].lf > 0 && (
+              <p className="text-[10px] text-muted-foreground">Long-form: {weeks[hovered].lf}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="absolute -bottom-5 left-0 flex items-center gap-4">
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span className="h-2 w-2 rounded-sm bg-[#08608f]" /> Instagram
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span className="h-2 w-2 rounded-sm bg-[#3BA3C9]" /> LinkedIn
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span className="h-2 w-2 rounded-sm bg-[#A8D8EA]" /> Long-form
+        </span>
       </div>
     </div>
   );
@@ -1103,10 +1218,10 @@ function ContentNinetyDays() {
           </div>
 
           {/* Bento Grid */}
-          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {/* Interactive chart — spans 2 cols */}
             <motion.div
-              className="md:col-span-2"
+              className="h-full md:col-span-2 lg:col-span-3"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -1114,14 +1229,19 @@ function ContentNinetyDays() {
               whileHover={{ y: -6 }}
             >
               <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8 lg:p-10">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
-                  <div className="flex-1">
+                <div className="flex h-full flex-col gap-6">
+                  {/* Top text */}
+                  <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Output cadence</p>
                     <p className="mt-2 font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">12-week ramp</p>
-                    <p className="mt-2 max-w-sm text-[15px] leading-[1.65] text-muted-foreground">
+                    <p className="mt-2 max-w-xl text-[15px] leading-[1.65] text-muted-foreground">
                       Starts at Week 3 and builds to a steady 4 pieces per week. Hover any bar to see the channel breakdown.
                     </p>
-                    <div className="mt-5 flex gap-3">
+                  </div>
+
+                  {/* Bottom row — stats + chart, aligned to bottom */}
+                  <div className="mt-auto flex flex-col gap-6 lg:flex-row lg:items-end">
+                    <div className="flex shrink-0 gap-3">
                       {stats.map((s) => (
                         <div key={s.label} className="rounded-xl bg-secondary/50 px-4 py-2.5 text-center">
                           <p className="text-lg font-extrabold text-foreground">{s.num}</p>
@@ -1129,20 +1249,21 @@ function ContentNinetyDays() {
                         </div>
                       ))}
                     </div>
-                  </div>
-                  <div className="flex-1 lg:max-w-[380px]">
-                    <ContentChart />
+                    <div className="min-w-0 flex-1">
+                      <ContentChart />
+                    </div>
                   </div>
                 </div>
               </Card>
             </motion.div>
 
-            {/* Channel cards — image backgrounds */}
+            {/* Channel cards */}
             {channels.map((ch, i) => {
               const Logo = ch.Logo;
               return (
                 <motion.div
                   key={ch.name}
+                  className="h-full"
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1151,7 +1272,7 @@ function ContentNinetyDays() {
                 >
                   <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8">
                     <div className={`absolute left-0 top-0 h-full w-1 ${ch.accent}`} />
-                    <div className="relative z-10">
+                    <div className="relative z-10 flex h-full flex-col">
                       <Logo className="h-10 w-10 text-primary" />
                       <p className="mt-5 text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
                       <p className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground md:text-[2.25rem]">
