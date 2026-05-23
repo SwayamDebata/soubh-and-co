@@ -1512,11 +1512,11 @@ function PricingSection() {
               <div className="border-t border-border bg-muted/40 px-8 py-4 md:px-10">
                 <p className="text-center text-sm text-foreground md:text-[15px]">
                   <span className="font-semibold">From client #4:</span>{" "}
-                  <span className="font-semibold">$8,500</span>
+                  <span className="font-semibold">$5,000</span>
                   <span className="mx-1 text-muted-foreground">·</span>
-                  <span className="font-semibold">$14,500</span>
+                  <span className="font-semibold">$10,000</span>
                   <span className="mx-1 text-muted-foreground">·</span>
-                  <span className="font-semibold">$22,000</span>
+                  <span className="font-semibold">$15,000</span>
                   <span className="ml-1 text-muted-foreground">Founding pricing won&apos;t return.</span>
                 </p>
               </div>
@@ -1808,7 +1808,7 @@ function FinalCTA() {
             </Button>
           </div>
           <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
-            Founding pricing - $2,200 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
+            Founding pricing - $2,200 AUD. Three spots. Once they&apos;re gone, it&apos;s $5,000 minimum.
           </p>
         </div>
       </section>
