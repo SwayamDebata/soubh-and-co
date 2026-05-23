@@ -757,7 +757,9 @@ function SprintCallout() {
             >
               <Card className="h-full !py-0 rounded-3xl bg-white border-border">
                 <div className="p-8 md:p-10 lg:p-12">
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">What you get</p>
+                  <h3 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                    What you get
+                  </h3>
                   <div className="mt-8 grid gap-8 md:grid-cols-3 md:gap-10">
                     {OFFER_WHAT_ITEMS.map((item) => (
                       <div key={item.title} className="flex gap-3.5">
@@ -1086,9 +1088,9 @@ function ProblemChecklist() {
     if (count === 0)
       return {
         severity: "neutral",
-        label: "Diagnosis",
-        title: "Nothing ticked yet.",
-        subtitle: "If a line feels true, tick it and we'll show you a readout.",
+        label: "Reality check",
+        title: "Nothing yet?",
+        subtitle: "Either you're a unicorn agency or you're not being honest with yourself. Tick a few and let's see.",
         labelClass: "text-muted-foreground",
         titleClass: "text-foreground",
         showCta: false,
@@ -1097,9 +1099,9 @@ function ProblemChecklist() {
       return {
         severity: "early",
         label: "Early signal",
-        title: count === 1 ? "One line ticked." : "A pattern is forming.",
+        title: count === 1 ? "One little flag." : "Okay, something's up.",
         subtitle:
-          "Even a single unchecked box is often a positioning problem in disguise. The sprint locks your story in two weeks.",
+          "Could be nothing. Could be the tip of the iceberg. Either way, the sprint locks your story in two weeks.",
         labelClass: "text-primary",
         titleClass: "text-primary",
         showCta: false,
@@ -1107,20 +1109,20 @@ function ProblemChecklist() {
     if (count >= 3 && count < total)
       return {
         severity: "confirmed",
-        label: "Problem confirmed",
+        label: "Yep, that's real",
         title: "You've got a positioning problem.",
         subtitle:
-          "Three or more ticks means the pattern is real. The good news: it's the most fixable thing on your list.",
+          "Three or more means the pattern isn't going away on its own. The good news: it's the most fixable thing on your list.",
         labelClass: "text-primary",
         titleClass: "text-primary",
         showCta: true,
       };
     return {
       severity: "critical",
-      label: "Critical",
-      title: "Positioning is your biggest lever.",
+      label: "Full house",
+      title: "You're basically our dream client.",
       subtitle:
-        "Every line ticked. The sprint was built for teams that feel this across the board.",
+        "Every box ticked. The sprint was literally built for agencies feeling this across the board.",
       labelClass: "text-orange",
       titleClass: "text-orange",
       showCta: true,
@@ -1143,13 +1145,13 @@ function ProblemChecklist() {
           <FadeIn direction="left">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                Self-diagnosis
+                Reality check
               </p>
               <h2 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-tight text-foreground md:leading-[1.2]">
-                Do you have a positioning problem?
+                How many of these feel a little too true?
               </h2>
               <p className="mt-3 font-body text-sm italic text-muted-foreground">
-                Tick all that apply.
+                Be honest. No judgment.
               </p>
               <ul className="mt-8">
                 {CHECKLIST_ITEMS.map((item, i) => (
@@ -1172,13 +1174,19 @@ function ProblemChecklist() {
                           : "hover:bg-muted/40"
                       }`}
                       whileHover={{ x: 3 }}
-                      transition={{ duration: 0.15 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     >
-                      <Checkbox
-                        checked={checked[i]}
-                        onCheckedChange={() => toggle(i)}
-                        className="mt-0.5 shrink-0 h-[18px] w-[18px] rounded-[4px] border-border transition-colors data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                      />
+                      <motion.div
+                        animate={checked[i] ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                      >
+                        <Checkbox
+                          checked={checked[i]}
+                          onCheckedChange={() => toggle(i)}
+                          className="mt-0.5 shrink-0 h-[18px] w-[18px] rounded-[4px] border-border transition-colors data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        />
+                      </motion.div>
                       <span
                         className={`font-body text-[15px] leading-snug transition-colors ${
                           checked[i]
@@ -1203,10 +1211,10 @@ function ProblemChecklist() {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={message.severity}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     >
                       {/* Header row */}
                       <div className="flex items-center justify-between">
@@ -1229,7 +1237,7 @@ function ProblemChecklist() {
                               checked[i] ? "bg-primary" : "bg-border"
                             }`}
                             layout
-                            transition={{ duration: 0.3 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 25 }}
                           />
                         ))}
                       </div>
@@ -1254,8 +1262,9 @@ function ProblemChecklist() {
                             }}
                             exit={{ opacity: 0, height: 0, marginTop: 0 }}
                             transition={{
-                              duration: 0.3,
-                              ease: [0.25, 0.1, 0.25, 1],
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 25,
                             }}
                             className="overflow-hidden"
                           >
