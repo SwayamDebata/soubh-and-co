@@ -27,7 +27,7 @@ const NEXT_STEPS = [
   },
   {
     title: "Sprint kicks off (TBD)",
-    subtitle: "If it is a fit: two weeks live, plus 90 days of content. Founding pricing is $5,000 AUD while spots remain.",
+    subtitle: "If it is a fit: two weeks live, plus 90 days of content. Founding pricing is $2,200 AUD while spots remain.",
     state: "upcoming",
   },
 ];

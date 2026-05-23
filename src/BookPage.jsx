@@ -28,7 +28,7 @@ const TIMELINE_STEPS = [
   },
   {
     title: "Sprint kicks off",
-    details: "Two-week sprint starts within 14-21 days of deposit. Three deliverables. Done.",
+    details: "Two-week sprint starts within 14-21 days of deposit. Three steps. Done.",
   },
 ];
 

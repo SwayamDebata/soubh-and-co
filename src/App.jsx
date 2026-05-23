@@ -42,12 +42,12 @@ After the sprint, your marketing hire works with a clear positioning and a docum
 This isn't a replacement. It's the strategy layer your marketing person was hired to follow, not invent.`,
   },
   {
-    q: "Why does this cost $5,000? Couldn't we get content cheaper?",
+    q: "Why does this cost $2,200? Couldn't we get content cheaper?",
     a: `Yes. You can hire a freelancer for $1,500 a month who'll post listing photos and recycle the same five captions.
 
 What you can't get cheaper is the strategic decision underneath the content: the answer to what makes our agency different and worth full commission. That's the work that pays for itself the first time a vendor stops negotiating you down on fee.
 
-The $5,000 is for the decision. The 90 days of content is the proof it works.`,
+The $2,200 is for the decision. The 90 days of content is the proof it works.`,
   },
   {
     q: "We're already pretty clear on our positioning. Do we still need this?",
@@ -224,7 +224,7 @@ const OFFER_WHAT_ITEMS = [
 const SPRINT_PANEL_PRICING = {
   accent: "bg-[#DCEAF2]",
   label: "Founding cohort (first 3 agencies)",
-  price: "$5,000",
+  price: "$2,200",
   detail: "One flat rate for the first three spots while we sharpen the sprint for Australian boutiques.",
 };
 
@@ -468,7 +468,7 @@ function Hero() {
               <a href="/book">Book a 20-minute qualifying call</a>
             </Button>
             <Button asChild variant="outline" className={`${ctaSecondary} w-full sm:w-auto`}>
-              <a href="#deliverables">See deliverables</a>
+              <a href="#how-it-works">See how it works</a>
             </Button>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
@@ -521,11 +521,11 @@ function DeliverableImageStack({ src, alt }) {
 
 function DeliverableCards() {
   return (
-    <section id="deliverables" className="scroll-mt-24 border-b border-border bg-background py-16 md:py-24">
+    <section id="how-it-works" className="scroll-mt-24 border-b border-border bg-background py-16 md:py-24">
       <div className={contentWide}>
         <FadeIn>
           <h2 className="mx-auto max-w-[min(100%,920px)] text-center text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[1.04] tracking-tight text-foreground">
-            Three deliverables. One sprint. No fluff.
+            See how it works. One sprint. No fluff.
           </h2>
           <div className="mx-auto mt-5 flex justify-center" aria-hidden>
             <span className="h-1.5 w-20 rounded-full bg-primary md:w-28" />
@@ -1316,7 +1316,7 @@ function PricingSection() {
                 </p>
                 <div className="mt-2 flex items-baseline gap-2">
                   <span className="text-[clamp(3rem,8vw,5rem)] font-extrabold leading-none tracking-tight text-foreground">
-                    $5,000
+                    $2,200
                   </span>
                   <span className="text-base font-medium text-muted-foreground md:text-lg">AUD</span>
                 </div>
@@ -1641,10 +1641,10 @@ function StickyCTA() {
         >
           <div className={`mx-auto flex w-full max-w-[min(100%,1280px)] items-center justify-between gap-4 py-4 ${pageGutter}`}>
             <p className="hidden text-sm font-medium sm:block md:text-base">
-              Ready to stop being invisible? <span className="font-semibold">3 spots</span> at <span className="font-semibold">$5,000 AUD</span>.
+              Ready to stop being invisible? <span className="font-semibold">3 spots</span> at <span className="font-semibold">$2,200 AUD</span>.
             </p>
             <p className="text-sm font-medium sm:hidden">
-              3 spots at <span className="font-semibold">$5,000 AUD</span>
+              3 spots at <span className="font-semibold">$2,200 AUD</span>
             </p>
             <Button
               asChild
@@ -1674,7 +1674,7 @@ function FinalCTA() {
             </Button>
           </div>
           <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
-            Founding pricing - $5,000 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
+            Founding pricing - $2,200 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
           </p>
         </div>
       </section>
@@ -1743,9 +1743,9 @@ export default function App() {
         <Hero />
         <LogoStrip />
         <SprintCallout />
+        <TestimonialCarousel />
         <ProblemChecklist />
         <DeliverableCards />
-        <TestimonialCarousel />
         <FounderSection />
         <SprintTimeline />
         <ContentNinetyDays />
