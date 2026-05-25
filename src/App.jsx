@@ -480,26 +480,41 @@ function Hero() {
           </div>
         </FadeIn>
 
-        <FadeIn direction="up" delay={0.2}>
-          <Card className="mt-14 max-w-xl border-border bg-white p-6 md:p-8">
-            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-              What you&apos;ll know after the call
-            </p>
-            <ul className="mt-5 space-y-3 text-[15px] leading-[1.6] text-foreground">
-              <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                The three positioning angles we&apos;d test for your agency (Safe / Stretch / Bold)
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+      </div>
+    </section>
+  );
+}
+
+function DiagnosticTakeaways() {
+  return (
+    <section className="bg-background py-16 md:py-20">
+      <div className={contentWide}>
+        <FadeIn direction="up">
+          <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            What you&apos;ll know after the call
+          </p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            <Card className="border-border bg-white p-5 md:p-6">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">01</span>
+              <p className="mt-4 text-[15px] font-semibold leading-snug text-foreground">
+                The three positioning angles we&apos;d test for your agency
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">Safe / Stretch / Bold</p>
+            </Card>
+            <Card className="border-border bg-white p-5 md:p-6">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">02</span>
+              <p className="mt-4 text-[15px] font-semibold leading-snug text-foreground">
                 The one phrase on your About page that&apos;s costing you commission
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                Whether a 2-week sprint with us makes sense — and if it doesn&apos;t, where to look instead
-              </li>
-            </ul>
-          </Card>
+              </p>
+            </Card>
+            <Card className="border-border bg-white p-5 md:p-6">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">03</span>
+              <p className="mt-4 text-[15px] font-semibold leading-snug text-foreground">
+                Whether a 2-week sprint with us makes sense
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">And if it doesn&apos;t, where to look instead</p>
+            </Card>
+          </div>
         </FadeIn>
       </div>
     </section>
@@ -1570,7 +1585,7 @@ function PricingSection() {
             Investment
           </p>
           <h2 className="mx-auto mt-4 max-w-[680px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-foreground">
-            A 2-week sprint with Soubh &amp; Co. starts at <span className="text-primary">$2,200 AUD</span>
+            A 2-week sprint with Soubh &amp; Co.
           </h2>
           <p className="mx-auto mt-4 max-w-[520px] text-center text-base text-muted-foreground md:text-[17px]">
             Pricing scales with agency size — full breakdown shared on the diagnostic call.
@@ -1590,11 +1605,17 @@ function PricingSection() {
                 <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                   Founding Price
                 </p>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-[clamp(3rem,8vw,5rem)] font-extrabold leading-none tracking-tight text-foreground">
+                <div className="group relative mt-2 inline-flex cursor-help items-baseline gap-2">
+                  <span className="select-none text-[clamp(3rem,8vw,5rem)] font-extrabold leading-none tracking-tight text-foreground blur-xl">
                     $2,200
                   </span>
-                  <span className="text-base font-medium text-muted-foreground md:text-lg">AUD</span>
+                  <span className="select-none text-base font-medium text-muted-foreground blur-xl md:text-lg">AUD</span>
+
+                  {/* Tooltip on hover */}
+                  <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 rounded-lg border border-border bg-foreground px-4 py-2.5 text-center text-sm font-semibold text-background opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                  >
+                    Schedule a call for pricing
+                  </div>
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">ex-GST · For boutique agencies under 10 staff</p>
 
@@ -2012,10 +2033,11 @@ export default function App() {
         <HeroTrustStrip />
         <LogoStrip />
         <SprintCallout />
+        <TestimonialCarousel />
         <ProblemChecklist />
         <DeliverableCards />
+        <DiagnosticTakeaways />
         <PricingSection />
-        <TestimonialCarousel />
         <FounderSection />
         <SprintTimeline />
         <ContentNinetyDays />
