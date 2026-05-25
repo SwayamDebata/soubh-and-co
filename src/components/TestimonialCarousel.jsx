@@ -42,11 +42,17 @@ function InfiniteMovingCards({
 
   useEffect(() => {
     if (containerRef.current && scrollerRef.current) {
-      const scrollerContent = Array.from(scrollerRef.current.children);
-      scrollerContent.forEach((item) => {
-        const duplicatedItem = item.cloneNode(true);
-        scrollerRef.current.appendChild(duplicatedItem);
-      });
+      const containerWidth = containerRef.current.offsetWidth;
+      // Keep cloning until content is at least 2.5x container width
+      let attempts = 0;
+      while (scrollerRef.current.scrollWidth < containerWidth * 2.5 && attempts < 10) {
+        const scrollerContent = Array.from(scrollerRef.current.children);
+        scrollerContent.forEach((item) => {
+          const duplicatedItem = item.cloneNode(true);
+          scrollerRef.current.appendChild(duplicatedItem);
+        });
+        attempts++;
+      }
 
       if (containerRef.current) {
         containerRef.current.style.setProperty(

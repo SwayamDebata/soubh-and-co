@@ -485,37 +485,59 @@ function Hero() {
   );
 }
 
+const TAKEAWAY_CARDS = [
+  {
+    num: "01",
+    title: "The three positioning angles we'd test for your agency",
+    sub: "Safe / Stretch / Bold",
+  },
+  {
+    num: "02",
+    title: "The one phrase on your About page that's costing you commission",
+    sub: null,
+  },
+  {
+    num: "03",
+    title: "Whether a 2-week sprint with us makes sense",
+    sub: "And if it doesn't, where to look instead",
+  },
+];
+
 function DiagnosticTakeaways() {
   return (
-    <section className="bg-background py-16 md:py-20">
-      <div className={contentWide}>
-        <FadeIn direction="up">
-          <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+    <section className="py-14 md:py-20 bg-background">
+      <div className="mx-auto w-full max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
+        <FadeIn>
+          <h2 className="text-center text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-foreground">
             What you&apos;ll know after the call
-          </p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            <Card className="border-border bg-white p-5 md:p-6">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">01</span>
-              <p className="mt-4 text-[15px] font-semibold leading-snug text-foreground">
-                The three positioning angles we&apos;d test for your agency
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground">Safe / Stretch / Bold</p>
-            </Card>
-            <Card className="border-border bg-white p-5 md:p-6">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">02</span>
-              <p className="mt-4 text-[15px] font-semibold leading-snug text-foreground">
-                The one phrase on your About page that&apos;s costing you commission
-              </p>
-            </Card>
-            <Card className="border-border bg-white p-5 md:p-6">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">03</span>
-              <p className="mt-4 text-[15px] font-semibold leading-snug text-foreground">
-                Whether a 2-week sprint with us makes sense
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground">And if it doesn&apos;t, where to look instead</p>
-            </Card>
-          </div>
+          </h2>
         </FadeIn>
+
+        <div className="relative mt-10">
+          {/* Left fade */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-background to-transparent md:w-12" />
+          {/* Right fade */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-background to-transparent md:w-12" />
+
+          <div
+            className="relative z-20 max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]"
+            style={{ "--animation-duration": "30s", "--animation-direction": "reverse" }}
+          >
+            <div className="flex w-max min-w-full shrink-0 flex-nowrap gap-5 py-4 animate-scroll hover:[animation-play-state:paused]">
+              {[...TAKEAWAY_CARDS, ...TAKEAWAY_CARDS, ...TAKEAWAY_CARDS].map((card, i) => (
+                <div key={i} className="relative w-[320px] max-w-full shrink-0 rounded-2xl border border-border bg-white px-7 py-6 md:w-[400px] md:px-8 md:py-7">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                    {card.num}
+                  </span>
+                  <p className="mt-4 text-[15px] font-medium leading-[1.72] text-foreground md:text-[17px]">
+                    {card.title}
+                  </p>
+                  {card.sub && <p className="mt-3 text-sm text-muted-foreground">{card.sub}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -754,9 +776,13 @@ function SprintCallout() {
               <Card className="h-full !py-0 rounded-3xl bg-white border-border">
                 <div className="flex h-full flex-col p-8 md:p-10">
                   <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Pricing</p>
-                  <div className="mt-6 flex gap-0 overflow-hidden rounded-xl border border-border">
+                  <Link
+                    to="/book"
+                    className="group relative mt-6 flex gap-0 overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md"
+                    title="Book a call"
+                  >
                     <span className={`w-1.5 shrink-0 ${SPRINT_PANEL_PRICING.accent}`} aria-hidden />
-                    <div className="min-w-0 flex-1 py-3 pl-4 pr-3">
+                    <div className="min-w-0 flex-1 py-3 pl-4 pr-3 blur-[6px] select-none">
                       <p className="text-[13px] font-semibold leading-snug text-foreground">{SPRINT_PANEL_PRICING.label}</p>
                       <p className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-foreground md:text-3xl">
                         {SPRINT_PANEL_PRICING.price}
@@ -766,7 +792,12 @@ function SprintCallout() {
                       </p>
                       <p className="mt-2 text-[13px] leading-snug text-muted-foreground">{SPRINT_PANEL_PRICING.detail}</p>
                     </div>
-                  </div>
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/60 opacity-0 transition-opacity group-hover:opacity-100">
+                      <span className="rounded-full bg-orange px-4 py-2 text-sm font-semibold text-white shadow-lg">
+                        Book a call
+                      </span>
+                    </span>
+                  </Link>
                   <p className="mt-5 text-[12px] leading-snug text-muted-foreground">
                     All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
                   </p>
@@ -1374,6 +1405,7 @@ function ProblemChecklist() {
         labelClass: "text-muted-foreground",
         titleClass: "text-foreground",
         showCta: false,
+        emoji: "🦄",
       };
     if (count === 1 || count === 2)
       return {
@@ -1385,6 +1417,7 @@ function ProblemChecklist() {
         labelClass: "text-primary",
         titleClass: "text-primary",
         showCta: false,
+        emoji: "🤨",
       };
     if (count >= 3 && count < total)
       return {
@@ -1396,6 +1429,7 @@ function ProblemChecklist() {
         labelClass: "text-primary",
         titleClass: "text-primary",
         showCta: true,
+        emoji: "😬",
       };
     return {
       severity: "critical",
@@ -1406,6 +1440,7 @@ function ProblemChecklist() {
       labelClass: "text-orange",
       titleClass: "text-orange",
       showCta: true,
+      emoji: "🎯",
     };
   })();
 
@@ -1496,6 +1531,16 @@ function ProblemChecklist() {
                       exit={{ opacity: 0, y: -10, scale: 0.98 }}
                       transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     >
+                      {/* Emoji */}
+                      <motion.div
+                        className="mb-3 text-center text-4xl"
+                        initial={{ scale: 0, rotate: -20 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+                      >
+                        {message.emoji}
+                      </motion.div>
+
                       {/* Header row */}
                       <div className="flex items-center justify-between">
                         <p
