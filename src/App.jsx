@@ -110,7 +110,7 @@ Either way, you own everything we built. There's no lock-in.`,
 ];
 
 const HERO_BODY =
-  "Soubh & Co. is a marketing consultancy built for boutique Australian real estate agencies. We define your positioning, build your positioning deck, and run your social for 90 days.";
+  "Soubh & Co. is a marketing consultancy for boutique Australian real estate agencies. We define your positioning, build your positioning deck, and run your social for 90 days.";
 
 const DELIVERABLE_CARDS = [
   {
@@ -293,7 +293,7 @@ function Nav() {
               href="/book"
               className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex md:!px-5`}
             >
-              Book a 20-minute qualifying call
+              Get a free positioning diagnostic
               <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
                 Founding pricing. 3 spots.
               </span>
@@ -387,7 +387,7 @@ function Nav() {
                 </a>
               </nav>
               <a href="/book" className={`${ctaPrimary} w-full max-w-md`} onClick={() => setMenuOpen(false)}>
-                Book a 20-minute qualifying call
+                Get a free positioning diagnostic
                 <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
                   Founding pricing. 3 spots.
                 </span>
@@ -463,49 +463,67 @@ function Hero() {
         </FadeIn>
 
         <FadeIn direction="up" delay={0.15}>
-          <div className="mt-12 flex w-full max-w-lg flex-col items-start gap-4 sm:max-w-none sm:flex-row sm:items-center sm:gap-5">
+          <div className="mt-12 flex flex-col items-start gap-4">
             <Button asChild className={`${ctaPrimary} w-full sm:w-auto`}>
-              <a href="/book">Book a 20-minute qualifying call</a>
+              <a href="/book">Get a free positioning diagnostic</a>
             </Button>
-            <Button asChild variant="outline" className={`${ctaSecondary} w-full sm:w-auto`}>
-              <a href="#how-it-works">See how it works</a>
+            <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
+              25 minutes. Walk away with three angles for your agency. Whether or not you work with us.
+            </p>
+            <Button
+              asChild
+              variant="link"
+              className="px-0 text-sm font-semibold text-foreground underline underline-offset-4 hover:text-orange"
+            >
+              <a href="#how-it-works">See how the sprint works ↓</a>
             </Button>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Founding pricing. 3 spots. No pitch on the call.
-          </p>
         </FadeIn>
 
         <FadeIn direction="up" delay={0.2}>
-          <div className="mt-14 flex items-center gap-4">
-            <div className="flex -space-x-2">
-              <img
-                src={avatarMarkZammit}
-                alt=""
-                className="h-9 w-9 rounded-full border-2 border-background object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <img
-                src={avatarJasonMcCall}
-                alt=""
-                className="h-9 w-9 rounded-full border-2 border-background object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <img
-                src={avatarArshakWasim}
-                alt=""
-                className="h-9 w-9 rounded-full border-2 border-background object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Trusted by boutique agency directors
+          <Card className="mt-14 max-w-xl border-border bg-white p-6 md:p-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              What you&apos;ll know after the call
             </p>
-          </div>
+            <ul className="mt-5 space-y-3 text-[15px] leading-[1.6] text-foreground">
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                The three positioning angles we&apos;d test for your agency (Safe / Stretch / Bold)
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                The one phrase on your About page that&apos;s costing you commission
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                Whether a 2-week sprint with us makes sense — and if it doesn&apos;t, where to look instead
+              </li>
+            </ul>
+          </Card>
         </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function HeroTrustStrip() {
+  return (
+    <section className="bg-secondary/40 py-5 md:py-6">
+      <div className={contentWide}>
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium text-muted-foreground md:gap-x-10 md:text-base">
+          <span className="inline-flex items-center gap-2">
+            <Check size={16} className="text-primary" strokeWidth={3} />
+            For boutique agencies, 5–25 agents
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Check size={16} className="text-primary" strokeWidth={3} />
+            Live workshops over Google Meet
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Check size={16} className="text-primary" strokeWidth={3} />
+            Working with directors across Melbourne, Sydney, Brisbane
+          </span>
+        </div>
       </div>
     </section>
   );
@@ -658,7 +676,7 @@ function FounderSection() {
                   href="/book"
                   className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
                 >
-                  Book a 20-minute qualifying call →
+                  Get a free positioning diagnostic →
                 </a>
               </p>
             </div>
@@ -739,7 +757,7 @@ function SprintCallout() {
                   </p>
                   <div className="mt-auto pt-8">
                     <Button asChild className={`${ctaPrimary} w-full`}>
-                      <a href="/book">Book a 20-minute qualifying call →</a>
+                      <a href="/book">Get a free positioning diagnostic →</a>
                     </Button>
                   </div>
                 </div>
@@ -1203,7 +1221,7 @@ function ContentNinetyDays() {
         <div className={contentWide}>
           {/* Header */}
           <div className="mx-auto max-w-[920px] text-center">
-            <Badge className="inline-flex w-fit rounded-full border border-border bg-primary px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary md:text-[11px]">
+            <Badge className="inline-flex w-fit rounded-full border border-border bg-primary px-7 py-3.5 text-[12px] font-bold uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary md:px-8 md:py-4 md:text-[14px]">
               USP: After the sprint
             </Badge>
 
@@ -1314,7 +1332,7 @@ function ContentNinetyDays() {
                     </span>
                   </div>
                   <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
-                    <a href="/book">Book a 20-minute qualifying call →</a>
+                    <a href="/book">Get a free positioning diagnostic →</a>
                   </Button>
                 </div>
               </Card>
@@ -1519,7 +1537,7 @@ function ProblemChecklist() {
                               asChild
                               className={`${ctaPrimary} w-full`}
                             >
-                              <a href="/book">Book a 20-minute qualifying call →</a>
+                              <a href="/book">Get a free positioning diagnostic →</a>
                             </Button>
                           </motion.div>
                         )}
@@ -1549,11 +1567,14 @@ function PricingSection() {
       <section id="pricing" className="scroll-mt-24 bg-background py-20 md:py-28">
         <div className={content}>
           <p className="text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground md:text-xs">
-            The Investment
+            Investment
           </p>
-          <h2 className="mx-auto mt-4 max-w-[560px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-foreground">
-            One price. One scope. <span className="text-muted-foreground">No retainer.</span>
+          <h2 className="mx-auto mt-4 max-w-[680px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+            A 2-week sprint with Soubh &amp; Co. starts at <span className="text-primary">$2,200 AUD</span>
           </h2>
+          <p className="mx-auto mt-4 max-w-[520px] text-center text-base text-muted-foreground md:text-[17px]">
+            Pricing scales with agency size — full breakdown shared on the diagnostic call.
+          </p>
 
           <div className="relative mx-auto mt-12 max-w-[640px]">
             {/* Badge — moved outside Card so overflow-hidden doesn’t clip it */}
@@ -1608,14 +1629,11 @@ function PricingSection() {
                 </p>
 
                 <div className="mt-8">
-                  <Button
-                    asChild
-                    className={`${ctaPrimary} w-full`}
-                  >
-                    <a href="/book">Book a 20-minute qualifying call →</a>
+                  <Button asChild className={`${ctaPrimary} w-full`}>
+                    <a href="/book">Get a free positioning diagnostic →</a>
                   </Button>
                   <p className="mt-3 text-center font-body text-xs text-muted-foreground">
-                    No pitch on the call. Just 20 minutes to confirm fit.
+                    No pitch on the call. Just 25 minutes to confirm fit.
                   </p>
                 </div>
 
@@ -1632,13 +1650,8 @@ function PricingSection() {
               {/* Bottom banner */}
               <div className="border-t border-border bg-muted/40 px-8 py-4 md:px-10">
                 <p className="text-center text-sm text-foreground md:text-[15px]">
-                  <span className="font-semibold">From client #4:</span>{" "}
-                  <span className="font-semibold">$5,000</span>
-                  <span className="mx-1 text-muted-foreground">·</span>
-                  <span className="font-semibold">$10,000</span>
-                  <span className="mx-1 text-muted-foreground">·</span>
-                  <span className="font-semibold">$15,000</span>
-                  <span className="ml-1 text-muted-foreground">Founding pricing won&apos;t return.</span>
+                  <span className="font-semibold">Founding pricing is locked through Q3</span>{" "}
+                  <span className="text-muted-foreground">for the first three boutique agencies who sign.</span>
                 </p>
               </div>
             </Card>
@@ -1714,7 +1727,7 @@ function FAQs() {
               Still have questions? The fastest way to get answers is on a 20-minute call. No pitch. Just qualification.
             </p>
             <Button asChild className={`${ctaPrimary} shrink-0`}>
-              <a href="/book">Book a 20-minute qualifying call →</a>
+              <a href="/book">Get a free positioning diagnostic →</a>
             </Button>
           </div>
         </div>
@@ -1896,17 +1909,17 @@ function StickyCTA() {
         >
           <div className={`mx-auto flex w-full max-w-[min(100%,1280px)] items-center justify-between gap-4 py-4 ${pageGutter}`}>
             <p className="hidden text-sm font-medium sm:block md:text-base">
-              Ready to stop being invisible? <span className="font-semibold">3 spots</span> at <span className="font-semibold">$2,200 AUD</span>.
+              Get a free positioning diagnostic. <span className="font-semibold">25 minutes.</span> Three angles for your agency.
             </p>
             <p className="text-sm font-medium sm:hidden">
-              3 spots at <span className="font-semibold">$2,200 AUD</span>
+              Free positioning diagnostic
             </p>
             <Button
               asChild
               size="sm"
               className="shrink-0 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110"
             >
-              <a href="/book">Book a 20-minute qualifying call →</a>
+              <a href="/book">Get a free positioning diagnostic →</a>
             </Button>
           </div>
         </motion.div>
@@ -1925,11 +1938,11 @@ function FinalCTA() {
           </h2>
           <div className="mt-10 flex justify-center px-0">
             <Button asChild className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}>
-              <a href="/book">Book a 20-minute qualifying call →</a>
+              <a href="/book">Get a free positioning diagnostic →</a>
             </Button>
           </div>
           <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
-            Founding pricing - $2,200 AUD. Three spots. Once they&apos;re gone, it&apos;s $5,000 minimum.
+            25 minutes. Walk away with three angles for your agency. Whether or not you work with us.
           </p>
         </div>
       </section>
@@ -1996,16 +2009,16 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
+        <HeroTrustStrip />
         <LogoStrip />
         <SprintCallout />
-        <TestimonialCarousel />
         <ProblemChecklist />
         <DeliverableCards />
+        <PricingSection />
+        <TestimonialCarousel />
         <FounderSection />
         <SprintTimeline />
         <ContentNinetyDays />
-        
-        <PricingSection />
         <FAQs />
         <ContactSection />
       </main>
