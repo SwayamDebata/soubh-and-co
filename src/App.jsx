@@ -446,7 +446,7 @@ function Hero() {
       <div className={contentWide}>
         <FadeIn direction="up" delay={0}>
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            Australian boutique real estate
+            for australian boutique real estate
           </p>
         </FadeIn>
 
