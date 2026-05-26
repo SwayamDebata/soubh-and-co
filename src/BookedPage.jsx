@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import FadeIn from "./components/FadeIn";
+import Footer from "./components/Footer";
 import logoPng from "./assets/logo.png";
 import { BOOKING_TIMELINE_LINE_CLASS, bookingTimelineMarkerClass } from "./bookingTimelineShared.js";
 
@@ -106,31 +107,6 @@ function TimelineState() {
   );
 }
 
-function LightFooter() {
-  return (
-    <footer className="border-t border-dark/10 py-10">
-      <div className="mx-auto flex w-full max-w-[min(100%,1280px)] flex-wrap items-center justify-between gap-5 px-3 sm:px-4 lg:px-5">
-        <p className="font-body text-xs text-dark/75">© 2026 Soubh &amp; Co. All rights reserved.</p>
-        <div className="flex items-center gap-5">
-          <a
-            href="https://www.linkedin.com/in/iamsoubh/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-body text-xs uppercase tracking-wider text-dark hover:text-orange"
-          >
-            LinkedIn
-          </a>
-          <a href="/" className="font-body text-xs uppercase tracking-wider text-dark hover:text-orange">
-            Privacy
-          </a>
-          <a href="/" className="font-body text-xs uppercase tracking-wider text-dark hover:text-orange">
-            Terms
-          </a>
-        </div>
-      </div>
-    </footer>
-  );
-}
 
 export default function BookedPage() {
   const { search } = useLocation();
@@ -223,7 +199,7 @@ export default function BookedPage() {
         </section>
       </main>
 
-      <LightFooter />
+      <Footer />
     </div>
   );
 }
