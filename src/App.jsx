@@ -41,14 +41,7 @@ After the sprint, your marketing hire works with a clear positioning and a docum
 
 This isn't a replacement. It's the strategy layer your marketing person was hired to follow, not invent.`,
   },
-  {
-    q: "Why does this cost $2,200? Couldn't we get content cheaper?",
-    a: `Yes. You can hire a freelancer for $1,500 a month who'll post listing photos and recycle the same five captions.
-
-What you can't get cheaper is the strategic decision underneath the content: the answer to what makes our agency different and worth full commission. That's the work that pays for itself the first time a vendor stops negotiating you down on fee.
-
-The $2,200 is for the decision. The 90 days of content is the proof it works.`,
-  },
+   
   {
     q: "We're already pretty clear on our positioning. Do we still need this?",
     a: `Probably not the strategy work. But here's the test:
@@ -441,103 +434,250 @@ function BrandsBar() {
 }
 
 function Hero() {
+  const avatars = [
+    avatarMarkZammit,
+    avatarJasonMcCall,
+    avatarArshakWasim,
+  ];
+
   return (
-    <section className="pb-20 pt-24 text-left sm:pb-24 sm:pt-28 md:pb-32 md:pt-36">
-      <div className={contentWide}>
-        <FadeIn direction="up" delay={0}>
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            for australian boutique real estate
-          </p>
-        </FadeIn>
+    <section className="bg-background px-6 py-20 sm:px-8 sm:py-24 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
+            {/* Left column */}
+            <div className="max-w-3xl">
+              <FadeIn direction="up" delay={0}>
+                <h1 className="text-balance font-display text-[clamp(2.75rem,6.5vw,5rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-foreground">
+                  Your agency sounds like every other agency on the high street.
+                </h1>
+              </FadeIn>
 
-        <FadeIn direction="up" delay={0.05}>
-          <h1 className="mt-6 max-w-[1000px] text-balance font-display text-[clamp(3rem,7.2vw,5.75rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-foreground">
-            Your agency sounds like every other agency on the high street
-          </h1>
-        </FadeIn>
+              <FadeIn direction="up" delay={0.05}>
+                <p className="mt-8 max-w-xl text-pretty font-body text-lg leading-relaxed text-muted-foreground">
+                  {HERO_BODY}
+                </p>
+              </FadeIn>
 
-        <FadeIn direction="up" delay={0.1}>
-          <p className="mt-10 max-w-[540px] text-pretty font-body text-base font-normal leading-[1.65] text-muted-foreground md:text-[17px]">
-            {HERO_BODY}
-          </p>
-        </FadeIn>
+              <FadeIn direction="up" delay={0.1}>
+                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <a href="/book" className="flex flex-col items-center gap-0.5 rounded-2xl bg-orange px-10 py-4 hover:bg-orange/90">
+                    <span className="text-base font-semibold text-white">Get a free positioning diagnostic</span>
+                    <span className="text-sm font-normal text-white/80">Founding pricing. 3 spots.</span>
+                  </a>
+                  <Button asChild variant="outline" className="rounded-2xl border-foreground/20 bg-transparent px-7 py-6 text-base font-semibold text-foreground hover:bg-foreground/5">
+                    <a href="#how-it-works">See how the sprint works</a>
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
 
-        <FadeIn direction="up" delay={0.15}>
-          <div className="mt-12 flex flex-col items-start gap-4">
-            <Button asChild className={`${ctaPrimary} w-full sm:w-auto`}>
-              <a href="/book">Get a free positioning diagnostic</a>
-            </Button>
-            <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
-              25 minutes. Walk away with three angles for your agency. Whether or not you work with us.
-            </p>
-            <Button
-              asChild
-              variant="link"
-              className="px-0 text-sm font-semibold text-foreground underline underline-offset-4 hover:text-orange"
-            >
-              <a href="#how-it-works">See how the sprint works ↓</a>
-            </Button>
+            {/* Right column - Social proof */}
+            <FadeIn direction="up" delay={0.15}>
+              <div className="flex flex-col items-start lg:items-end">
+                <p className="text-sm text-muted-foreground lg:text-right">
+                  Trusted by boutique agencies<br />
+                  across Australia
+                </p>
+                <div className="mt-4 flex items-center gap-2">
+                  <div className="flex -space-x-3">
+                    {avatars.map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        alt=""
+                        className="h-10 w-10 rounded-full border-2 border-background object-cover"
+                      />
+                    ))}
+                  </div>
+                  <div className="ml-2 flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
           </div>
-        </FadeIn>
-
-      </div>
+        </div>
     </section>
   );
 }
 
-const TAKEAWAY_CARDS = [
-  {
-    num: "01",
-    title: "The three positioning angles we'd test for your agency",
-    sub: "Safe / Stretch / Bold",
-  },
-  {
-    num: "02",
-    title: "The one phrase on your About page that's costing you commission",
-    sub: null,
-  },
-  {
-    num: "03",
-    title: "Whether a 2-week sprint with us makes sense",
-    sub: "And if it doesn't, where to look instead",
-  },
-];
+function ChatBubblesIcon() {
+  const messages = [
+    { align: "left", text: "Hey! Are you free for a quick call?", avatarColor: "bg-gray-300" },
+    { align: "right", text: "Sure, give me 5 minutes!", avatarColor: "bg-orange" },
+    { align: "left", text: "Sounds good", avatarColor: "bg-gray-300" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-2">
+      {messages.map((msg, i) => (
+        <motion.div
+          key={i}
+          className={`flex items-center gap-2 ${msg.align === "right" ? "justify-end" : ""}`}
+          initial={{ opacity: 0, x: msg.align === "right" ? 20 : -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: i * 0.3 }}
+        >
+          {msg.align === "left" && <div className={`h-8 w-8 shrink-0 rounded-full ${msg.avatarColor}`} />}
+          <motion.div
+            className="rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-600"
+            whileHover={{ scale: 1.02 }}
+          >
+            {msg.text}
+          </motion.div>
+          {msg.align === "right" && <div className={`h-8 w-8 shrink-0 rounded-full ${msg.avatarColor}`} />}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function FolderDocIcon() {
+  return (
+    <div className="flex items-center justify-center">
+      <div className="relative">
+        <motion.div
+          className="h-28 w-24 rounded-lg bg-yellow-500"
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute -right-4 top-2 h-20 w-16 rounded-lg border-2 border-gray-200 bg-white p-2 shadow-md"
+          initial={{ opacity: 0, x: 10 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          animate={{ y: [0, -4, 0] }}
+          style={{ animationDelay: "0.5s" }}
+        >
+          <motion.div
+            className="mb-1 h-2 rounded bg-gray-200"
+            initial={{ width: 0 }}
+            whileInView={{ width: "100%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.5 }}
+          />
+          <motion.div
+            className="mb-1 h-2 rounded bg-gray-200"
+            initial={{ width: 0 }}
+            whileInView={{ width: "75%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.7 }}
+          />
+          <motion.div
+            className="h-2 rounded bg-gray-200"
+            initial={{ width: 0 }}
+            whileInView={{ width: "50%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.9 }}
+          />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function CodeEditorIcon() {
+  const lines = [
+    { width: "w-full", color: "bg-purple-400" },
+    { width: "w-3/4", color: "bg-gray-200" },
+    { width: "w-full", color: "bg-orange" },
+    { width: "w-2/3", color: "bg-gray-200" },
+    { width: "w-full", color: "bg-green-400" },
+    { width: "w-1/2", color: "bg-gray-200" },
+  ];
+
+  return (
+    <motion.div
+      className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="mb-2 flex gap-1">
+        <motion.div
+          className="h-2 w-2 rounded-full bg-red-500"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.2, delay: 0.1 }}
+        />
+        <motion.div
+          className="h-2 w-2 rounded-full bg-yellow-500"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.2, delay: 0.2 }}
+        />
+        <motion.div
+          className="h-2 w-2 rounded-full bg-green-500"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.2, delay: 0.3 }}
+        />
+      </div>
+      <div className="space-y-2">
+        {lines.map((line, i) => (
+          <motion.div
+            key={i}
+            className={`h-2 rounded ${line.color}`}
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: "100%", opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3, delay: 0.4 + i * 0.15 }}
+            style={{ maxWidth: line.width === "w-full" ? "100%" : line.width === "w-3/4" ? "75%" : line.width === "w-2/3" ? "66.67%" : "50%" }}
+          />
+        ))}
+      </div>
+    </motion.div>
+  );
+}
 
 function DiagnosticTakeaways() {
+  const features = [
+    {
+      title: "The three positioning angles we'd test for your agency",
+      description: "Safe / Stretch / Bold",
+      icon: <ChatBubblesIcon />,
+    },
+    {
+      title: "The one phrase on your About page that's costing you commission",
+      description: null,
+      icon: <FolderDocIcon />,
+    },
+    {
+      title: "Whether a 2-week sprint with us makes sense",
+      description: "And if it doesn't, where to look instead",
+      icon: <CodeEditorIcon />,
+    },
+  ];
+
   return (
-    <section className="py-14 md:py-20 bg-background">
-      <div className="mx-auto w-full max-w-[min(100%,1280px)] px-3 sm:px-4 lg:px-5">
+    <section className="bg-background py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
-          <h2 className="text-center text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-foreground">
+          <h2 className="mb-10 text-center text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-foreground">
             What you&apos;ll know after the call
           </h2>
         </FadeIn>
-
-        <div className="relative mt-10">
-          {/* Left fade */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-background to-transparent md:w-12" />
-          {/* Right fade */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-background to-transparent md:w-12" />
-
-          <div
-            className="relative z-20 max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]"
-            style={{ "--animation-duration": "30s", "--animation-direction": "reverse" }}
-          >
-            <div className="flex w-max min-w-full shrink-0 flex-nowrap gap-5 py-4 animate-scroll hover:[animation-play-state:paused]">
-              {[...TAKEAWAY_CARDS, ...TAKEAWAY_CARDS, ...TAKEAWAY_CARDS].map((card, i) => (
-                <div key={i} className="relative w-[320px] max-w-full shrink-0 rounded-2xl border border-border bg-white px-7 py-6 md:w-[400px] md:px-8 md:py-7">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                    {card.num}
-                  </span>
-                  <p className="mt-4 text-[15px] font-medium leading-[1.72] text-foreground md:text-[17px]">
-                    {card.title}
-                  </p>
-                  {card.sub && <p className="mt-3 text-sm text-muted-foreground">{card.sub}</p>}
+        <FadeIn>
+          <div className="grid grid-cols-1 divide-y divide-border rounded-3xl border border-border md:grid-cols-3 md:divide-x md:divide-y-0">
+            {features.map((feature, i) => (
+              <div key={i} className="flex flex-col p-8 md:p-10">
+                <div className="mb-8 h-40 w-full">
+                  {feature.icon}
                 </div>
-              ))}
-            </div>
+                <h3 className="text-xl font-bold text-foreground">{feature.title}</h3>
+                {feature.description && <p className="mt-3 text-base leading-relaxed text-muted-foreground">{feature.description}</p>}
+              </div>
+            ))}
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -802,9 +942,10 @@ function SprintCallout() {
                     All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
                   </p>
                   <div className="mt-auto pt-8">
-                    <Button asChild className={`${ctaPrimary} w-full`}>
-                      <a href="/book">Get a free positioning diagnostic →</a>
-                    </Button>
+                    <a href="/book" className="flex w-full flex-col items-center gap-0.5 rounded-2xl bg-orange px-10 py-4 hover:bg-orange/90">
+                      <span className="text-base font-semibold text-white">Get a free positioning diagnostic</span>
+                      <span className="text-sm font-normal text-white/80">Founding pricing. 3 spots.</span>
+                    </a>
                   </div>
                 </div>
               </Card>
@@ -1267,9 +1408,7 @@ function ContentNinetyDays() {
         <div className={contentWide}>
           {/* Header */}
           <div className="mx-auto max-w-[920px] text-center">
-            <Badge className="inline-flex w-fit rounded-full border border-border bg-primary px-7 py-3.5 text-[12px] font-bold uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary md:px-8 md:py-4 md:text-[14px]">
-              USP: After the sprint
-            </Badge>
+            
 
             <h2 className="mt-5 font-display text-[clamp(2.25rem,5.5vw,4rem)] font-bold leading-[1.05] tracking-tight text-foreground">
               <span className="text-primary">90 days</span> of content.
