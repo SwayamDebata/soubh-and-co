@@ -382,7 +382,7 @@ function Nav() {
               <a href="/book" className={`${ctaPrimary} w-full max-w-md`} onClick={() => setMenuOpen(false)}>
                 Get a free positioning diagnostic
                 <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-                  Founding pricing. 3 spots.
+                  Book a 25 min call
                 </span>
               </a>
             </div>
@@ -462,7 +462,7 @@ function Hero() {
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <a href="/book" className="flex flex-col items-center gap-0.5 rounded-2xl bg-orange px-10 py-4 hover:bg-orange/90">
                     <span className="text-base font-semibold text-white">Get a free positioning diagnostic</span>
-                    <span className="text-sm font-normal text-white/80">Founding pricing. 3 spots.</span>
+                    <span className="text-sm font-normal text-white/80">Book a 25 min call</span>
                   </a>
                   <Button asChild variant="outline" className="rounded-2xl border-foreground/20 bg-transparent px-7 py-6 text-base font-semibold text-foreground hover:bg-foreground/5">
                     <a href="#how-it-works">See how the sprint works</a>
@@ -944,7 +944,7 @@ function SprintCallout() {
                   <div className="mt-auto pt-8">
                     <a href="/book" className="flex w-full flex-col items-center gap-0.5 rounded-2xl bg-orange px-10 py-4 hover:bg-orange/90">
                       <span className="text-base font-semibold text-white">Get a free positioning diagnostic</span>
-                      <span className="text-sm font-normal text-white/80">Founding pricing. 3 spots.</span>
+                      <span className="text-sm font-normal text-white/80">Book a 25 min call</span>
                     </a>
                   </div>
                 </div>
