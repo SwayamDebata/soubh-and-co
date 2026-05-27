@@ -507,9 +507,9 @@ function Hero() {
 
 function ChatBubblesIcon() {
   const messages = [
-    { align: "left", text: "Hey! Are you free for a quick call?", avatarColor: "bg-gray-300" },
-    { align: "right", text: "Sure, give me 5 minutes!", avatarColor: "bg-orange" },
-    { align: "left", text: "Sounds good", avatarColor: "bg-gray-300" },
+    { align: "left", text: "Thanks for the call, Soubh!", avatarColor: "bg-gray-300" },
+    { align: "left", text: "Can you send me the three positioning options?", avatarColor: "bg-gray-300" },
+    { align: "right", text: "For sure, let’s start the sprint!", avatarColor: "bg-orange" },
   ];
 
   return (

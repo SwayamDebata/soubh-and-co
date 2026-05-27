@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import FadeIn from "./FadeIn";
 import avatarMarkZammit from "../assets/Mark Zammit.png";
@@ -28,6 +29,111 @@ const TESTIMONIALS = [
     avatar: avatarArshakWasim,
   },
 ];
+
+// Mobile swipe carousel
+function MobileSwipeCarousel({ items }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && currentIndex < items.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+    if (isRightSwipe && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  return (
+    <div className="relative">
+      <div
+        className="overflow-hidden"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+            className="px-4"
+          >
+            <div className="rounded-2xl border border-border bg-white px-6 py-6">
+              <blockquote>
+                <span className="text-[15px] font-medium leading-[1.72] text-foreground">
+                  <span className="text-[1.35em] font-bold leading-none text-primary/30" aria-hidden="true">
+                    &ldquo;
+                  </span>
+                  {items[currentIndex].quote}
+                  <span className="text-[1.35em] font-bold leading-none text-primary/30" aria-hidden="true">
+                    &rdquo;
+                  </span>
+                </span>
+                <div className="mt-5 flex flex-row items-center gap-3">
+                  {items[currentIndex].avatar && (
+                    <img
+                      src={items[currentIndex].avatar}
+                      alt=""
+                      className="h-11 w-11 shrink-0 rounded-full object-cover"
+                    />
+                  )}
+                  <span className="flex flex-col gap-0.5">
+                    <span className="text-sm font-semibold text-foreground">
+                      {items[currentIndex].name}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {items[currentIndex].title}
+                    </span>
+                  </span>
+                </div>
+              </blockquote>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Dots indicator */}
+      <div className="mt-6 flex justify-center gap-2">
+        {items.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            className={cn(
+              "h-2 w-2 rounded-full transition-all duration-300",
+              idx === currentIndex ? "w-6 bg-orange" : "bg-dark/20"
+            )}
+            aria-label={`Go to testimonial ${idx + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Swipe hint */}
+      <p className="mt-3 text-center text-xs text-muted-foreground">
+        Swipe to see more
+      </p>
+    </div>
+  );
+}
 
 function InfiniteMovingCards({
   items,
@@ -144,7 +250,13 @@ export default function TestimonialCarousel() {
           </h2>
         </FadeIn>
 
-        <div className="relative mt-10">
+        {/* Mobile: Swipe carousel */}
+        <div className="mt-10 md:hidden">
+          <MobileSwipeCarousel items={TESTIMONIALS} />
+        </div>
+
+        {/* Desktop: Infinite moving cards */}
+        <div className="relative mt-10 hidden md:block">
           {/* Left fade */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-background to-transparent md:w-12" />
           {/* Right fade */}
