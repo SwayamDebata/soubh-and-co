@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import FadeIn from "./components/FadeIn";
 import { WEB3FORMS_ACCESS_KEY } from "./config";
 
 const GCI_OPTIONS = [
@@ -249,12 +252,10 @@ export default function IntakePage() {
             </p>
             <p className="pt-4 font-display text-sm text-dark/60">- Soubh</p>
             <div className="pt-4">
-              <Link
-                to="/"
-                className="inline-flex items-center justify-center rounded-xl border-2 border-dark bg-orange px-6 py-3 font-display text-base font-bold uppercase tracking-wide text-white transition-shadow hover:shadow-[4px_4px_0_0_rgba(13,13,13,0.25)]"
+              <Button asChild className="inline-flex items-center justify-center rounded-lg bg-orange px-6 py-3 text-base font-semibold text-white transition-all hover:brightness-110"
               >
-                Back to offer
-              </Link>
+                <Link to="/">Back to offer</Link>
+              </Button>
             </div>
           </div>
         </main>
@@ -618,13 +619,14 @@ export default function IntakePage() {
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={status === "submitting"}
-            className="mx-auto block w-full max-w-[440px] rounded-2xl border-4 border-dark bg-orange px-6 py-3 text-center font-display text-2xl font-bold capitalize tracking-tight text-white shadow-[6px_6px_0_0_#0D0D0D] transition-all hover:-translate-y-0.5 hover:shadow-[8px_8px_0_0_#0D0D0D] disabled:opacity-50 md:text-3xl"
+            size="lg"
+            className="mx-auto block h-auto w-full max-w-[440px] rounded-lg bg-orange px-6 py-3 text-center text-xl font-semibold text-white transition-all hover:brightness-110 disabled:opacity-50 md:text-2xl"
           >
             {status === "submitting" ? "Sending…" : "Submit intake"}
-          </button>
+          </Button>
         </form>
       </main>
     </div>

@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Plus, Check } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import FadeIn from "./components/FadeIn";
 import logoPng from "./assets/logo.png";
 import positionPng from "./assets/position.png";
 import positionPng2 from "./assets/position2.png";
@@ -8,6 +16,7 @@ import brandZammit from "./assets/zammit.png";
 import avatarMarkZammit from "./assets/Mark Zammit.png";
 import avatarJasonMcCall from "./assets/Jason McCall.png";
 import avatarArshakWasim from "./assets/Arshak Wasim.png";
+import TestimonialCarousel from "./components/TestimonialCarousel";
 import brandArum from "./assets/arum.png";
 import brandCarismatic from "./assets/carismatic.png";
 import brandTspg from "./assets/tspg.png";
@@ -32,14 +41,7 @@ After the sprint, your marketing hire works with a clear positioning and a docum
 
 This isn't a replacement. It's the strategy layer your marketing person was hired to follow, not invent.`,
   },
-  {
-    q: "Why does this cost $5,000? Couldn't we get content cheaper?",
-    a: `Yes. You can hire a freelancer for $1,500 a month who'll post listing photos and recycle the same five captions.
-
-What you can't get cheaper is the strategic decision underneath the content: the answer to what makes our agency different and worth full commission. That's the work that pays for itself the first time a vendor stops negotiating you down on fee.
-
-The $5,000 is for the decision. The 90 days of content is the proof it works.`,
-  },
+   
   {
     q: "We're already pretty clear on our positioning. Do we still need this?",
     a: `Probably not the strategy work. But here's the test:
@@ -101,7 +103,7 @@ Either way, you own everything we built. There's no lock-in.`,
 ];
 
 const HERO_BODY =
-  "Soubh & Co. is a marketing consultancy built for boutique Australian real estate agencies. We define your positioning, build your positioning deck, and run your social for 90 days.";
+  "Soubh & Co. is a marketing consultancy for boutique Australian real estate agencies. We define your positioning, build your positioning deck, and run your social for 90 days.";
 
 const DELIVERABLE_CARDS = [
   {
@@ -181,30 +183,6 @@ const WEEK2_ROWS = [
   },
 ];
 
-const THREE_TESTIMONIALS = [
-  {
-    text: "I've been working with him (Soubh, Saubh, Subh, Soub) for years and I still can't say his name right. But I can tell you this: his work is **unforgettable**. That's really all you need to know.",
-    name: "Mark Zammit",
-    role: "Director, Zammit Real Estate",
-    initials: "MZ",
-    avatar: avatarMarkZammit,
-  },
-  {
-    text: "He helped streamline our workflows, saving us time and effort. His attention to detail and a keen understanding of our business needs have made him an invaluable partner.",
-    name: "Jason McCall",
-    role: "Director, The SMSF Property Guy",
-    initials: "JM",
-    avatar: avatarJasonMcCall,
-  },
-  {
-    text: "Finding Soubh through a random Facebook group was the best thing that ever happened to my business. He completely transformed my scattered online presence into a cohesive, powerful brand that now attracts high-quality leads daily.",
-    name: "Arshak Wasim",
-    role: "Director, Arum & Co",
-    initials: "AW",
-    avatar: avatarArshakWasim,
-  },
-];
-
 /** Tighter horizontal rhythm (closer to fletchpmm.com): less gutter, slightly wider content band. */
 const pageGutter = "px-3 sm:px-4 lg:px-5";
 
@@ -213,11 +191,9 @@ const contentWide = `mx-auto w-full max-w-[min(100%,1280px)] ${pageGutter}`;
 /** Wider than default page grid so the sprint / pricing card reads as a landscape panel (Fletch-style). */
 const contentOffer = `mx-auto w-full max-w-[min(100%,1440px)] ${pageGutter}`;
 
-/** Fletch-style: flat at rest; hover pops (lift + 4px hard shadow). */
-const ctaPop =
-  "shadow-none transition-[transform,box-shadow] duration-200 ease-out hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#0D0D0D] active:translate-x-0 active:translate-y-0 active:shadow-none";
-const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-[12px] border-[3px] border-dark bg-orange px-9 py-3 text-center font-body text-[15px] font-bold leading-snug text-white sm:px-16 sm:py-3.5 sm:text-[17px] md:px-[5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
-const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-[12px] border-[3px] border-dark bg-white px-9 py-3 text-center font-body text-[15px] font-bold leading-snug text-dark sm:px-16 sm:py-3.5 sm:text-[17px] md:px-[5rem] ${ctaPop} hover:bg-orange hover:text-white hover:brightness-110`;
+/** Geist-style: clean, minimal, no hard shadows. */
+const ctaPrimary = `inline-flex min-w-0 flex-col items-center justify-center rounded-lg bg-orange px-8 py-3 text-center text-[15px] font-semibold leading-snug text-white transition-all hover:brightness-110 active:brightness-100 sm:px-12 sm:py-3.5 sm:text-base`;
+const ctaSecondary = `inline-flex min-w-0 items-center justify-center rounded-lg border border-border bg-background px-8 py-3 text-center text-[15px] font-semibold leading-snug text-foreground transition-colors hover:bg-muted active:bg-background sm:px-12 sm:py-3.5 sm:text-base`;
 
 const OFFER_INTRO =
   "A focused two-week process to lock your positioning, align your whole team on it, and run it across 3 months of scheduled content without you lifting a finger.";
@@ -241,24 +217,9 @@ const OFFER_WHAT_ITEMS = [
 const SPRINT_PANEL_PRICING = {
   accent: "bg-[#DCEAF2]",
   label: "Founding cohort (first 3 agencies)",
-  price: "$5,000",
+  price: "$2,200",
   detail: "One flat rate for the first three spots while we sharpen the sprint for Australian boutiques.",
 };
-
-function renderBoldSegments(text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    const m = part.match(/^\*\*([^*]+)\*\*$/);
-    if (m) {
-      return (
-        <strong key={i} className="text-orange">
-          {m[1]}
-        </strong>
-      );
-    }
-    return <span key={i}>{part}</span>;
-  });
-}
 
 function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -305,31 +266,34 @@ function Nav() {
           </a>
           <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3 md:gap-8">
             <nav className="hidden items-center gap-5 md:flex lg:gap-8" aria-label="Primary">
-              <a href="#sprint" className={linkClass}>
+              <motion.a href="#sprint" className={linkClass} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
                 Sprint
-              </a>
-              <a href="#founder" className={linkClass}>
+              </motion.a>
+              <motion.a href="#founder" className={linkClass} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
                 About Founder
-              </a>
-              <a href="#pricing" className={linkClass}>
+              </motion.a>
+              <motion.a href="#pricing" className={linkClass} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
                 Pricing
-              </a>
-              <a href="#faqs" className={linkClass}>
+              </motion.a>
+              <motion.a href="#faqs" className={linkClass} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
                 FAQs
-              </a>
+              </motion.a>
+              <motion.a href="#contact" className={linkClass} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
+                Contact
+              </motion.a>
             </nav>
             <a
               href="/book"
               className={`${ctaPrimary} hidden shrink-0 px-2.5 py-1.5 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm md:inline-flex md:!px-5`}
             >
-              Reserve your sprint
+              Get a free positioning diagnostic
               <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
-                Founding pricing. 3 spots.
+                Book a 25 min call
               </span>
             </a>
             <button
               type="button"
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-orange bg-white text-dark transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2 md:hidden"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:hidden"
               aria-expanded={menuOpen}
               aria-controls="mobile-nav-panel"
               aria-label={menuOpen ? "Menu open" : "Open menu"}
@@ -348,12 +312,17 @@ function Nav() {
           </div>
         </div>
 
+        <AnimatePresence>
         {menuOpen ? (
-          <div
+          <motion.div
             id="mobile-nav-panel"
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[100] flex min-h-0 flex-col bg-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] md:hidden"
           >
             <div
@@ -377,7 +346,7 @@ function Nav() {
               </a>
               <button
                 type="button"
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dark bg-white text-dark transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 aria-label="Close menu"
                 onClick={() => setMenuOpen(false)}
               >
@@ -406,16 +375,20 @@ function Nav() {
                 <a href="#faqs" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
                   FAQs
                 </a>
+                <a href="#contact" className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>
+                  Contact
+                </a>
               </nav>
               <a href="/book" className={`${ctaPrimary} w-full max-w-md`} onClick={() => setMenuOpen(false)}>
-                Reserve your sprint
+                Get a free positioning diagnostic
                 <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-                  Founding pricing. 3 spots.
+                  Book a 25 min call
                 </span>
               </a>
             </div>
-          </div>
+          </motion.div>
         ) : null}
+        </AnimatePresence>
       </div>
     </header>
   );
@@ -429,47 +402,304 @@ const BRAND_LOGOS = [
   { src: brandCarismatic, alt: "Carismatic" },
 ];
 
-/** Fletch-style: centered logo wall; one row from md up, wraps on small screens */
 function BrandsBar() {
-  const logoClass =
-    "h-10 w-auto max-w-[42%] shrink-0 object-contain object-center sm:h-11 sm:max-w-[31%] md:h-12 md:max-w-[10.5rem] lg:h-[3.35rem] lg:max-w-[11.5rem] xl:h-14 xl:max-w-[12.5rem]";
+  const logos = BRAND_LOGOS;
+  const loopLogos = [...logos, ...logos, ...logos];
   return (
     <div className="w-full text-center">
-      <p className="mb-8 font-body text-[11px] font-bold uppercase tracking-[0.2em] text-mid md:mb-10 md:text-xs">
+      <p className="mb-8 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground md:mb-10 md:text-xs">
         Past work across Australia.
       </p>
-      <div className="mx-auto flex w-full max-w-[min(100%,1240px)] flex-wrap items-center justify-center gap-x-5 gap-y-7 sm:gap-x-7 sm:gap-y-8 lg:flex-nowrap lg:justify-center lg:gap-x-7 xl:gap-x-9">
-        {BRAND_LOGOS.map(({ src, alt }) => (
-          <img key={alt} src={src} alt={alt} className={logoClass} loading="lazy" decoding="async" />
-        ))}
+      <div className="relative overflow-hidden">
+        {/* Left fade */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-background to-transparent sm:w-16 md:w-24" />
+        {/* Right fade */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-background to-transparent sm:w-16 md:w-24" />
+
+        <div className="flex w-max animate-marquee gap-12 hover:[animation-play-state:paused] sm:gap-16 md:gap-20">
+          {loopLogos.map(({ src, alt }, i) => (
+            <img
+              key={`${alt}-${i}`}
+              src={src}
+              alt={alt}
+              className="h-10 w-auto shrink-0 object-contain opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:h-11 md:h-12 lg:h-14"
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 function Hero() {
+  const avatars = [
+    avatarMarkZammit,
+    avatarJasonMcCall,
+    avatarArshakWasim,
+  ];
+
   return (
-    <section className="pb-8 pt-12 text-left sm:pb-10 sm:pt-16 md:pb-12 md:pt-20">
-      <div className={contentWide}>
-        <h1 className="max-w-[920px] text-balance font-display text-[clamp(2.75rem,6vw,4.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-dark">
-          Your agency sounds like every other agency on the high street
-        </h1>
-        <p className="mt-6 max-w-[640px] text-pretty font-body text-lg font-normal leading-[1.65] text-dark md:text-xl">
-          {HERO_BODY}
-        </p>
-        <div className="mt-10 flex w-full max-w-lg flex-col items-start gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
-          <a
-            href="/book"
-            className={`${ctaPrimary} w-full sm:w-auto`}
+    <section className="bg-background px-6 py-20 sm:px-8 sm:py-24 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
+            {/* Left column */}
+            <div className="max-w-3xl">
+              <FadeIn direction="up" delay={0}>
+                <h1 className="text-balance font-display text-[clamp(2.75rem,6.5vw,5rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-foreground">
+                  Your agency sounds like every other agency on the high street.
+                </h1>
+              </FadeIn>
+
+              <FadeIn direction="up" delay={0.05}>
+                <p className="mt-8 max-w-xl text-pretty font-body text-lg leading-relaxed text-muted-foreground">
+                  {HERO_BODY}
+                </p>
+              </FadeIn>
+
+              <FadeIn direction="up" delay={0.1}>
+                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <a href="/book" className="flex flex-col items-center gap-0.5 rounded-2xl bg-orange px-10 py-4 hover:bg-orange/90">
+                    <span className="text-base font-semibold text-white">Get a free positioning diagnostic</span>
+                    <span className="text-sm font-normal text-white/80">Book a 25 min call</span>
+                  </a>
+                  <Button asChild variant="outline" className="rounded-2xl border-foreground/20 bg-transparent px-7 py-6 text-base font-semibold text-foreground hover:bg-foreground/5">
+                    <a href="#how-it-works">See how the sprint works</a>
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
+
+            {/* Right column - Social proof */}
+            <FadeIn direction="up" delay={0.15}>
+              <div className="flex flex-col items-start lg:items-end">
+                <p className="text-sm text-muted-foreground lg:text-right">
+                  Trusted by boutique agencies<br />
+                  across Australia
+                </p>
+                <div className="mt-4 flex items-center gap-2">
+                  <div className="flex -space-x-3">
+                    {avatars.map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        alt=""
+                        className="h-10 w-10 rounded-full border-2 border-background object-cover"
+                      />
+                    ))}
+                  </div>
+                  <div className="ml-2 flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+    </section>
+  );
+}
+
+function ChatBubblesIcon() {
+  const messages = [
+    { align: "left", text: "Thanks for the call, Soubh!", avatarColor: "bg-gray-300" },
+    { align: "left", text: "Can you send me the three positioning options?", avatarColor: "bg-gray-300" },
+    { align: "right", text: "For sure, let’s start the sprint!", avatarColor: "bg-orange" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-2">
+      {messages.map((msg, i) => (
+        <motion.div
+          key={i}
+          className={`flex items-center gap-2 ${msg.align === "right" ? "justify-end" : ""}`}
+          initial={{ opacity: 0, x: msg.align === "right" ? 20 : -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: i * 0.3 }}
+        >
+          {msg.align === "left" && <div className={`h-8 w-8 shrink-0 rounded-full ${msg.avatarColor}`} />}
+          <motion.div
+            className="rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-600"
+            whileHover={{ scale: 1.02 }}
           >
-            Reserve your sprint
-            <span className="mt-1 block text-balance font-body text-[11px] font-normal leading-snug text-white/90">
-              Founding pricing. 3 spots.
-            </span>
-          </a>
-          <a href="#deliverables" className={`${ctaSecondary} w-full sm:w-auto`}>
-            See deliverables ↓
-          </a>
+            {msg.text}
+          </motion.div>
+          {msg.align === "right" && <div className={`h-8 w-8 shrink-0 rounded-full ${msg.avatarColor}`} />}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function FolderDocIcon() {
+  return (
+    <div className="flex items-center justify-center">
+      <div className="relative">
+        <motion.div
+          className="h-28 w-24 rounded-lg bg-yellow-500"
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute -right-4 top-2 h-20 w-16 rounded-lg border-2 border-gray-200 bg-white p-2 shadow-md"
+          initial={{ opacity: 0, x: 10 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          animate={{ y: [0, -4, 0] }}
+          style={{ animationDelay: "0.5s" }}
+        >
+          <motion.div
+            className="mb-1 h-2 rounded bg-gray-200"
+            initial={{ width: 0 }}
+            whileInView={{ width: "100%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.5 }}
+          />
+          <motion.div
+            className="mb-1 h-2 rounded bg-gray-200"
+            initial={{ width: 0 }}
+            whileInView={{ width: "75%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.7 }}
+          />
+          <motion.div
+            className="h-2 rounded bg-gray-200"
+            initial={{ width: 0 }}
+            whileInView={{ width: "50%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.9 }}
+          />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function CodeEditorIcon() {
+  const lines = [
+    { width: "w-full", color: "bg-purple-400" },
+    { width: "w-3/4", color: "bg-gray-200" },
+    { width: "w-full", color: "bg-orange" },
+    { width: "w-2/3", color: "bg-gray-200" },
+    { width: "w-full", color: "bg-green-400" },
+    { width: "w-1/2", color: "bg-gray-200" },
+  ];
+
+  return (
+    <motion.div
+      className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="mb-2 flex gap-1">
+        <motion.div
+          className="h-2 w-2 rounded-full bg-red-500"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.2, delay: 0.1 }}
+        />
+        <motion.div
+          className="h-2 w-2 rounded-full bg-yellow-500"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.2, delay: 0.2 }}
+        />
+        <motion.div
+          className="h-2 w-2 rounded-full bg-green-500"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.2, delay: 0.3 }}
+        />
+      </div>
+      <div className="space-y-2">
+        {lines.map((line, i) => (
+          <motion.div
+            key={i}
+            className={`h-2 rounded ${line.color}`}
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: "100%", opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3, delay: 0.4 + i * 0.15 }}
+            style={{ maxWidth: line.width === "w-full" ? "100%" : line.width === "w-3/4" ? "75%" : line.width === "w-2/3" ? "66.67%" : "50%" }}
+          />
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function DiagnosticTakeaways() {
+  const features = [
+    {
+      title: "The three positioning angles we'd test for your agency",
+      description: "Safe / Stretch / Bold",
+      icon: <ChatBubblesIcon />,
+    },
+    {
+      title: "The one phrase on your About page that's costing you commission",
+      description: null,
+      icon: <FolderDocIcon />,
+    },
+    {
+      title: "Whether a 2-week sprint with us makes sense",
+      description: "And if it doesn't, where to look instead",
+      icon: <CodeEditorIcon />,
+    },
+  ];
+
+  return (
+    <section className="bg-background py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <FadeIn>
+          <h2 className="mb-10 text-center text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-foreground">
+            What you&apos;ll know after the call
+          </h2>
+        </FadeIn>
+        <FadeIn>
+          <div className="grid grid-cols-1 divide-y divide-border rounded-3xl border border-border md:grid-cols-3 md:divide-x md:divide-y-0">
+            {features.map((feature, i) => (
+              <div key={i} className="flex flex-col p-8 md:p-10">
+                <div className="mb-8 h-40 w-full">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-bold text-foreground">{feature.title}</h3>
+                {feature.description && <p className="mt-3 text-base leading-relaxed text-muted-foreground">{feature.description}</p>}
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function HeroTrustStrip() {
+  return (
+    <section className="bg-secondary/40 py-5 md:py-6">
+      <div className={contentWide}>
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium text-muted-foreground md:gap-x-10 md:text-base">
+          <span className="inline-flex items-center gap-2">
+            <Check size={16} className="text-primary" strokeWidth={3} />
+            For boutique agencies, 5–25 agents
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Check size={16} className="text-primary" strokeWidth={3} />
+            Live workshops over Google Meet
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Check size={16} className="text-primary" strokeWidth={3} />
+            Working with directors across Melbourne, Sydney, Brisbane
+          </span>
         </div>
       </div>
     </section>
@@ -478,39 +708,41 @@ function Hero() {
 
 function DeliverableImageStack({ src, alt }) {
   return (
-    <div className="mx-auto w-full max-w-[min(100%,600px)]">
+    <motion.div className="mx-auto w-full max-w-[min(100%,600px)]" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
       <img src={src} alt={alt} className="block h-auto w-full" loading="lazy" decoding="async" />
-    </div>
+    </motion.div>
   );
 }
 
 function DeliverableCards() {
   return (
-    <section id="deliverables" className="scroll-mt-24 border-b border-border bg-white py-16 md:py-24">
+    <section id="how-it-works" className="scroll-mt-24 bg-background py-16 md:py-24">
       <div className={contentWide}>
-        <h2 className="mx-auto max-w-[min(100%,920px)] text-center font-display text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[1.04] tracking-tight text-dark">
-          Three deliverables. One sprint. No fluff.
-        </h2>
-        <div className="mx-auto mt-5 flex justify-center" aria-hidden>
-          <span className="h-1.5 w-20 rounded-full bg-orange md:w-28" />
-        </div>
+        <FadeIn>
+          <h2 className="mx-auto max-w-[min(100%,920px)] text-center text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[1.04] tracking-tight text-foreground">
+            See how it works. One sprint. No fluff.
+          </h2>
+          <div className="mx-auto mt-5 flex justify-center" aria-hidden>
+            <span className="h-1.5 w-20 rounded-full bg-primary md:w-28" />
+          </div>
+        </FadeIn>
         <div className="mt-14 flex flex-col gap-16 md:mt-16 md:gap-20 lg:gap-24">
           {DELIVERABLE_CARDS.map((card, i) => {
             const imageLeft = i % 2 === 1;
             return (
-              <article key={card.label}>
+              <FadeIn key={card.label} direction={imageLeft ? "right" : "left"}>
                 <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-0 xl:gap-x-20">
                   <div
                     className={`flex w-full min-w-0 flex-col justify-center lg:max-w-xl ${
                       imageLeft ? "lg:order-2 lg:justify-self-end" : "lg:justify-self-start"
                     }`}
                   >
-                    <p className="font-body text-xs font-bold uppercase tracking-[0.18em] text-mid">{card.label}</p>
-                    <h3 className="mt-3 font-display text-[clamp(1.35rem,3.2vw,2rem)] font-bold leading-[1.12] tracking-tight text-dark md:text-[1.75rem] lg:mt-4 lg:text-[2rem]">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">{card.label}</p>
+                    <h3 className="mt-3 text-[clamp(1.35rem,3.2vw,2rem)] font-bold leading-[1.12] tracking-tight text-foreground md:text-[1.75rem] lg:mt-4 lg:text-[2rem]">
                       {card.heading}
                     </h3>
-                    <p className="mt-5 font-body text-[15px] leading-[1.7] text-dark/75 md:text-base">{card.body}</p>
-                    <p className="mt-6 pt-1 font-body text-xs font-semibold uppercase tracking-wide text-dark/80">
+                    <p className="mt-5 text-[15px] leading-[1.7] text-foreground/75 md:text-base">{card.body}</p>
+                    <p className="mt-6 pt-1 text-xs font-semibold uppercase tracking-wide text-foreground/80">
                       {card.foot}
                     </p>
                   </div>
@@ -522,7 +754,7 @@ function DeliverableCards() {
                     <DeliverableImageStack src={card.image} alt={card.imageAlt} />
                   </div>
                 </div>
-              </article>
+              </FadeIn>
             );
           })}
         </div>
@@ -533,71 +765,99 @@ function DeliverableCards() {
 
 function FounderSection() {
   return (
-    <section id="founder" className="scroll-mt-24 border-b border-border bg-white py-20 md:py-28">
+    <section id="founder" className="scroll-mt-24 bg-white py-20 md:py-28">
       <div className={contentWide}>
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
-          <div className="order-2 lg:order-1">
-            <p className="font-body text-xs font-bold uppercase tracking-[0.18em] text-mid">Who&apos;s behind this</p>
-            <h2 className="mt-4 font-display text-[clamp(2rem,4.4vw,3.1rem)] font-bold leading-[1.05] tracking-tight text-dark">
-              I&apos;m Soubh. I run Soubh &amp; Co.
-            </h2>
-            <div className="mt-6 space-y-5 font-body text-[17px] leading-[1.72] text-dark/85 md:text-[19px]">
-              <p>
-                Spent the last four years building brands across Australia, including four real estate agencies you&apos;ve
-                probably never heard of, but their vendors definitely have.
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* Left — Photo */}
+          <FadeIn direction="left">
+            <div className="flex items-center justify-center lg:justify-start">
+              <motion.div
+                className="w-full max-w-[420px] overflow-hidden rounded-2xl border border-border"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <img
+                  src={founderImage}
+                  alt="Soubh portrait"
+                  className="block h-auto w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </motion.div>
+            </div>
+          </FadeIn>
+
+          {/* Right — All text */}
+          <FadeIn direction="right">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Who&apos;s behind this
               </p>
-              <p>
-                Every engagement converged on the same insight: positioning has to come before marketing. So I built a
-                sprint that does only that.
-              </p>
-              <p>
-                If you want the long version of the work,{" "}
-                <a
-                  href="https://iamsoubh.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
-                >
-                  iamsoubh.com
-                </a>
-                .
-              </p>
-              <p>
-                If you want to see the daily posts,{" "}
-                <a
-                  href="https://www.linkedin.com/in/iamsoubh/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
-                >
-                  LinkedIn
-                </a>
-                .
-              </p>
-              <p>
-                If you want to skip both and just talk,{" "}
+              <h2 className="mt-4 font-display text-[clamp(2.25rem,4.5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+                I&apos;m Soubh.
+                <br />
+                I run Soubh &amp; Co.
+              </h2>
+
+              <div className="mt-8 space-y-5 text-[16px] leading-[1.7] text-muted-foreground md:text-[17px]">
+                <p>
+                  Spent the last four years building brands across Australia, including real estate agencies
+                  you&apos;ve probably never heard of — but their vendors definitely have.
+                </p>
+                <p>
+                  Every engagement converged on the same insight: positioning has to come before marketing. So I
+                  built a sprint that does only that.
+                </p>
+                <p>
+                  See the work on{" "}
+                  <a
+                    href="https://iamsoubh.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                  >
+                    iamsoubh.com
+                  </a>
+                  {" "}or the daily posts on{" "}
+                  <a
+                    href="https://www.linkedin.com/in/iamsoubh/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                  >
+                    LinkedIn
+                  </a>
+                  .
+                </p>
+              </div>
+
+              {/* Stats */}
+              <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-8">
+                <div>
+                  <p className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">4+</p>
+                  <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Years</p>
+                </div>
+                <div className="border-l border-border pl-4 md:pl-6">
+                  <p className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">50+</p>
+                  <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Campaigns</p>
+                </div>
+                <div className="border-l border-border pl-4 md:pl-6">
+                  <p className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">4.9</p>
+                  <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Rating</p>
+                </div>
+              </div>
+
+              <p className="mt-8 text-sm text-muted-foreground">
+                Want to talk?{" "}
                 <a
                   href="/book"
-                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                  className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
                 >
-                  reserve a sprint →
+                  Get a free positioning diagnostic →
                 </a>
-                .
               </p>
-              <p className="pt-1 font-display text-sm text-dark/60">- Soubh</p>
             </div>
-          </div>
-          <div className="order-1 lg:order-2">
-            <div className="mx-auto max-w-[440px] overflow-hidden rounded-[28px] border-[3px] border-dark bg-[#EAF3F8] shadow-[10px_10px_0_0_rgba(13,13,13,0.12)] lg:ml-auto">
-              <img
-                src={founderImage}
-                alt="Soubh portrait"
-                className="block h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>
@@ -606,112 +866,123 @@ function FounderSection() {
 
 function LogoStrip() {
   return (
-    <section className="py-12 md:py-16" aria-label="Brands">
-      <div className={contentWide}>
-        <BrandsBar />
-      </div>
-    </section>
-  );
-}
-
-function TestimonialThreeCards() {
-  const items = THREE_TESTIMONIALS;
-  return (
-    <section className="py-14 md:py-20" aria-label="Client testimonials">
-      <div className={contentWide}>
-        <div className="grid gap-10 md:grid-cols-3 md:gap-12">
-          {items.map((item) => (
-            <article key={item.name} className="flex flex-col">
-              <p className="font-body text-[15px] font-medium leading-[1.72] text-dark md:text-[17px]">
-                <span className="font-display text-[1.35em] font-bold leading-none text-orange/35" aria-hidden="true">
-                  &ldquo;
-                </span>
-                {renderBoldSegments(item.text)}
-                <span className="font-display text-[1.35em] font-bold leading-none text-orange/35" aria-hidden="true">
-                  &rdquo;
-                </span>
-              </p>
-              <div className="mt-8 flex items-center gap-4 pt-1">
-                {item.avatar ? (
-                  <img
-                    src={item.avatar}
-                    alt=""
-                    width={48}
-                    height={48}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-12 w-12 shrink-0 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F0F0F0] font-body text-sm font-medium text-dark">
-                    {item.initials}
-                  </div>
-                )}
-                <div>
-                  <p className="font-body text-base font-semibold text-dark">{item.name}</p>
-                  <p className="mt-0.5 font-body text-sm text-dark/70">{item.role}</p>
-                </div>
-              </div>
-            </article>
-          ))}
+    <FadeIn>
+      <section className="py-12 md:py-16" aria-label="Brands">
+        <div className={contentWide}>
+          <BrandsBar />
         </div>
-      </div>
-    </section>
+      </section>
+    </FadeIn>
   );
 }
 
 function SprintCallout() {
   return (
-    <section id="sprint" className="scroll-mt-24 py-14 md:py-20">
+    <section id="sprint" className="scroll-mt-24 bg-secondary py-14 md:py-20">
       <div className={contentOffer}>
-        <div className="overflow-hidden rounded-2xl border-[3px] border-dark bg-white">
-          <div className="grid divide-y divide-border text-left lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:items-stretch">
-            <div className="p-6 md:p-7 lg:p-8">
-              <h2 className="text-balance font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-dark md:text-[2.25rem] lg:text-[2.35rem]">
-                <span className="block">The Real Estate</span>
-                <span className="block">Positioning Sprint</span>
-              </h2>
-              <p className="mt-4 font-body text-[15px] leading-[1.6] text-dark md:text-base">
-                {OFFER_INTRO}
-              </p>
-            </div>
-            <div className="p-6 md:p-7 lg:p-8">
-              <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">What you get:</p>
-              <ul className="mt-5 space-y-5 md:space-y-6">
-                {OFFER_WHAT_ITEMS.map((item) => (
-                  <li key={item.title} className="flex gap-3">
-                    <span className="mt-0.5 shrink-0 font-body text-base leading-none text-dark" aria-hidden>
-                      ✓
-                    </span>
-                    <div>
-                      <p className="font-body text-sm font-bold leading-snug text-dark">{item.title}</p>
-                      <p className="mt-1.5 font-body text-sm leading-[1.55] text-dark">{item.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="p-6 md:p-7 lg:p-8">
-              <p className="font-body text-xs font-bold uppercase tracking-widest text-mid">Pricing</p>
-              <div className="mt-5 flex gap-0 overflow-hidden rounded-lg border border-dark/10">
-                <span className={`w-1.5 shrink-0 ${SPRINT_PANEL_PRICING.accent}`} aria-hidden />
-                <div className="min-w-0 flex-1 py-2.5 pl-3 pr-2.5">
-                  <p className="font-body text-[12px] font-semibold leading-snug text-dark">{SPRINT_PANEL_PRICING.label}</p>
-                  <p className="mt-1 font-display text-xl font-extrabold tracking-tight text-dark md:text-2xl">
-                    {SPRINT_PANEL_PRICING.price}
-                    <span className="ml-1 font-body text-[10px] font-semibold normal-case tracking-normal text-mid">
-                      AUD
-                    </span>
+        <FadeIn>
+          <div className="grid gap-5 text-left md:grid-cols-2 lg:grid-cols-3">
+            {/* Title + Intro — top left, spans 2 cols */}
+            <motion.div
+              className="md:col-span-2"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="h-full !py-0 rounded-3xl bg-white border-border">
+                <div className="p-8 md:p-10 lg:p-12">
+                  <h2 className="max-w-[680px] text-balance font-display text-[clamp(2rem,4.5vw,3.25rem)] font-extrabold leading-[1.05] tracking-tight text-foreground">
+                    <span className="block">The Real Estate</span>
+                    <span className="block">Positioning Sprint</span>
+                  </h2>
+                  <p className="mt-5 max-w-[560px] text-[15px] leading-[1.65] text-muted-foreground md:text-base">
+                    {OFFER_INTRO}
                   </p>
-                  <p className="mt-1 font-body text-[12px] leading-snug text-dark/75">{SPRINT_PANEL_PRICING.detail}</p>
                 </div>
-              </div>
-              <p className="mt-4 font-body text-[11px] leading-snug text-mid">
-                All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
-              </p>
-            </div>
+              </Card>
+            </motion.div>
+
+            {/* Pricing — top right */}
+            <motion.div
+              className="lg:col-span-1"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="h-full !py-0 rounded-3xl bg-white border-border">
+                <div className="flex h-full flex-col p-8 md:p-10">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Pricing</p>
+                  <Link
+                    to="/book"
+                    className="group relative mt-6 flex gap-0 overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md"
+                    title="Book a call"
+                  >
+                    <span className={`w-1.5 shrink-0 ${SPRINT_PANEL_PRICING.accent}`} aria-hidden />
+                    <div className="min-w-0 flex-1 py-3 pl-4 pr-3 blur-[6px] select-none">
+                      <p className="text-[13px] font-semibold leading-snug text-foreground">{SPRINT_PANEL_PRICING.label}</p>
+                      <p className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-foreground md:text-3xl">
+                        {SPRINT_PANEL_PRICING.price}
+                        <span className="ml-1 font-body text-[11px] font-semibold normal-case tracking-normal text-muted-foreground">
+                          AUD
+                        </span>
+                      </p>
+                      <p className="mt-2 text-[13px] leading-snug text-muted-foreground">{SPRINT_PANEL_PRICING.detail}</p>
+                    </div>
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/60 opacity-0 transition-opacity group-hover:opacity-100">
+                      <span className="rounded-full bg-orange px-4 py-2 text-sm font-semibold text-white shadow-lg">
+                        Book a call
+                      </span>
+                    </span>
+                  </Link>
+                  <p className="mt-5 text-[12px] leading-snug text-muted-foreground">
+                    All figures in AUD, ex-GST. 50% on signing, 50% at the start of Week 2.
+                  </p>
+                  <div className="mt-auto pt-8">
+                    <a href="/book" className="flex w-full flex-col items-center gap-0.5 rounded-2xl bg-orange px-10 py-4 hover:bg-orange/90">
+                      <span className="text-base font-semibold text-white">Get a free positioning diagnostic</span>
+                      <span className="text-sm font-normal text-white/80">Book a 25 min call</span>
+                    </a>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* What you get — bottom, full width */}
+            <motion.div
+              className="md:col-span-2 lg:col-span-3"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="h-full !py-0 rounded-3xl bg-white border-border">
+                <div className="p-8 md:p-10 lg:p-12">
+                  <h3 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                    What you get
+                  </h3>
+                  <div className="mt-8 grid gap-8 md:grid-cols-3 md:gap-10">
+                    {OFFER_WHAT_ITEMS.map((item) => (
+                      <div key={item.title} className="flex gap-3.5">
+                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                          <Check size={14} strokeWidth={3} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold leading-snug text-foreground">{item.title}</p>
+                          <p className="mt-1.5 text-sm leading-[1.6] text-muted-foreground">{item.body}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -728,216 +999,533 @@ function weekCellTitleClass(title) {
 
 function WeekCell({ row }) {
   return (
-    <div className="flex min-h-[128px] flex-col p-5 md:min-h-[168px] md:border-l md:border-dotted md:border-border md:p-6 md:pt-6">
+    <motion.div
+      className="flex min-h-[128px] flex-col p-5 md:min-h-[168px] md:border-l md:border-dotted md:border-border md:p-6 md:pt-6"
+      whileHover={{ backgroundColor: "rgba(8,96,143,0.04)" }}
+      transition={{ duration: 0.15 }}
+    >
       <p className="font-body text-[14px] font-bold tracking-tight text-dark md:text-[15px]">{row.day}</p>
       <p className={`mt-3 font-body text-[17px] font-bold leading-snug tracking-tight md:text-[1.38rem] ${weekCellTitleClass(row.title)}`}>
         {row.title}
       </p>
       {row.badge ? (
-        <p className="mt-1.5 font-body text-[15px] font-normal leading-snug text-mid md:text-base">{row.badge}</p>
+        <Badge variant="outline" className="mt-1.5 w-fit font-body text-[13px] font-normal leading-snug text-mid md:text-sm">{row.badge}</Badge>
       ) : null}
       {row.desc ? (
         <p className="mt-2 font-body text-[15px] font-normal leading-[1.6] text-dark/80 md:text-base">{row.desc}</p>
       ) : null}
-    </div>
+    </motion.div>
   );
 }
 
 function SprintTimeline() {
   return (
-    <section className="border-b border-border py-20 md:py-28">
-      <div className={contentWide}>
-        <h2 className="text-center font-display text-[clamp(1.9rem,4.3vw,2.95rem)] font-bold tracking-tight text-dark">
-          Here&apos;s exactly what the sprint looks like.
-        </h2>
+    <FadeIn>
+      <section className="py-20 md:py-28">
+        <div className={contentWide}>
+          <h2 className="text-center font-display text-[clamp(1.9rem,4.3vw,2.95rem)] font-bold tracking-tight text-dark">
+            Here&apos;s exactly what the sprint looks like.
+          </h2>
 
-        <div className="mt-12 overflow-hidden rounded-3xl border-2 border-dark bg-white">
-          <div className="p-5 md:p-6">
-            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-              Pre-Work
-            </span>
-          </div>
-          <div className="grid border-t border-border md:grid-cols-2">
-            <div className="p-5 md:p-6 md:pr-8">
-              <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
-                Your team
-              </p>
-              <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
-                Fill out the{" "}
-                <Link
-                  to="/intake"
-                  className="font-semibold text-dark underline decoration-dark/35 underline-offset-[3px] transition-colors hover:text-orange hover:decoration-orange/50"
-                >
-                  intake form
-                </Link>{" "}
-                . Send us your website, your social handles, and anything you give vendors before an appraisal even if
-                it's rough.
-              </p>
+          <motion.div
+            className="mt-12 overflow-hidden rounded-xl border border-border bg-white"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="p-5 md:p-6">
+              <Badge variant="secondary" className="inline-flex w-fit rounded-lg border border-border px-3 py-2 text-xs font-bold uppercase leading-tight tracking-wide hover:bg-secondary">
+                Pre-Work
+              </Badge>
             </div>
-            <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
-              <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
-                Soubh & Co.
-              </p>
-              <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
-                We dig into your website, your social, and three boutique agencies you're up against.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white shadow-none">
-          <div className="hidden grid-cols-6 border-b border-border bg-white md:grid">
-            <div className="border-r border-dotted border-border" aria-hidden />
-            {GRID_DAYS.map((d) => (
-              <div
-                key={d}
-                className="border-l border-dotted border-border px-2 py-4 text-center font-body text-[14px] font-bold tracking-tight text-dark md:py-5 md:text-[15px]"
-              >
-                {d}
+            <div className="grid border-t border-border md:grid-cols-2">
+              <div className="p-5 md:p-6 md:pr-8">
+                <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
+                  Your team
+                </p>
+                <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
+                  Fill out the{" "}
+                  <Link
+                    to="/intake"
+                    className="font-semibold text-dark underline decoration-dark/35 underline-offset-[3px] transition-colors hover:text-orange hover:decoration-orange/50"
+                  >
+                    intake form
+                  </Link>{" "}
+                  . Send us your website, your social handles, and anything you give vendors before an appraisal even if
+                  it's rough.
+                </p>
               </div>
-            ))}
-          </div>
-          <div className="hidden md:grid md:grid-cols-6">
-            <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
-              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#EDE8F5] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-                WEEK 01 - STRATEGY
-              </span>
+              <div className="border-t border-dotted border-border p-5 md:border-l md:border-t-0 md:border-border md:p-6 md:pl-8">
+                <p className="font-body text-[17px] font-bold leading-snug tracking-tight text-dark md:text-[1.38rem]">
+                  Soubh & Co.
+                </p>
+                <p className="mt-3 font-body text-[15px] font-normal leading-[1.7] text-dark/85 md:text-[17px]">
+                  We dig into your website, your social, and three boutique agencies you're up against.
+                </p>
+              </div>
             </div>
-            {WEEK1_ROWS.map((row) => (
-              <WeekCell key={row.day + row.title} row={row} />
-            ))}
-          </div>
-          <div className="hidden border-t border-border md:grid md:grid-cols-6">
-            <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
-              <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-                WEEK 02 - CONTENT
-              </span>
-            </div>
-            {WEEK2_ROWS.map((row) => (
-              <WeekCell key={row.day + row.title} row={row} />
-            ))}
-          </div>
-          <div className="border-t border-border p-6 md:hidden">
-            <p className="font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 01 - STRATEGY</p>
-            <div className="mt-5 space-y-6">
-              {WEEK1_ROWS.map((row) => (
-                <div key={row.day} className="border-b border-dashed border-dark/30 pb-6 last:border-0 last:pb-0">
-                  <WeekCell row={row} />
-                </div>
-              ))}
-            </div>
-            <p className="mt-10 font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 02 - CONTENT</p>
-            <div className="mt-5 space-y-6">
-              {WEEK2_ROWS.map((row) => (
-                <div key={row.day} className="border-b border-dashed border-dark/30 pb-6 last:border-0 last:pb-0">
-                  <WeekCell row={row} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+          </motion.div>
 
-        <div className="mt-10 overflow-hidden rounded-3xl border-2 border-dark bg-white">
-          <div className="p-5 md:p-6">
-            <span className="inline-flex w-fit rounded-lg border-[3px] border-dark bg-[#FFF0E6] px-3 py-2 font-body text-[12px] font-bold uppercase leading-tight tracking-wide text-dark shadow-[3px_3px_0_0_#0D0D0D]">
-              MONTHS 01-03 - CONTENT ENGINE
-            </span>
-          </div>
-          <ul className="space-y-4 border-t border-border p-5 font-body text-[15px] font-normal leading-[1.65] text-dark/85 md:space-y-5 md:p-6 md:pt-6 md:text-base">
-            <li>Soubh & Co. delivers next week's content batch every Friday and schedules it in your accounts.</li>
-            <li>Day 30, Day 60, Day 90: Loom report and a 30-minute review call.</li>
-            <li>You list, sell, and lead. The marketing keeps running.</li>
-          </ul>
-          <p className="border-t border-border px-5 py-5 font-body text-[15px] font-semibold leading-[1.65] text-dark md:px-6 md:text-base">
-            Total time from your team across 14 weeks: about 10 hours.
-          </p>
+          <motion.div
+            className="mt-10 overflow-hidden rounded-xl border border-border bg-white shadow-none"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div className="hidden grid-cols-6 border-b border-border bg-white md:grid">
+              <div className="border-r border-dotted border-border" aria-hidden />
+              {GRID_DAYS.map((d) => (
+                <div
+                  key={d}
+                  className="border-l border-dotted border-border px-2 py-4 text-center text-sm font-bold tracking-tight text-foreground md:py-5 md:text-[15px]"
+                >
+                  {d}
+                </div>
+              ))}
+            </div>
+            <div className="hidden md:grid md:grid-cols-6">
+              <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
+                <Badge variant="secondary" className="inline-flex w-fit rounded-lg border border-border px-3 py-2 text-xs font-bold uppercase leading-tight tracking-wide hover:bg-secondary">
+                  WEEK 01 - STRATEGY
+                </Badge>
+              </div>
+              {WEEK1_ROWS.map((row) => (
+                <WeekCell key={row.day + row.title} row={row} />
+              ))}
+            </div>
+            <div className="hidden border-t border-border md:grid md:grid-cols-6">
+              <div className="flex flex-col border-r border-dotted border-border bg-white p-5 md:p-6">
+                <Badge variant="outline" className="inline-flex w-fit rounded-lg border border-border px-3 py-2 text-xs font-bold uppercase leading-tight tracking-wide hover:bg-muted">
+                  WEEK 02 - CONTENT
+                </Badge>
+              </div>
+              {WEEK2_ROWS.map((row) => (
+                <WeekCell key={row.day + row.title} row={row} />
+              ))}
+            </div>
+            <div className="border-t border-border p-6 md:hidden">
+              <p className="font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 01 - STRATEGY</p>
+              <div className="mt-5 space-y-6">
+                {WEEK1_ROWS.map((row) => (
+                  <div key={row.day} className="border-b border-dashed border-dark/30 pb-6 last:border-0 last:pb-0">
+                    <WeekCell row={row} />
+                  </div>
+                ))}
+              </div>
+              <p className="mt-10 font-body text-[12px] font-bold uppercase tracking-wide text-dark">WEEK 02 - CONTENT</p>
+              <div className="mt-5 space-y-6">
+                {WEEK2_ROWS.map((row) => (
+                  <div key={row.day} className="border-b border-dashed border-dark/30 pb-6 last:border-0 last:pb-0">
+                    <WeekCell row={row} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="mt-10 overflow-hidden rounded-xl border border-border bg-white"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="p-5 md:p-6">
+              <Badge variant="outline" className="inline-flex w-fit rounded-lg border border-border px-3 py-2 text-xs font-bold uppercase leading-tight tracking-wide hover:bg-muted">
+                MONTHS 01-03 - CONTENT ENGINE
+              </Badge>
+            </div>
+            <ul className="space-y-4 border-t border-border p-5 font-body text-[15px] font-normal leading-[1.65] text-dark/85 md:space-y-5 md:p-6 md:pt-6 md:text-base">
+              <li>Soubh & Co. delivers next week's content batch every Friday and schedules it in your accounts.</li>
+              <li>Day 30, Day 60, Day 90: Loom report and a 30-minute review call.</li>
+              <li>You list, sell, and lead. The marketing keeps running.</li>
+            </ul>
+            <p className="border-t border-border px-5 py-5 font-body text-[15px] font-semibold leading-[1.65] text-dark md:px-6 md:text-base">
+              Total time from your team across 14 weeks: about 10 hours.
+            </p>
+          </motion.div>
         </div>
+      </section>
+    </FadeIn>
+  );
+}
+
+function smoothPathThrough(points, skipMove = false) {
+  if (points.length < 2) return "";
+  let d = skipMove ? "" : `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[Math.max(0, i - 1)];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[Math.min(points.length - 1, i + 2)];
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }
+  return d;
+}
+
+function areaPath(topPoints, bottomPoints) {
+  let d = smoothPathThrough(topPoints);
+  d += ` L ${bottomPoints[bottomPoints.length - 1].x.toFixed(1)} ${bottomPoints[bottomPoints.length - 1].y.toFixed(1)}`;
+  const reversedBottom = [...bottomPoints].reverse();
+  d += smoothPathThrough(reversedBottom, true);
+  d += " Z";
+  return d;
+}
+
+function ContentChart() {
+  const weeks = [
+    { w: 1, ig: 0, li: 0, lf: 0 },
+    { w: 2, ig: 1, li: 0, lf: 0 },
+    { w: 3, ig: 1, li: 1, lf: 0 },
+    { w: 4, ig: 2, li: 1, lf: 0 },
+    { w: 5, ig: 2, li: 1, lf: 1 },
+    { w: 6, ig: 2, li: 1, lf: 1 },
+    { w: 7, ig: 2, li: 1, lf: 1 },
+    { w: 8, ig: 2, li: 1, lf: 1 },
+    { w: 9, ig: 2, li: 1, lf: 1 },
+    { w: 10, ig: 2, li: 1, lf: 1 },
+    { w: 11, ig: 2, li: 1, lf: 1 },
+    { w: 12, ig: 2, li: 1, lf: 1 },
+  ];
+  const max = 4;
+  const [hovered, setHovered] = useState(null);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
+
+  const width = 1000;
+  const height = 220;
+  const pad = { top: 10, right: 10, bottom: 24, left: 10 };
+  const chartW = width - pad.left - pad.right;
+  const chartH = height - pad.top - pad.bottom;
+
+  const getX = (i) => pad.left + (i / (weeks.length - 1)) * chartW;
+  const getY = (val) => pad.top + chartH - (val / max) * chartH;
+
+  const igTop = weeks.map((d, i) => ({ x: getX(i), y: getY(d.ig) }));
+  const igBottom = weeks.map((d, i) => ({ x: getX(i), y: getY(0) }));
+
+  const liTop = weeks.map((d, i) => ({ x: getX(i), y: getY(d.ig + d.li) }));
+  const liBottom = [...igTop];
+
+  const lfTop = weeks.map((d, i) => ({ x: getX(i), y: getY(d.ig + d.li + d.lf) }));
+  const lfBottom = [...liTop];
+
+  const pathIg = areaPath(igTop, igBottom);
+  const pathLi = areaPath(liTop, liBottom);
+  const pathLf = areaPath(lfTop, lfBottom);
+
+  return (
+    <div ref={ref} className="relative w-full select-none" style={{ height: 180 }}>
+      <svg viewBox={`0 0 ${width} ${height}`} className="absolute inset-0 h-full w-full overflow-visible" preserveAspectRatio="none">
+        {/* Grid lines */}
+        {[1, 2, 3].map((tick) => (
+          <line
+            key={tick}
+            x1={pad.left}
+            y1={getY(tick)}
+            x2={width - pad.right}
+            y2={getY(tick)}
+            stroke="#E5E5E5"
+            strokeWidth={1}
+            strokeDasharray="4 4"
+          />
+        ))}
+
+        {/* Stacked areas */}
+        <motion.path
+          d={pathIg}
+          fill="#08608f"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        />
+        <motion.path
+          d={pathLi}
+          fill="#3BA3C9"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+        />
+        <motion.path
+          d={pathLf}
+          fill="#A8D8EA"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        />
+
+        {/* Hover line */}
+        {hovered !== null && (
+          <line
+            x1={getX(hovered)}
+            y1={pad.top}
+            x2={getX(hovered)}
+            y2={height - pad.bottom}
+            stroke="#0D0D0D"
+            strokeWidth={1}
+            strokeDasharray="4 4"
+            opacity={0.2}
+          />
+        )}
+
+        {/* Hover targets */}
+        {weeks.map((_, i) => {
+          const sectionW = chartW / (weeks.length - 1);
+          return (
+            <rect
+              key={i}
+              x={getX(i) - sectionW / 2}
+              y={pad.top}
+              width={sectionW}
+              height={chartH}
+              fill="transparent"
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            />
+          );
+        })}
+
+        {/* X-axis labels */}
+        {weeks.map((d, i) => (
+          <text
+            key={d.w}
+            x={getX(i)}
+            y={height - 4}
+            textAnchor="middle"
+            className="text-[10px] font-semibold fill-muted-foreground"
+          >
+            {d.w}
+          </text>
+        ))}
+      </svg>
+
+      {/* Tooltip */}
+      {hovered !== null && (
+        <div
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white px-3 py-2 shadow-lg"
+          style={{
+            left: `${(getX(hovered) / width) * 100}%`,
+            top: `${((Math.min(lfTop[hovered].y, liTop[hovered].y, igTop[hovered].y) - pad.top) / height) * 100}%`,
+          }}
+        >
+          <p className="whitespace-nowrap text-[11px] font-bold text-foreground">Week {weeks[hovered].w}</p>
+          <div className="mt-1 space-y-0.5">
+            {weeks[hovered].ig > 0 && (
+              <p className="text-[10px] text-muted-foreground">Instagram: {weeks[hovered].ig}</p>
+            )}
+            {weeks[hovered].li > 0 && (
+              <p className="text-[10px] text-muted-foreground">LinkedIn: {weeks[hovered].li}</p>
+            )}
+            {weeks[hovered].lf > 0 && (
+              <p className="text-[10px] text-muted-foreground">Long-form: {weeks[hovered].lf}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="absolute -bottom-5 left-0 flex items-center gap-4">
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span className="h-2 w-2 rounded-sm bg-[#08608f]" /> Instagram
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span className="h-2 w-2 rounded-sm bg-[#3BA3C9]" /> LinkedIn
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span className="h-2 w-2 rounded-sm bg-[#A8D8EA]" /> Long-form
+        </span>
       </div>
-    </section>
+    </div>
+  );
+}
+
+function InstaLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function LinkedInLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
+
+function NewsletterLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
   );
 }
 
 function ContentNinetyDays() {
+  const stats = [
+    { num: "36", label: "Pieces" },
+    { num: "12", label: "Weeks" },
+    { num: "3", label: "Channels" },
+  ];
+
+  const channels = [
+    {
+      name: "Instagram",
+      freq: "2 posts / week",
+      desc: "Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched, scheduled in Meta Business Suite.",
+      Logo: InstaLogo,
+      accent: "bg-primary/30",
+    },
+    {
+      name: "LinkedIn",
+      freq: "1 post / week",
+      desc: "Founder-fronted thought pieces from the principal's profile + agency page. Built to position the agency, not just promote listings.",
+      Logo: LinkedInLogo,
+      accent: "bg-primary/20",
+    },
+    {
+      name: "Long-form",
+      freq: "1 piece / week",
+      desc: "Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.",
+      Logo: NewsletterLogo,
+      accent: "bg-primary/10",
+    },
+  ];
+
   return (
-    <section className="border-b border-border bg-gradient-to-b from-[#DCEAF2] via-[#EAF3F8] to-[#F4F8FB] py-20 md:py-28">
-      <div className={contentWide}>
-        <div className="relative overflow-hidden rounded-2xl border-[3px] border-dark bg-white p-8 shadow-[10px_10px_0_0_rgba(13,13,13,0.12)] md:rounded-3xl md:p-10 lg:p-12">
-          <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-[#CDE4F2] blur-3xl" aria-hidden />
-          <div className="pointer-events-none absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-[#D8EAF5] blur-3xl" aria-hidden />
-          <p className="inline-block rounded-lg border-2 border-dark bg-orange px-3 py-1.5 font-body text-[10px] font-bold uppercase tracking-[0.2em] text-white md:text-[11px]">
-            USP: After the sprint
-          </p>
-          <h2 className="relative mt-4 max-w-[920px] font-display text-[clamp(1.95rem,4.4vw,3rem)] font-bold leading-[1.06] tracking-tight text-dark md:mt-5">
-            <span className="text-orange">90 days</span> of content.
-            <br className="hidden sm:block" /> Made for you. Scheduled for you.
-          </h2>
-          <p className="relative mt-4 max-w-[760px] font-body text-[17px] leading-[1.68] text-dark md:mt-5 md:text-[19px]">
-            After Week 2, the marketing engine keeps running while you list, sell, and lead. Every week your channels
-            stay active with consistent, positioning-led content.
-          </p>
-          <div className="relative mt-8 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border-2 border-dark bg-[#EAF6FF] px-4 py-3 text-center">
-              <p className="font-display text-2xl font-extrabold leading-none text-dark">36</p>
-              <p className="mt-1 font-body text-[12px] font-bold uppercase tracking-wide text-dark/80">Pieces</p>
-            </div>
-            <div className="rounded-xl border-2 border-dark bg-[#F7F1FF] px-4 py-3 text-center">
-              <p className="font-display text-2xl font-extrabold leading-none text-dark">12</p>
-              <p className="mt-1 font-body text-[12px] font-bold uppercase tracking-wide text-dark/80">Weeks</p>
-            </div>
-            <div className="rounded-xl border-2 border-dark bg-[#FFF5EC] px-4 py-3 text-center">
-              <p className="font-display text-2xl font-extrabold leading-none text-dark">3</p>
-              <p className="mt-1 font-body text-[12px] font-bold uppercase tracking-wide text-dark/80">Channels</p>
-            </div>
-          </div>
-          <div className="relative mt-10 overflow-hidden rounded-2xl border-2 border-dark bg-[#FAFCFD] md:mt-12 md:rounded-3xl">
-            <div className="grid divide-y divide-border md:grid-cols-3 md:divide-x md:divide-y-0">
-              <div className="border-t-4 border-[#CFE8F9] p-6 md:p-8">
-                <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">Instagram</p>
-                <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
-                  2 posts / week
-                </p>
-                <p className="mt-4 font-body text-sm leading-[1.65] text-dark/80">
-                  Listing-led, voice-aligned, mapped to your positioning. Captions written, hashtags researched,
-                  scheduled in Meta Business Suite.
-                </p>
-              </div>
-              <div className="border-t-4 border-[#E3D5FB] p-6 md:p-8">
-                <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">LinkedIn</p>
-                <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
-                  1 post / week
-                </p>
-                <p className="mt-4 font-body text-sm leading-[1.65] text-dark/80">
-                  Founder-fronted thought pieces from the principal&apos;s profile + agency page. Built to position the
-                  agency, not just promote listings.
-                </p>
-              </div>
-              <div className="border-t-4 border-[#FFE3C7] p-6 md:p-8">
-                <p className="font-body text-sm font-bold uppercase tracking-wide text-dark">Long-form</p>
-                <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-dark md:text-3xl">
-                  1 piece / week
-                </p>
-                <p className="mt-4 font-body text-sm leading-[1.65] text-dark/80">
-                  Newsletter, blog post, or vendor letter your call. Sent or published by us, on a regular cadence.
-                </p>
-              </div>
-            </div>
-          </div>
-          <p className="mx-auto mt-8 max-w-[900px] text-center font-body text-sm font-medium leading-[1.65] text-dark md:mt-10 md:text-[15px]">
-            ✓ Every batch delivered Friday, for the following week. ✓ Scheduled in your accounts by us. ✓ 30-minute
-            review call + Loom report at days 30, 60, and 90.
-          </p>
-          <div className="mt-10 flex flex-col items-stretch gap-8 rounded-xl border-2 border-dark bg-[#F4F9FB] px-5 py-6 md:flex-row md:items-end md:justify-between md:gap-12 md:px-8 md:py-7">
-            <p className="max-w-xl flex-1 text-left font-body text-[15px] font-semibold leading-[1.68] text-dark md:text-[17px]">
-              36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On
-              your schedule.
+    <FadeIn>
+      <section className="bg-background py-20 md:py-28">
+        <div className={contentWide}>
+          {/* Header */}
+          <div className="mx-auto max-w-[920px] text-center">
+            
+
+            <h2 className="mt-5 font-display text-[clamp(2.25rem,5.5vw,4rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+              <span className="text-primary">90 days</span> of content.
+              <br className="hidden sm:block" /> Made for you. Scheduled for you.
+            </h2>
+
+            <p className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.65] text-muted-foreground md:mt-5 md:text-[18px]">
+              After Week 2, the marketing engine keeps running while you list, sell, and lead. Every week your channels stay active with consistent, positioning-led content.
             </p>
-            <a href="/book" className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
-              Reserve your sprint →
-            </a>
+          </div>
+
+          {/* Bento Grid */}
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {/* Interactive chart — spans 2 cols */}
+            <motion.div
+              className="h-full md:col-span-2 lg:col-span-3"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -6 }}
+            >
+              <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8 lg:p-10">
+                <div className="flex h-full flex-col gap-6">
+                  {/* Top text */}
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Output cadence</p>
+                    <p className="mt-2 font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">12-week ramp</p>
+                    <p className="mt-2 max-w-xl text-[15px] leading-[1.65] text-muted-foreground">
+                      Starts at Week 3 and builds to a steady 4 pieces per week. Hover any bar to see the channel breakdown.
+                    </p>
+                  </div>
+
+                  {/* Bottom row — stats + chart, aligned to bottom */}
+                  <div className="mt-auto flex flex-col gap-6 lg:flex-row lg:items-end">
+                    <div className="flex shrink-0 gap-3">
+                      {stats.map((s) => (
+                        <div key={s.label} className="rounded-xl bg-secondary/50 px-4 py-2.5 text-center">
+                          <p className="text-lg font-extrabold text-foreground">{s.num}</p>
+                          <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <ContentChart />
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Channel cards */}
+            {channels.map((ch, i) => {
+              const Logo = ch.Logo;
+              return (
+                <motion.div
+                  key={ch.name}
+                  className="h-full"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 * (i + 1) }}
+                  whileHover={{ y: -6, boxShadow: "0 20px 50px -12px rgba(0,0,0,0.08)" }}
+                >
+                  <Card className="relative h-full overflow-hidden rounded-3xl border-border bg-white p-6 md:p-8">
+                    <div className={`absolute left-0 top-0 h-full w-1 ${ch.accent}`} />
+                    <div className="relative z-10 flex h-full flex-col">
+                      <Logo className="h-10 w-10 text-primary" />
+                      <p className="mt-5 text-xs font-bold uppercase tracking-widest text-muted-foreground">{ch.name}</p>
+                      <p className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground md:text-[2.25rem]">
+                        {ch.freq}
+                      </p>
+                      <p className="mt-3 text-sm leading-[1.65] text-muted-foreground">{ch.desc}</p>
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
+
+            {/* Bottom process + CTA — full width */}
+            <motion.div
+              className="md:col-span-2 lg:col-span-3"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="rounded-3xl border-border bg-white p-6 md:p-8">
+                <p className="mb-5 text-center text-[15px] font-semibold leading-[1.6] text-foreground md:text-left md:text-base">
+                  36 pieces of content across 3 channels, in 12 weeks. Written in your voice. Mapped to your positioning. On your schedule.
+                </p>
+                <div className="flex flex-col items-center justify-between gap-6 border-t border-border pt-5 md:flex-row">
+                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} className="text-primary" strokeWidth={3} />
+                      Every batch delivered Friday, for the following week.
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} className="text-primary" strokeWidth={3} />
+                      Scheduled in your accounts by us.
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} className="text-primary" strokeWidth={3} />
+                      30-minute review call + Loom report at days 30, 60, and 90.
+                    </span>
+                  </div>
+                  <Button asChild className={`${ctaPrimary} w-full shrink-0 md:w-auto`}>
+                    <a href="/book">Get a free positioning diagnostic →</a>
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </FadeIn>
   );
 }
 
@@ -945,50 +1533,55 @@ function ProblemChecklist() {
   const [checked, setChecked] = useState(() => CHECKLIST_ITEMS.map(() => false));
   const count = checked.filter(Boolean).length;
   const total = CHECKLIST_ITEMS.length;
-  const message =
-    count === 0
-      ? {
-          emoji: "😊",
-          title: "Nothing ticked yet.",
-          subtitle: "If a line feels true, tick it, we'll show you a readout.",
-          boxClass: "bg-[#ECFDF3]",
-          compact: false,
-        }
-      : count === 1
-        ? {
-            emoji: "😬",
-            title: "You ticked one line. That's often a positioning problem in disguise.",
-            subtitle:
-              "We can fix it in the sprint: two weeks to lock positioning, then 90 days of scheduled content.",
-            boxClass: "bg-[#FFE8DE]",
-            compact: false,
-          }
-        : count >= 3
-          ? {
-              emoji: "😬",
-              title: "You've got a positioning problem.",
-              subtitle:
-                "Three ticks is the line. The good news: it's the most fixable thing on your list.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            }
-        : count < total
-          ? {
-              emoji: "😬",
-              title: "You ticked several lines. The pattern is real, and it's exactly what the sprint is for.",
-              subtitle:
-                "Two weeks to lock positioning, then 90 days of content scheduled in your voice. We can help you ship it.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            }
-          : {
-              emoji: "😬",
-              title: "You ticked every line. When it shows up everywhere, positioning is the lever.",
-              subtitle:
-                "The sprint is built for teams that feel this across the board. Book when you're ready to tighten the story.",
-              boxClass: "bg-[#FFE8DE]",
-              compact: false,
-            };
+
+  const message = (() => {
+    if (count === 0)
+      return {
+        severity: "neutral",
+        label: "Reality check",
+        title: "Nothing yet?",
+        subtitle: "Either you're a unicorn agency or you're not being honest with yourself. Tick a few and let's see.",
+        labelClass: "text-muted-foreground",
+        titleClass: "text-foreground",
+        showCta: false,
+        emoji: "🦄",
+      };
+    if (count === 1 || count === 2)
+      return {
+        severity: "early",
+        label: "Early signal",
+        title: count === 1 ? "One little flag." : "Okay, something's up.",
+        subtitle:
+          "Could be nothing. Could be the tip of the iceberg. Either way, the sprint locks your story in two weeks.",
+        labelClass: "text-primary",
+        titleClass: "text-primary",
+        showCta: false,
+        emoji: "🤨",
+      };
+    if (count >= 3 && count < total)
+      return {
+        severity: "confirmed",
+        label: "Yep, that's real",
+        title: "You've got a positioning problem.",
+        subtitle:
+          "Three or more means the pattern isn't going away on its own. The good news: it's the most fixable thing on your list.",
+        labelClass: "text-primary",
+        titleClass: "text-primary",
+        showCta: true,
+        emoji: "😬",
+      };
+    return {
+      severity: "critical",
+      label: "Full house",
+      title: "You're basically our dream client.",
+      subtitle:
+        "Every box ticked. The sprint was literally built for agencies feeling this across the board.",
+      labelClass: "text-orange",
+      titleClass: "text-orange",
+      showCta: true,
+      emoji: "🎯",
+    };
+  })();
 
   const toggle = (i) => {
     setChecked((prev) => {
@@ -999,27 +1592,227 @@ function ProblemChecklist() {
   };
 
   return (
-    <section className="border-b border-border py-20 md:py-28">
+    <section className="py-20 md:py-28">
       <div className={contentWide}>
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch lg:gap-20">
-          <div>
-            <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.38] tracking-tight text-dark md:leading-[1.45]">
-              Do you have a positioning
-              <br />
-              problem?
-            </h2>
-            <p className="mt-3 font-body text-sm italic text-dark">(Tick all that apply.)</p>
-            <ul className="mt-8">
-              {CHECKLIST_ITEMS.map((item, i) => (
-                <li key={item} className="border-t border-border py-4 first:border-t-0 first:pt-0">
-                  <label className="group flex cursor-pointer items-start gap-4">
-                    <input type="checkbox" checked={checked[i]} onChange={() => toggle(i)} className="peer sr-only" />
-                    <span
-                      className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center border border-dark transition-colors peer-checked:border-orange peer-checked:bg-orange peer-focus-visible:ring-2 peer-focus-visible:ring-dark peer-focus-visible:ring-offset-2"
-                      aria-hidden
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-20">
+          {/* Left — checklist */}
+          <FadeIn direction="left">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Reality check
+              </p>
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-tight text-foreground md:leading-[1.2]">
+                How many of these feel a little too true?
+              </h2>
+              <p className="mt-3 font-body text-sm italic text-muted-foreground">
+                Be honest. No judgment.
+              </p>
+              <ul className="mt-8">
+                {CHECKLIST_ITEMS.map((item, i) => (
+                  <motion.li
+                    key={item}
+                    initial={{ opacity: 0, x: -12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.35,
+                      delay: i * 0.06,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                    className="border-t border-border first:border-t-0"
+                  >
+                    <motion.label
+                      className={`group flex cursor-pointer items-start gap-4 rounded-xl px-3 py-4 transition-colors duration-200 ${
+                        checked[i]
+                          ? "bg-primary/[0.03]"
+                          : "hover:bg-muted/40"
+                      }`}
+                      whileHover={{ x: 3 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     >
-                      {checked[i] && (
-                        <svg className="h-2.5 w-2.5 text-white" viewBox="0 0 12 10" fill="none">
+                      <motion.div
+                        animate={checked[i] ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                      >
+                        <Checkbox
+                          checked={checked[i]}
+                          onCheckedChange={() => toggle(i)}
+                          className="mt-0.5 shrink-0 h-[18px] w-[18px] rounded-[4px] border-border transition-colors data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        />
+                      </motion.div>
+                      <span
+                        className={`font-body text-[15px] leading-snug transition-colors ${
+                          checked[i]
+                            ? "font-medium text-primary"
+                            : "text-foreground"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                    </motion.label>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </FadeIn>
+
+          {/* Right — diagnosis card */}
+          <FadeIn direction="right">
+            <div className="lg:sticky lg:top-32">
+              <Card className="!py-0">
+                <div className="p-6 md:p-8">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={message.severity}
+                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    >
+                      {/* Emoji */}
+                      <motion.div
+                        className="mb-3 text-center text-4xl"
+                        initial={{ scale: 0, rotate: -20 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+                      >
+                        {message.emoji}
+                      </motion.div>
+
+                      {/* Header row */}
+                      <div className="flex items-center justify-between">
+                        <p
+                          className={`text-[11px] font-bold uppercase tracking-[0.18em] ${message.labelClass}`}
+                        >
+                          {message.label}
+                        </p>
+                        <p className="text-[11px] font-semibold tabular-nums tracking-wide text-muted-foreground">
+                          {count}/{total}
+                        </p>
+                      </div>
+
+                      {/* Progress bar */}
+                      <div className="mt-4 flex gap-1.5">
+                        {CHECKLIST_ITEMS.map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className={`h-1 flex-1 rounded-full ${
+                              checked[i] ? "bg-primary" : "bg-border"
+                            }`}
+                            layout
+                            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                          />
+                        ))}
+                      </div>
+
+                      <h3
+                        className={`mt-6 font-display text-xl font-bold leading-snug md:text-2xl ${message.titleClass}`}
+                      >
+                        {message.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-[1.65] text-muted-foreground md:text-base">
+                        {message.subtitle}
+                      </p>
+
+                      <AnimatePresence>
+                        {message.showCta && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                            animate={{
+                              opacity: 1,
+                              height: "auto",
+                              marginTop: 24,
+                            }}
+                            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 25,
+                            }}
+                            className="overflow-hidden"
+                          >
+                            <Button
+                              asChild
+                              className={`${ctaPrimary} w-full`}
+                            >
+                              <a href="/book">Get a free positioning diagnostic →</a>
+                            </Button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </Card>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const PRICING_FEATURES = [
+  "2-week positioning sprint (3 workshops)",
+  "6-slide pitch deck (source files)",
+  "90 days of scheduled content (36 posts)",
+  "Monthly review call",
+];
+
+function PricingSection() {
+  return (
+    <FadeIn>
+      <section id="pricing" className="scroll-mt-24 bg-background py-20 md:py-28">
+        <div className={content}>
+          <p className="text-center font-body text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground md:text-xs">
+            Investment
+          </p>
+          <h2 className="mx-auto mt-4 max-w-[680px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+            A 2-week sprint with Soubh &amp; Co.
+          </h2>
+          <p className="mx-auto mt-4 max-w-[520px] text-center text-base text-muted-foreground md:text-[17px]">
+            Pricing scales with agency size — full breakdown shared on the diagnostic call.
+          </p>
+
+          <div className="relative mx-auto mt-12 max-w-[640px]">
+            {/* Badge — moved outside Card so overflow-hidden doesn’t clip it */}
+            <div className="absolute left-6 top-0 z-10 -translate-y-1/2 md:left-8">
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-foreground px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-background md:text-[11px]">
+                <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                3 Founding spots remaining
+              </span>
+            </div>
+
+            <Card className="bg-white">
+              <div className="p-8 md:p-10">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                  Founding Price
+                </p>
+                <div className="group relative mt-2 inline-flex cursor-help items-baseline gap-2">
+                  <span className="select-none text-[clamp(3rem,8vw,5rem)] font-extrabold leading-none tracking-tight text-foreground blur-xl">
+                    $2,200
+                  </span>
+                  <span className="select-none text-base font-medium text-muted-foreground blur-xl md:text-lg">AUD</span>
+
+                  {/* Tooltip on hover */}
+                  <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 rounded-lg border border-border bg-foreground px-4 py-2.5 text-center text-sm font-semibold text-background opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                  >
+                    Schedule a call for pricing
+                  </div>
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">ex-GST · For boutique agencies under 10 staff</p>
+
+                <Separator className="my-8 bg-border" />
+
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                  What&apos;s included
+                </p>
+                <ul className="mt-5 space-y-4">
+                  {PRICING_FEATURES.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-[4px] bg-primary">
+                        <svg className="h-3 w-3 text-primary-foreground" viewBox="0 0 12 10" fill="none">
                           <path
                             d="M1 5l3.5 3.5L11 1"
                             stroke="currentColor"
@@ -1028,193 +1821,390 @@ function ProblemChecklist() {
                             strokeLinejoin="round"
                           />
                         </svg>
-                      )}
-                    </span>
-                    <span
-                      className={`font-body text-[15px] leading-snug transition-colors ${
-                        checked[i] ? "text-orange" : "text-dark group-hover:text-orange"
-                      }`}
-                    >
-                      {item}
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <aside className="flex flex-col items-center justify-center lg:items-end" aria-live="polite" aria-atomic="true">
-            <p className="mb-4 w-full max-w-[440px] text-center text-4xl leading-none lg:text-[52px]" aria-hidden>
-              {message.emoji}
-            </p>
-            <div
-              className={`w-full rounded-2xl border-2 border-dark ${message.compact ? "max-w-[270px] px-6 py-4 text-center" : "max-w-[440px] p-6 md:p-8"} ${message.boxClass}`}
-              role="status"
-            >
-              <p className={`font-display font-bold leading-snug text-dark ${message.compact ? "text-[1.45rem]" : "text-xl md:text-2xl"}`}>
-                {message.title}
-              </p>
-              {message.subtitle ? (
-                <p className={`mt-3 font-body text-dark ${message.compact ? "text-sm leading-[1.55]" : "text-sm leading-[1.65] md:text-base"}`}>
-                  {message.subtitle}
-                </p>
-              ) : null}
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-  );
-}
+                      </span>
+                      <span className="text-[15px] leading-snug text-foreground md:text-base">{item}</span>
+                    </li>
+                  ))}
+                </ul>
 
-function PricingSection() {
-  return (
-    <section id="pricing" className="scroll-mt-24 border-b border-border bg-[#FAFAFA] py-20 md:py-28">
-      <div className={content}>
-        <h2 className="text-center font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold tracking-tight text-dark">
-          Founding pricing.
-        </h2>
-        <p className="mx-auto mt-4 max-w-[560px] text-center font-body text-base leading-[1.65] text-dark">
-          We&apos;re taking on three founding clients at a single flat rate while we sharpen the process for the
-          Australian real estate market.
-        </p>
-        <div className="mt-12 text-center">
-          <p className="font-display text-[clamp(2.5rem,8vw,4.5rem)] font-extrabold tracking-tight text-dark">
-            $5,000 AUD
-          </p>
-          <p className="mt-3 font-body text-sm text-dark md:text-base">
-            <span className="line-through decoration-dark/50">Standard from $8,500</span>
-            <span className="mx-2 text-mid" aria-hidden>
-              ·
-            </span>
-            <span className="font-semibold text-dark">3 spots remaining</span>
-          </p>
+                <Separator className="my-8 bg-border" />
+
+                <p className="text-sm text-muted-foreground">
+                  Payment: 50% on signing · 50% at start of Week 2
+                </p>
+
+                <div className="mt-8">
+                  <Button asChild className={`${ctaPrimary} w-full`}>
+                    <a href="/book">Get a free positioning diagnostic →</a>
+                  </Button>
+                  <p className="mt-3 text-center font-body text-xs text-muted-foreground">
+                    No pitch on the call. Just 25 minutes to confirm fit.
+                  </p>
+                </div>
+
+                <div className="mt-5 text-center">
+                  <a
+                    href="#faqs"
+                    className="font-body text-sm font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-orange hover:decoration-orange/60"
+                  >
+                    Not sure? Read the FAQ first →
+                  </a>
+                </div>
+              </div>
+
+              {/* Bottom banner */}
+              <div className="border-t border-border bg-muted/40 px-8 py-4 md:px-10">
+                <p className="text-center text-sm text-foreground md:text-[15px]">
+                  <span className="font-semibold">Founding pricing is locked through Q3</span>{" "}
+                  <span className="text-muted-foreground">for the first three boutique agencies who sign.</span>
+                </p>
+              </div>
+            </Card>
+          </div>
         </div>
-        <div className="mt-10 flex justify-center">
-          <a href="/book" className={`${ctaPrimary} w-full max-w-md sm:w-auto`}>
-            Reserve your sprint →
-          </a>
-        </div>
-        <p className="mx-auto mt-8 max-w-[640px] text-center font-body text-xs leading-[1.65] text-mid md:text-sm">
-          All prices in AUD, ex-GST. 50% on signing, 50% at start of Week 2. From client #4 onward, pricing scales by
-          agency size - $8,500 / $14,500 / $22,000.
-        </p>
-      </div>
-    </section>
+      </section>
+    </FadeIn>
   );
 }
 
 function FAQs() {
-  const [open, setOpen] = useState(null);
+  const [openIndex, setOpenIndex] = useState(null);
+  const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
+
   return (
-    <section id="faqs" className="scroll-mt-24 border-b border-border py-20 md:py-28">
-      <div className={content}>
-        <h2 className="text-center font-display text-[clamp(1.9rem,4.3vw,2.8rem)] font-bold tracking-tight text-dark">
-          Questions we hear a lot.
-        </h2>
-        <ul className="mx-auto mt-12 max-w-[640px]">
-          {FAQ_ITEMS.map((item, i) => {
-            const isOpen = open === i;
-            return (
-              <li key={item.q} className="border-t border-border first:border-t-0">
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left"
-                  aria-expanded={isOpen}
-                >
-                  <span className="font-display text-[1.15rem] font-semibold leading-snug text-dark md:text-[1.3rem]">
-                    {item.q}
-                  </span>
-                  <span
-                    className={`shrink-0 font-body text-2xl leading-none transition-colors ${
-                      isOpen ? "text-orange" : "text-dark/45"
-                    }`}
-                  >
-                    {isOpen ? "−" : "+"}
-                  </span>
-                </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-[1600px]" : "max-h-0"
-                  }`}
-                >
-                  <p className="whitespace-pre-line pb-5 font-body text-[15px] leading-[1.72] text-dark md:text-[17px]">{item.a}</p>
+    <FadeIn>
+      <section id="faqs" className="scroll-mt-24 py-20 md:py-28">
+        <div className={contentWide}>
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+            {/* Left heading */}
+            <div className="lg:sticky lg:top-32 lg:self-start">
+              <h2 className="text-[clamp(2.5rem,5.5vw,4rem)] font-bold leading-[1.05] tracking-tight text-foreground">
+                Frequently asked
+                <br />
+                questions
+              </h2>
+            </div>
+
+            {/* Right accordion */}
+            <div className="border-t border-border">
+              {FAQ_ITEMS.map((item, i) => {
+                const isOpen = openIndex === i;
+                return (
+                  <div key={item.q} className="border-b border-border">
+                    <button
+                      onClick={() => toggle(i)}
+                      className="flex w-full items-center gap-4 py-6 text-left transition-colors hover:text-primary md:gap-5 md:py-7"
+                    >
+                      <Plus
+                        size={20}
+                        strokeWidth={2}
+                        className={`shrink-0 text-primary transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}
+                      />
+                      <span className="text-base font-medium text-foreground md:text-lg">
+                        {item.q}
+                      </span>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          key={item.q + "-content"}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="whitespace-pre-line pb-6 pl-9 text-sm leading-[1.72] text-foreground/80 md:pb-7 md:pl-10">
+                            {item.a}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="mt-16 flex flex-col gap-6 border border-border bg-secondary/40 p-8 md:mt-20 md:flex-row md:items-center md:justify-between md:p-10">
+            <p className="max-w-md text-lg italic leading-snug text-foreground md:text-xl">
+              Still have questions? The fastest way to get answers is on a 20-minute call. No pitch. Just qualification.
+            </p>
+            <Button asChild className={`${ctaPrimary} shrink-0`}>
+              <a href="/book">Get a free positioning diagnostic →</a>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+  );
+}
+
+function ContactSection() {
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", agency: "", message: "" });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <FadeIn>
+      <section id="contact" className="scroll-mt-24 py-20 md:py-28">
+        <div className={contentWide}>
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            {/* Left: form */}
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground md:text-xs">
+                Get in touch
+              </p>
+              <h2 className="mt-4 text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-tight text-foreground">
+                Not ready to book? Leave your details and we&apos;ll reach out.
+              </h2>
+              <p className="mt-4 max-w-md text-base leading-[1.65] text-muted-foreground">
+                Tell us a little about your agency and we&apos;ll get back to you within 24 hours with next steps.
+              </p>
+
+              {submitted ? (
+                <Card className="mt-8 border border-border bg-secondary/40 p-6 md:p-8">
+                  <p className="text-lg font-semibold text-foreground">Thanks — we&apos;ll be in touch soon.</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    We usually reply within one business day.
+                  </p>
+                </Card>
+              ) : (
+                <form onSubmit={onSubmit} className="mt-8 space-y-5">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium text-foreground">Name</label>
+                      <input
+                        id="name"
+                        type="text"
+                        required
+                        value={form.name}
+                        onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                        className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium text-foreground">Email</label>
+                      <input
+                        id="email"
+                        type="email"
+                        required
+                        value={form.email}
+                        onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                        className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
+                        placeholder="you@agency.com"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="agency" className="text-sm font-medium text-foreground">Agency name</label>
+                    <input
+                      id="agency"
+                      type="text"
+                      value={form.agency}
+                      onChange={(e) => setForm((f) => ({ ...f, agency: e.target.value }))}
+                      className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
+                      placeholder="Your agency"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium text-foreground">Message</label>
+                    <textarea
+                      id="message"
+                      rows={4}
+                      value={form.message}
+                      onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                      className="w-full resize-none rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
+                      placeholder="What are you hoping to fix?"
+                    />
+                  </div>
+                  <Button type="submit" size="lg" className="w-full sm:w-auto">
+                    Send message
+                  </Button>
+                </form>
+              )}
+            </div>
+
+            {/* Right: dark value card */}
+            <FadeIn direction="right" className="flex items-stretch">
+              <Card className="flex h-full w-full flex-col justify-between overflow-hidden rounded-xl border border-border bg-foreground p-8 text-background md:p-10">
+                <div>
+                  <Badge className="inline-flex w-fit rounded-lg border border-background/20 bg-background/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-background hover:bg-background/10 md:text-[11px]">
+                    Why reach out?
+                  </Badge>
+                  <h3 className="mt-6 text-2xl font-bold leading-snug tracking-tight md:text-[1.65rem]">
+                    Most agencies don&apos;t have a marketing problem. They have a positioning problem.
+                  </h3>
+                  <p className="mt-4 text-[15px] leading-[1.65] text-background/80 md:text-base">
+                    If your team describes the agency five different ways, vendors negotiate on commission, and your social
+                    still feels like a startup — the sprint was built for you.
+                  </p>
                 </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </section>
+                <div className="mt-8 border-t border-background/15 pt-6">
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={avatarMarkZammit}
+                      alt=""
+                      width={48}
+                      height={48}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-12 w-12 shrink-0 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-base font-semibold text-background">Mark Zammit</p>
+                      <p className="mt-0.5 text-sm text-background/70">Director, Zammit Real Estate</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-[15px] leading-[1.72] text-background/80 md:text-[17px]">
+                    &ldquo;I&apos;ve been working with him for years and his work is unforgettable. That&apos;s really all you need to know.&rdquo;
+                  </p>
+                </div>
+              </Card>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+  );
+}
+
+function StickyCTA() {
+  const [visible, setVisible] = useState(false);
+  const lastScrollY = useRef(0);
+  const heroHeight = useRef(600);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const direction = y < lastScrollY.current ? "up" : "down";
+      lastScrollY.current = y;
+
+      if (y < heroHeight.current) {
+        setVisible(false);
+        return;
+      }
+
+      if (direction === "up") {
+        setVisible(true);
+      } else {
+        setVisible(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+          className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-foreground text-background shadow-lg"
+        >
+          <div className={`mx-auto flex w-full max-w-[min(100%,1280px)] items-center justify-between gap-4 py-4 ${pageGutter}`}>
+            <p className="hidden text-sm font-medium sm:block md:text-base">
+              Get a free positioning diagnostic. <span className="font-semibold">25 minutes.</span> Three angles for your agency.
+            </p>
+            <p className="text-sm font-medium sm:hidden">
+              Free positioning diagnostic
+            </p>
+            <Button
+              asChild
+              size="sm"
+              className="shrink-0 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110"
+            >
+              <a href="/book">Get a free positioning diagnostic →</a>
+            </Button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
 function FinalCTA() {
   return (
-    <section className="border-b border-border py-20 md:py-24">
-      <div className={content}>
-        <h2 className="mx-auto max-w-[720px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-dark">
-          Stop being the best-kept secret in your suburb.
-        </h2>
-        <div className="mt-10 flex justify-center px-0">
-          <a href="/book" className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}>
-            Reserve your sprint →
-          </a>
+    <FadeIn>
+      <section className="py-20 md:py-24">
+        <div className={content}>
+          <h2 className="mx-auto max-w-[720px] text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-dark">
+            Stop being the best-kept secret in your suburb.
+          </h2>
+          <div className="mt-10 flex justify-center px-0">
+            <Button asChild className={`${ctaPrimary} w-full max-w-md sm:max-w-none sm:w-auto`}>
+              <a href="/book">Get a free positioning diagnostic →</a>
+            </Button>
+          </div>
+          <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
+            25 minutes. Walk away with three angles for your agency. Whether or not you work with us.
+          </p>
         </div>
-        <p className="mx-auto mt-6 max-w-lg text-center font-body text-sm text-dark md:text-base">
-          Founding pricing - $5,000 AUD. Three spots. Once they&apos;re gone, it&apos;s $8,500 minimum.
-        </p>
-      </div>
-    </section>
+      </section>
+    </FadeIn>
   );
 }
 
 function Footer() {
   return (
-    <footer className="py-12">
-      <div
-        className={`mx-auto flex w-full max-w-[min(100%,1280px)] flex-col gap-8 md:flex-row md:items-center md:justify-between ${pageGutter}`}
-      >
-        <div className="flex max-w-md items-start gap-3 sm:gap-4">
-          <img
-            src={logoPng}
-            alt=""
-            className="mt-0.5 h-9 w-auto shrink-0 sm:h-10"
-            decoding="async"
-            aria-hidden
-          />
-          <div>
-            <p className="font-display text-sm font-semibold text-dark">Soubh &amp; Co.</p>
-            <p className="mt-2 max-w-xs font-body text-xs leading-relaxed text-mid">
-              A real estate marketing consultancy. Built in Australia.
-            </p>
+    <FadeIn>
+      <footer className="py-12">
+        <div
+          className={`mx-auto flex w-full max-w-[min(100%,1280px)] flex-col gap-8 md:flex-row md:items-center md:justify-between ${pageGutter}`}
+        >
+          <div className="flex max-w-md items-start gap-3 sm:gap-4">
+            <img
+              src={logoPng}
+              alt=""
+              className="mt-0.5 h-9 w-auto shrink-0 sm:h-10"
+              decoding="async"
+              aria-hidden
+            />
+            <div>
+              <p className="font-display text-sm font-semibold text-dark">Soubh &amp; Co.</p>
+              <p className="mt-2 max-w-xs font-body text-xs leading-relaxed text-mid">
+                A real estate marketing consultancy. Built in Australia.
+              </p>
+            </div>
           </div>
+          <nav className="flex flex-wrap gap-6" aria-label="Footer">
+            {[
+              { label: "Sprint", href: "#sprint" },
+              { label: "Pricing", href: "#pricing" },
+              { label: "FAQs", href: "#faqs" },
+              { label: "Soubh's LinkedIn", href: "https://www.linkedin.com/in/iamsoubh/" },
+            ].map(({ label, href }) => {
+              const external = href.startsWith("http");
+              return (
+                <motion.a
+                  key={label}
+                  href={href}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="font-body text-xs uppercase tracking-widest text-dark transition-colors hover:text-dark"
+                  whileHover={{ y: -1 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {label}
+                </motion.a>
+              );
+            })}
+          </nav>
         </div>
-        <nav className="flex flex-wrap gap-6" aria-label="Footer">
-          {[
-            { label: "Sprint", href: "#sprint" },
-            { label: "Pricing", href: "#pricing" },
-            { label: "FAQs", href: "#faqs" },
-            { label: "Soubh's LinkedIn", href: "https://www.linkedin.com/in/iamsoubh/" },
-          ].map(({ label, href }) => {
-            const external = href.startsWith("http");
-            return (
-              <a
-                key={label}
-                href={href}
-                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="font-body text-xs uppercase tracking-widest text-dark transition-colors hover:text-dark"
-              >
-                {label}
-              </a>
-            );
-          })}
-        </nav>
-      </div>
-      <p className="mt-8 text-center font-body text-xs text-dark">
-        © 2026 Soubh &amp; Co. All rights reserved.
-      </p>
-    </footer>
+        <p className="mt-8 text-center font-body text-xs text-dark">
+          © 2026 Soubh &amp; Co. All rights reserved.
+        </p>
+      </footer>
+    </FadeIn>
   );
 }
 
@@ -1224,19 +2214,22 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
+        <HeroTrustStrip />
         <LogoStrip />
         <SprintCallout />
-        <TestimonialThreeCards />
+        <TestimonialCarousel />
         <ProblemChecklist />
         <DeliverableCards />
+        <DiagnosticTakeaways />
+        <PricingSection />
         <FounderSection />
         <SprintTimeline />
         <ContentNinetyDays />
-        
-        <PricingSection />
         <FAQs />
+        <ContactSection />
       </main>
       <Footer />
+      <StickyCTA />
     </div>
   );
 }
