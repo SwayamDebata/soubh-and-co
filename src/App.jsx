@@ -288,7 +288,7 @@ function Nav() {
             >
               Get a free positioning diagnostic
               <span className="mt-0.5 hidden max-w-[9.5rem] text-balance font-body text-[10px] font-normal leading-tight text-white/90 sm:block sm:max-w-none">
-                Founding pricing. 3 spots.
+                Book a 25 min call
               </span>
             </a>
             <button
