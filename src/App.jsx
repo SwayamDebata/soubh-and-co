@@ -1943,11 +1943,39 @@ function FAQs() {
 
 function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ name: "", email: "", agency: "", message: "" });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "fbacf8eb-8371-4a85-bd02-057ce84e93d0",
+          subject: "New enquiry from Soubh & Co. website",
+          from_name: form.name,
+          name: form.name,
+          email: form.email,
+          agency: form.agency,
+          message: form.message,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setError(data.message || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error — please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -2024,8 +2052,18 @@ function ContactSection() {
                       placeholder="What are you hoping to fix?"
                     />
                   </div>
-                  <Button type="submit" size="lg" className="w-full sm:w-auto">
-                    Send message
+                  {error && (
+                    <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                      {error}
+                    </p>
+                  )}
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={loading}
+                    className="w-full sm:w-auto disabled:opacity-60"
+                  >
+                    {loading ? "Sending…" : "Send message"}
                   </Button>
                 </form>
               )}
